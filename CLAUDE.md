@@ -118,7 +118,7 @@ Avant chaque module : 3 questions OUI/NON par couple (Opération × Module).
 <!-- METTRE À JOUR APRÈS CHAQUE PHASE -->
 
 ### Phase 1 — MVP fonctionnel (avant mise en ligne)
-- [ ] Phase 1A : Scaffold + Auth + Schéma DB + Config Vercel
+- [x] Phase 1A : Scaffold + Auth + Schéma DB + Config Vercel
 - [ ] Phase 1B : Onboarding + Navigation Postes/Opérations
 - [ ] Phase 1C : Présélection + Module Bruit (M01)
 - [ ] Phase 1D : Tableau APR + Dashboard + Polish

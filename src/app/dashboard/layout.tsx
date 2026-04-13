@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { Header } from '@/components/dashboard/header'
 
@@ -9,19 +10,26 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const supabase = await createClient()
-
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/auth/login')
-  }
+  if (!user) redirect('/auth/login')
 
   // Récupérer le nom de l'entreprise
   const { data: entreprise } = await supabase
     .from('entreprises')
-    .select('nom')
+    .select('id, nom')
     .eq('user_id', user.id)
     .single()
+
+  // Rediriger vers l'onboarding si pas d'entreprise,
+  // sauf si on est déjà sur la page onboarding (évite la boucle infinie)
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') ?? ''
+  const estSurOnboarding = pathname === '/dashboard/onboarding'
+
+  if (!entreprise && !estSurOnboarding) {
+    redirect('/dashboard/onboarding')
+  }
 
   const nomEntreprise = entreprise?.nom ?? user.email ?? 'Mon Entreprise'
 
@@ -35,7 +43,6 @@ export default async function DashboardLayout({
       {/* Contenu principal */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header nomEntreprise={nomEntreprise} />
-
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           {children}
         </main>

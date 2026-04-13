@@ -1,5 +1,5 @@
 import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { updateSession } from '@/lib/supabase/session'
 
 // Next.js 16+ : proxy.ts remplace middleware.ts
 export async function proxy(request: NextRequest) {
