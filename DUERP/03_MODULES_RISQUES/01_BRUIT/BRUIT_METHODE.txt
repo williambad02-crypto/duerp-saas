@@ -1,0 +1,480 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║                    BRUIT — MÉTHODE D'ÉVALUATION                                    ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 4.01
+  Fichier  : D_RISQUES_CHRONIQUES/01_BRUIT/BRUIT_METHODE.txt
+  Module   : M8
+  Fiche ED840 : Fiche 11 — Bruit / Nuisances sonores
+  Source principale : ED 6035 (INRS, 2009) — NF EN ISO 9612
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 1 — DÉFINITION ET DESCRIPTION DU RISQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Le risque bruit en milieu professionnel correspond à l'exposition répétée et
+  prolongée à des niveaux sonores élevés. Contrairement à un accident sonore isolé
+  (choc unique très intense), le risque chronique s'installe progressivement, sans
+  douleur immédiate, jusqu'à provoquer des dommages auditifs irréversibles.
+
+  Mécanisme physique :
+    Les sons de forte intensité provoquent une fatigue puis une destruction progressive
+    des cellules ciliées de l'oreille interne (cochlée). Ces cellules ne se régénèrent
+    pas — la perte auditive est donc définitive. Plus le niveau sonore est élevé et
+    la durée d'exposition longue, plus les dommages s'accumulent.
+
+  Trois notions distinctes à ne pas confondre :
+    · Bruit émis par une machine : mesuré en espace ouvert, sans effet du local.
+      Ne sert pas à évaluer l'exposition des travailleurs.
+    · Bruit ambiant : niveau sonore en un point fixe d'un atelier à un instant donné.
+      Inclut l'effet réverbérant du local. Utile pour localiser les sources,
+      insuffisant pour évaluer l'exposition.
+    · Exposition au bruit (LEX,8h) : dose journalière de bruit reçue par une personne
+      au cours de sa journée de travail complète, tenant compte de tous ses
+      déplacements et de la variabilité de ses tâches. C'est l'indicateur légal.
+
+  Nature du risque : CHRONIQUE — les effets apparaissent après des mois ou des années
+  d'exposition. Un travailleur ne ressent pas de douleur jusqu'à ce que l'atteinte
+  soit déjà significative.
+
+  [!] Le bruit peut aussi provoquer des risques aigus indirects : masquage des
+  signaux d'alarme, gêne à la communication, stress favorisant les erreurs.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 2 — EFFETS SUR LA SANTÉ ET POPULATIONS EXPOSÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ─── Pathologies liées à l'exposition au bruit ───────────────────────────────────────
+
+    · Hypoacousie de perception bilatérale : perte auditive progressive, irréversible,
+      touchant d'abord les fréquences aiguës (4 000 Hz), puis s'étendant à la parole
+    · Acouphènes permanents : sifflements ou bourdonnements dans les oreilles, souvent
+      associés à la perte auditive, fortement invalidants au quotidien
+    · Fatigue auditive : baisse temporaire de l'acuité auditive après exposition,
+      récupérable dans un premier temps — signal précurseur de l'atteinte permanente
+    · Effets extra-auditifs (exposition longue durée) : hypertension artérielle,
+      troubles du sommeil, stress chronique, difficultés de concentration
+
+  ─── Organes touchés ─────────────────────────────────────────────────────────────────
+
+    Oreille interne (cochlée) en premier lieu.
+    Système cardiovasculaire et système nerveux central en exposition prolongée.
+
+  ─── Facteurs aggravants ─────────────────────────────────────────────────────────────
+
+    · Exposition combinée à des solvants ototoxiques (toluène, styrène, xylène,
+      trichloréthylène) → risque de surdité multiplié pour un même niveau sonore
+    · Vibrations simultanées → aggravation de l'atteinte auditive
+    · Âge (presbyacousie naturelle + bruit professionnel se cumulent)
+    · Prédisposition individuelle génétique (variable, non mesurable a priori)
+    · Médicaments ototoxiques (aminosides, quinine, cisplatine...)
+
+  ─── Secteurs d'activité et métiers principalement exposés ──────────────────────────
+
+    ┌───────────────────────────────┬────────────────────────────────────────────────┐
+    │  Secteur                      │  Métiers / Postes exposés                      │
+    ├───────────────────────────────┼────────────────────────────────────────────────┤
+    │  BTP                          │  Foreurs, conducteurs engins, démolisseurs      │
+    │  Industries du bois           │  Scieurs, menuisiers, ébénistes               │
+    │  Industrie métallurgique      │  Soudeurs, tôliers, emboutisseurs, fraiseurs   │
+    │  Fonderie                     │  Démouleurs, ébarbeurs, mouleurs               │
+    │  Agroalimentaire              │  Conducteurs de lignes d'embouteillage          │
+    │  Textile / papier             │  Fileurs, tisserands, opérateurs presses        │
+    │  Restauration / CHR           │  Cuisiniers (hotte, extraction, machines)       │
+    │  Musique / divertissement     │  Musiciens, disc-jockeys, techniciens son       │
+    │  Agriculture                  │  Tractoristes, utilisateurs de machines agri.  │
+    │  Transports / logistique      │  Conducteurs de poids lourds, caristes          │
+    └───────────────────────────────┴────────────────────────────────────────────────┘
+
+  ─── Données de sinistralité ─────────────────────────────────────────────────────────
+
+    Source : INRS / CNAMTS (régime général)
+    · 7 % des salariés exposés à des bruits nocifs (> 85 dB(A), > 20h/semaine)
+      — Enquête SUMER 2003
+    · 1 076 surdités professionnelles reconnues en MP 42 en 2008
+    · Coût financier direct moyen par surdité reconnue : 94 000 €
+    · Les atteintes sont massivement sous-déclarées (handicap social sous-estimé)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 3 — MÉTHODE D'IDENTIFICATION TERRAIN (MINI-QUESTIONNAIRE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La démarche ED 6035 commence par identifier les travailleurs susceptibles d'être
+  exposés. Le critère de non-exposition certaine (permettant d'écarter d'emblée un
+  poste) est le suivant :
+
+  ┌────────────────────────────────────────────────────────────────────────────────────┐
+  │  CRITÈRE DE NON-EXPOSITION CERTAINE (les deux conditions doivent être réunies)     │
+  │                                                                                    │
+  │  1. Communication aisée à voix normale entre collègues à 1 m de distance          │
+  │  2. Absence d'événements acoustiques rares et intenses (chocs métalliques,         │
+  │     détentes d'air comprimé, alarmes à fort niveau...)                             │
+  │                                                                                    │
+  │  → Si ces deux critères sont réunis : aucune évaluation bruit nécessaire           │
+  └────────────────────────────────────────────────────────────────────────────────────┘
+
+  ─── Niveau 1 — Estimation sommaire (test de communication) ─────────────────────────
+
+  Issu directement de l'ED 6035 (chapitre 4.2). Ce test permet de classer rapidement
+  le risque sans aucune mesure instrumentale.
+
+  ┌──────────────────────────────────────────────────────────┬───────────────────────┐
+  │  Situation observée sur le poste                         │  Résultat             │
+  ├──────────────────────────────────────────────────────────┼───────────────────────┤
+  │  Devoir crier ou avoir beaucoup de difficulté à se       │  NIVEAU 2             │
+  │  faire comprendre par une personne à moins de 1 m        │  → Risque certain     │
+  │                                                          │  (≈ > 90 dB(A))       │
+  ├──────────────────────────────────────────────────────────┼───────────────────────┤
+  │  Devoir crier ou avoir beaucoup de difficulté à se       │  NIVEAU 1             │
+  │  faire comprendre par une personne à moins de 2 m        │  → Risque incertain   │
+  ├──────────────────────────────────────────────────────────┼───────────────────────┤
+  │  Pouvoir communiquer normalement avec une personne       │  NIVEAU 0             │
+  │  à 0,5 m de distance (et absence d'événements rares)    │  → Pas de risque      │
+  └──────────────────────────────────────────────────────────┴───────────────────────┘
+
+  Questions complémentaires à poser lors de la visite terrain :
+    · Des événements bruyants brefs mais intenses se produisent-ils ? (chocs métal,
+      soufflettes, martelage, presses, alarmes...) → Si oui : Niveau 2 même si rare
+    · Des travailleurs signalent-ils des sifflements dans les oreilles en fin de
+      journée ou le matin ? → Indicateur de fatigue auditive → Niveau 2 minimum
+    · Des mesures de bruit antérieures ont-elles été réalisées ?
+      → Utiliser les résultats si les conditions n'ont pas changé
+
+  Interprétation :
+    · Niveau 0 : aucune évaluation supplémentaire nécessaire (document dans DUERP)
+    · Niveau 1 : passer à l'Évaluation Simplifiée (Niveau 2 de la méthode)
+    · Niveau 2 : passer directement à l'Évaluation Simplifiée ou au Mesurage Normalisé
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4 — OUTILS ET INDICATEURS DE MESURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ─── Indicateurs principaux ──────────────────────────────────────────────────────────
+
+  · LEX,8h (ou Lp,A,eqT normalisé à 8h) :
+    Niveau d'exposition quotidienne au bruit, exprimé en dB(A).
+    C'est la "dose journalière" de bruit, calculée sur une durée de référence de 8h.
+    Indicateur légal principal pour comparer aux seuils d'action (80 / 85 dB(A)).
+
+  · Lp,C,peak :
+    Niveau de pression acoustique de crête, exprimé en dB(C).
+    Valeur maximale instantanée du bruit — essentiel pour les bruits impulsionnels
+    (chocs, presses, détentes d'air comprimé, tirs...).
+    Comparé aux seuils : 135 / 137 / 140 dB(C).
+
+  ─── Appareils de mesure ─────────────────────────────────────────────────────────────
+
+  Deux types d'appareils conformes à la norme NF EN ISO 9612 :
+
+  · Exposimètre (dosimètre) :
+    Porté en permanence par le travailleur durant sa journée.
+    Microphone fixé près de l'oreille (dans la zone de l'oreille, à 10 cm).
+    Indispensable pour les opérateurs mobiles avec déplacements importants.
+    Enregistre toute la série chronologique du bruit → analyse possible a posteriori.
+    [!] Choisir un exposimètre avec pondération A ET pondération C.
+
+  · Sonomètre intégrateur (de classe 1 ou 2) :
+    Plus précis que l'exposimètre, mais nécessite la présence d'un technicien
+    maintenant le microphone à moins de 40 cm de la tête du travailleur en permanence.
+    Idéal pour les postes fixes.
+    Mesure le niveau de bruit L p,A,eqT pendant une durée T définie.
+
+  ─── Pondérations ────────────────────────────────────────────────────────────────────
+
+  · Pondération A : calquée sur la sensibilité de l'oreille humaine aux niveaux
+    courants — obligatoire pour mesurer LEX,8h.
+  · Pondération C : quasi-linéaire — obligatoire pour mesurer Lp,C,peak et pour
+    estimer le bruit effectif en cas de port de PICB (méthode HML/SNR ISO 4869-2).
+
+  ─── Outils numériques disponibles ──────────────────────────────────────────────────
+
+  · Calculette NF EN ISO 9612 (INRS, sous Excel) : calcul du LEX,8h avec incertitude
+    U selon les 3 stratégies de mesure.
+  · Calculette PICB (INRS ED 133, sous Excel) : estimation du bruit effectif avec
+    protecteur pour vérifier le non-dépassement de la VLE.
+  · Base de données SUVA (www.suva.ch/waswo/86005) : niveaux d'exposition typiques
+    par secteur et métier — utile pour l'estimation sommaire sans mesure.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 5 — MÉTHODE DE COTATION — DÉMARCHE EN 3 NIVEAUX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La méthode ED 6035 organise l'évaluation en 3 niveaux progressifs, du plus simple
+  au plus précis. On utilise le niveau minimal permettant de conclure.
+
+  ┌─────────┬────────────────────────────────┬──────────────────────────────────────┐
+  │  Niveau │  Méthode                       │  Quand l'utiliser                    │
+  ├─────────┼────────────────────────────────┼──────────────────────────────────────┤
+  │    1    │  Estimation sommaire           │  Première approche, sans mesure      │
+  │         │  (test de communication)       │  → voir Section 3                    │
+  ├─────────┼────────────────────────────────┼──────────────────────────────────────┤
+  │    2    │  Évaluation simplifiée         │  Risque incertain (Niveau 1) ou pour │
+  │         │  (méthode des points           │  prioriser les actions correctives   │
+  │         │   d'exposition)                │                                      │
+  ├─────────┼────────────────────────────────┼──────────────────────────────────────┤
+  │    3    │  Mesurage normalisé            │  Résultat proche des seuils          │
+  │         │  (NF EN ISO 9612)              │  d'action — conclusion certaine      │
+  │         │                                │  requise / demande d'inspection      │
+  └─────────┴────────────────────────────────┴──────────────────────────────────────┘
+
+  ══════════════════════════════════════════════════════════════════════════════════════
+  NIVEAU 2 — ÉVALUATION SIMPLIFIÉE PAR POINTS D'EXPOSITION
+  ══════════════════════════════════════════════════════════════════════════════════════
+
+  Principe :
+    L'exposition sonore quotidienne est la somme des contributions de toutes les
+    phases bruyantes de la journée. Comme les décibels ne s'additionnent pas
+    linéairement, on utilise des "points d'exposition" — une unité additive.
+
+  Mode opératoire (4 étapes) :
+
+  ÉTAPE 1 — Décomposer la journée de travail en phases distinctes
+    Exemple : Phase 1 = usinage machine, Phase 2 = nettoyage soufflette, Phase 3 = montage
+
+  ÉTAPE 2 — Pour chaque phase, estimer :
+    · Le niveau de bruit moyen en dB(A) pendant cette phase
+    · La durée quotidienne totale de cette phase (en heures ou minutes)
+
+  ÉTAPE 3 — Lire les points d'exposition dans le tableau ci-dessous
+    (extrait de la figure 9 de l'ED 6035 — table complète de 75 à 120 dB(A))
+
+    ┌──────────────┬─────┬─────┬─────┬─────┬────────┬────────┬────────┬────────┐
+    │  Niveau dB(A)│ 8h  │ 4h  │ 2h  │ 1h  │ 30 min │ 15 min │ 10 min │  5 min │
+    ├──────────────┼─────┼─────┼─────┼─────┼────────┼────────┼────────┼────────┤
+    │     80       │  32 │  16 │   8 │   4 │    2   │    1   │    1   │    0   │
+    │     82       │  50 │  25 │  13 │   6 │    3   │    2   │    1   │    1   │
+    │     85       │ 100 │  50 │  25 │  13 │    6   │    3   │    2   │    1   │
+    │     88       │ 200 │ 100 │  50 │  25 │   13   │    6   │    4   │    2   │
+    │     90       │ 320 │ 160 │  80 │  40 │   20   │   10   │    7   │    3   │
+    │     95       │1000 │ 510 │ 250 │ 130 │   60   │   32   │   21   │   11   │
+    │    100       │3200 │1600 │ 800 │ 400 │  200   │  100   │   70   │   33   │
+    │    105       │  .. │  .. │2500 │1300 │  630   │  320   │  210   │  110   │
+    └──────────────┴─────┴─────┴─────┴─────┴────────┴────────┴────────┴────────┘
+    (Pour les durées intermédiaires, combiner les colonnes disponibles)
+
+  ÉTAPE 4 — Additionner les points de toutes les phases → Total journalier
+
+  Interprétation du total :
+  ┌────────────────────────────────┬────────────────────┬──────────────────────────────┐
+  │  Total de points               │  Résultat          │  Action dans l'outil         │
+  ├────────────────────────────────┼────────────────────┼──────────────────────────────┤
+  │  Total ≤ 16 points             │  Quasi-certitude   │  Pas d'action bruit requise  │
+  │  [soit LEX,8h ≤ 77 dB(A)]      │  d'absence de      │  Documenter dans l'APR       │
+  │                                │  risque            │                              │
+  ├────────────────────────────────┼────────────────────┼──────────────────────────────┤
+  │  16 < Total < 200 points       │  Risque incertain  │  Mesurage normalisé          │
+  │  [entre 77 et 88 dB(A)]        │  (zone d'incert.)  │  recommandé (Niveau 3)       │
+  ├────────────────────────────────┼────────────────────┼──────────────────────────────┤
+  │  Total ≥ 200 points            │  Risque quasi      │  VAI dépassée (80 dB(A))     │
+  │  [soit LEX,8h ≥ 88 dB(A)]      │  certain           │  Actions obligatoires        │
+  ├────────────────────────────────┼────────────────────┼──────────────────────────────┤
+  │  Total ≥ 1 000 points          │  VAS probablement  │  VAS certainement dépassée   │
+  │  [soit LEX,8h ≥ 95 dB(A)]      │  dépassée          │  + vérifier VLE avec PICB    │
+  └────────────────────────────────┴────────────────────┴──────────────────────────────┘
+
+  [!] L'évaluation simplifiée ne suffit pas à conclure au non-dépassement des seuils
+      si le total est entre 16 et 200 points. Les seuils réglementaires correspondent
+      à 32 points (80 dB(A)/8h) et 100 points (85 dB(A)/8h).
+
+  Avantage de la méthode des points :
+    · Permet d'identifier quelle phase de travail contribue le plus à l'exposition
+    · Permet de simuler l'impact d'une action corrective (remplacer une machine,
+      réduire la durée d'une phase...) avant de la mettre en œuvre
+
+  ══════════════════════════════════════════════════════════════════════════════════════
+  NIVEAU 3 — MESURAGE NORMALISÉ (NF EN ISO 9612)
+  ══════════════════════════════════════════════════════════════════════════════════════
+
+  Applicable lorsque le total de points est entre 16 et 200 (zone d'incertitude),
+  ou lorsque l'inspection du travail l'exige.
+
+  5 étapes de la norme NF EN ISO 9612 :
+
+  1. ANALYSER LE TRAVAIL
+     · Identifier les activités de l'entreprise et les métiers exposés
+     · Définir les Groupes d'Exposition Homogène (GEH) — travailleurs ayant
+       des activités similaires et donc une exposition comparable
+     · Déterminer la journée nominale (journée type ou journée à exposition maximale)
+     · Identifier les événements acoustiques rares et intenses
+     · Consulter les travailleurs et l'encadrement
+
+  2. CHOISIR UNE STRATÉGIE DE MESURE
+     · Par tâche : mesurer chaque tâche séparément, combiner selon les durées
+     · Par métier : mesurer un groupe de travailleurs exerçant le même métier
+     · Par journée complète : mesure en continu sur une journée entière
+
+  3. PLANIFIER ET RÉALISER LES MESURES
+     · Utiliser exposimètre (opérateur mobile) ou sonomètre (poste fixe)
+     · Microphone positionné à 10 cm de l'oreille la plus exposée
+     · Mesurer simultanément en pondération A et C (si risque impulsionnel)
+     · Durée minimale de mesure par tâche : représentative de la variabilité
+
+  4. CONTRÔLER LES ERREURS ET INCERTITUDES
+     · Vérifier l'appareillage avant et après les mesures (calibreur acoustique)
+     · Identifier les sources d'incertitude : variabilité du bruit, de la durée,
+       sources de bruit non pertinentes (voix, radio...)
+     · Calculer l'incertitude combinée U selon ISO 9612
+
+  5. CALCULER ET PRÉSENTER LE RÉSULTAT
+     · Calculer LEX,8h (via la calculette ISO 9612 INRS)
+     · Résultat final : LEX,8h ± U dB(A)
+     · Comparer au seuil : LEX,8h + U ≤ 80 dB(A) → VAI non dépassée avec certitude
+
+  Qui peut réaliser les mesures ? (Art. R.4433-2)
+    · Technicien compétent de l'entreprise, service de santé au travail, ou
+      prestataire extérieur
+    · Si demande de l'inspection du travail : organisme accrédité COFRAC obligatoire
+
+  Renouvellement : au moins tous les 5 ans, ou après toute modification susceptible
+  d'élever les niveaux de bruit.
+
+  ══════════════════════════════════════════════════════════════════════════════════════
+  CORRESPONDANCE AVEC LA COTATION APR DE L'OUTIL
+  ══════════════════════════════════════════════════════════════════════════════════════
+
+  Le résultat du module M8 est réintégré dans l'APR sous forme de criticité.
+  Table de correspondance :
+
+  ┌──────────────────────────────────┬─────────────────────────┬────────────────────┐
+  │  Résultat de l'évaluation bruit  │  Niveau de risque APR   │  Criticité brute   │
+  ├──────────────────────────────────┼─────────────────────────┼────────────────────┤
+  │  LEX,8h ≤ 77 dB(A) (≤ 16 pts)   │  FAIBLE                 │  2 (Vert)          │
+  │  LEX,8h 77–80 dB(A) (16–32 pts) │  MODÉRÉ                 │  4 (Jaune)         │
+  │  LEX,8h 80–85 dB(A) (32–100 pts)│  ÉLEVÉ — VAI dépassée   │  8 (Orange)        │
+  │  LEX,8h > 85 dB(A) (> 100 pts)  │  TRÈS ÉLEVÉ — VAS dép.  │  16 (Rouge)        │
+  └──────────────────────────────────┴─────────────────────────┴────────────────────┘
+
+  Le Plan de Maîtrise (PM) s'applique ensuite selon les protections en place.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 6 — VALEURS SEUILS ET NIVEAUX D'ACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌───────────────────────────────┬──────────────────────────┬───────────────────────┐
+  │  Valeur                       │  LEX,8h / Lp,C,peak      │  Actions requises     │
+  ├───────────────────────────────┼──────────────────────────┼───────────────────────┤
+  │  Valeur d'action inférieure   │  > 80 dB(A)              │  Info + PICB dispo    │
+  │  (VAI)                        │  OU > 135 dB(C)          │  + examens audio.     │
+  ├───────────────────────────────┼──────────────────────────┼───────────────────────┤
+  │  Valeur d'action supérieure   │  > 85 dB(A)              │  Programme technique  │
+  │  (VAS)                        │  OU > 137 dB(C)          │  + port PICB oblig.   │
+  │                               │                          │  + SMR                │
+  ├───────────────────────────────┼──────────────────────────┼───────────────────────┤
+  │  Valeur Limite d'Exposition   │  > 87 dB(A) (avec PICB)  │  Dépassement interdit │
+  │  (VLE)                        │  OU > 140 dB(C)          │  → réduction immédiate│
+  └───────────────────────────────┴──────────────────────────┴───────────────────────┘
+
+  Facteur C2P : ≥ 81 dB(A) sur 600 h/an ou ≥ 135 dB(C)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 7 — HIÉRARCHIE DES MESURES DE PRÉVENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  NIVEAU 1 — Suppression / Substitution (prioritaire)
+    · Remplacer les procédés bruyants par des procédés silencieux
+      (ex : soudage à la place du rivetage, aspiration à la place de la soufflette)
+    · Choisir des machines moins bruyantes dès l'achat (comparer les niveaux déclarés)
+    · Modifier les paramètres de fabrication (vitesse de coupe, pression, cadence)
+
+  NIVEAU 2 — Réduction à la source (mesures collectives TECHNIQUES)
+    · Encoffrement des machines bruyantes (cabines acoustiques)
+    · Traitement acoustique des locaux (absorbants, panneaux anti-bruit)
+    · Isolation vibratoire des machines (plots, amortisseurs)
+    · Ecrans acoustiques entre sources et travailleurs
+    · Maintenance préventive (une machine usée est souvent plus bruyante)
+
+  NIVEAU 3 — Réduction par ORGANISATION
+    · Éloigner les postes de travail des sources bruyantes
+    · Réduire le temps d'exposition quotidien (rotation de postes)
+    · Regrouper les tâches bruyantes et les effectuer quand le moins de travailleurs
+      possible sont présents
+    · Signaliser les zones bruyantes et limiter les accès
+
+  NIVEAU 4 — Formation et sensibilisation
+    · Former les travailleurs à reconnaître le risque bruit et ses effets
+    · Informer sur l'usage correct des PICB (ajustement, entretien, limites)
+    · Sensibiliser à la déclaration des symptômes précoces (acouphènes en fin de journée)
+
+  NIVEAU 5 — EPI (dernier recours)
+    · PICB : Protecteurs Individuels Contre le Bruit
+      → Bouchons moulés ou jetables : atténuation 20-35 dB selon modèle
+      → Casques antibruit (serre-tête) : atténuation 20-35 dB
+      → Casques avec système de communication intégré : pour travailleurs mobiles
+    · Choisir le PICB selon la norme ISO 4869-2 (méthode HML ou SNR)
+    · [!] L'atténuation réelle en conditions de travail est souvent 5 à 15 dB
+      inférieure aux valeurs déclarées en laboratoire — ne pas surestimer la protection
+
+  SURVEILLANCE MÉDICALE
+    · En dessous de la VAI : examens audiométriques préventifs proposés (facultatifs)
+    · Au-dessus de la VAS : Surveillance Médicale Renforcée (SMR) obligatoire,
+      examens audiométriques périodiques organisés par le médecin du travail
+    · Fréquence SMR : à définir avec le médecin du travail (généralement tous les 2 ans)
+    · En cas d'atteinte détectée : mesures conservatoires immédiates (changement de poste)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 8 — LIENS MALADIES PROFESSIONNELLES ET C2P
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────┬─────────────────────────────────────────────────────────────────────┐
+  │  MP n°       │  Pathologie — Délai de prise en charge                              │
+  ├──────────────┼─────────────────────────────────────────────────────────────────────┤
+  │  MP 42       │  Atteinte auditive provoquée par les bruits lésionnels.             │
+  │  (Rég. gén.) │  Hypoacousie bilatérale de perception + acouphènes éventuels.       │
+  │              │  Délai de prise en charge : 1 an après fin d'exposition.            │
+  │              │  Durée d'exposition minimale : 1 an dans les travaux listés.        │
+  ├──────────────┼─────────────────────────────────────────────────────────────────────┤
+  │  MP RG 46    │  Idem, régime agricole.                                              │
+  │  (Rég. agri.)│                                                                     │
+  └──────────────┴─────────────────────────────────────────────────────────────────────┘
+
+  Facteur C2P — Bruit :
+    · OUI — facteur actif depuis 2015
+    · Seuil : LEX,8h ≥ 81 dB(A) sur au moins 600 heures par an
+              OU Lp,C,peak ≥ 135 dB(C) en bruits impulsionnels
+    · Mode de déclaration : DSN (Déclaration Sociale Nominative) mensuelle
+    · Droits acquis : points C2P utilisables pour formation, temps partiel compensé,
+      ou retraite anticipée
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 9 — RÉFÉRENCES NORMATIVES ET RÉGLEMENTAIRES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  RÉGLEMENTATION FRANÇAISE
+  · Articles R.4431-1 à R.4437-4 Code du travail : ensemble du dispositif bruit
+  · Décret n° 2006-892 du 19 juillet 2006 : transposition de la directive 2003/10/CE
+  · Arrêté du 19 juillet 2006 : modalités du mesurage (norme de référence)
+
+  DIRECTIVE EUROPÉENNE
+  · Directive 2003/10/CE du 6 février 2003 : prescriptions minimales relatives au bruit
+
+  NORMES TECHNIQUES
+  · NF EN ISO 9612 (2009) : Détermination de l'exposition au bruit en milieu pro.
+  · NF S 31-084 (2002) : ancienne norme de mesurage (remplacée par ISO 9612)
+  · ISO 4869-2 : Estimation du niveau de pression acoustique avec PICB (HML, SNR)
+  · NF EN ISO 11904-1 et -2 : sources proches de l'oreille (casques de communication)
+
+  DOCUMENTS INRS
+  · ED 6035 (2009) : Évaluer et mesurer l'exposition professionnelle au bruit
+  · ED 133 : Application de la réglementation sur le bruit et usage des PICB
+    (inclut la calculette Excel d'estimation du bruit effectif avec PICB)
+
+  OUTILS NUMÉRIQUES
+  · Calculette ISO 9612 (INRS) : calcul LEX,8h + incertitude — téléchargeable sur inrs.fr
+  · Calculette PICB (INRS ED 133) : estimation bruit effectif avec protecteur
+  · Base SUVA (www.suva.ch/waswo/86005) : données d'exposition par secteur et métier
+  · Tableau des points d'exposition (figure 9 ED 6035) : intégré dans le module M8
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  Phase 4.01 terminée — Fichier : 01_BRUIT/BRUIT_METHODE.txt                        ║
+║  Prochaine étape : Phase 3.02 + 4.02 — VIBRATIONS                                  ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,464 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║              SYNTHÈSE ED 840 — AIDE AU REPÉRAGE DES RISQUES EN PME-PMI            ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Source   : 2_ed840.pdf — INRS, édition octobre 2023, 36 pages
+  Phase    : 1a
+  Fichier  : C_ED840/ED840_SYNTHESE.txt
+  Dernière mise à jour : Avril 2026
+
+  L'ED 840 est le document de référence INRS pour l'identification des risques
+  professionnels en PME-PMI. Il contient 20 fiches de risques.
+  C'est la liste de référence utilisée dans le module APR de l'outil (colonne "Risque").
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  VUE D'ENSEMBLE — LES 20 FICHES DE RISQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────┬────────────────────────────────────────────────────┬────────────┬──────────┐
+  │  N°  │  Intitulé de la fiche                              │  Type      │  Module  │
+  ├──────┼────────────────────────────────────────────────────┼────────────┼──────────┤
+  │   1  │  Risques de chute de plain-pied                    │  AIGU      │  APR     │
+  │   2  │  Risques de chute de hauteur                       │  AIGU      │  APR     │
+  │   3  │  Risques liés aux circulations internes            │  AIGU      │  APR     │
+  │   4  │  Risques routiers en mission                       │  AIGU      │  APR     │
+  │   5  │  Risques liés à la charge physique de travail      │  CHRONIQUE │  M9      │
+  │   6  │  Risques liés à la manutention mécanique           │  AIGU      │  APR     │
+  │   7  │  Risques liés aux produits chimiques               │  LES DEUX  │  M12     │
+  │   8  │  Risques liés aux agents biologiques               │  CHRONIQUE │  À créer │
+  │   9  │  Risques liés aux équipements de travail           │  AIGU      │  APR     │
+  │  10  │  Risques liés aux effondrements/chutes d'objets    │  AIGU      │  APR     │
+  │  11  │  Risques et nuisances liés au bruit                │  LES DEUX  │  M8      │
+  │  12  │  Risques liés aux ambiances thermiques             │  LES DEUX  │  À créer │
+  │  13  │  Risques d'incendie et d'explosion (ATEX)          │  AIGU      │  APR     │
+  │  14  │  Risques liés à l'électricité                      │  AIGU      │  APR     │
+  │  15  │  Risques liés aux ambiances lumineuses             │  CHRONIQUE │  [?]     │
+  │  16  │  Risques liés aux rayonnements                     │  CHRONIQUE │  À créer │
+  │  17  │  Risques psychosociaux                             │  CHRONIQUE │  À créer │
+  │  18  │  Risques liés aux vibrations                       │  CHRONIQUE │  M10     │
+  │  19  │  Risques de heurt, de cognement                    │  AIGU      │  APR     │
+  │  20  │  Risques liés aux pratiques addictives             │  CHRONIQUE │  [?]     │
+  └──────┴────────────────────────────────────────────────────┴────────────┴──────────┘
+
+  Légende modules : APR = évaluation standard G×P | M8-M12 = module dédié dans l'outil
+                    À créer = module à développer | [?] = intégration à décider
+
+  [!] Le TMS n'est PAS une fiche ED840 autonome. Il est cité comme conséquence
+      de la Fiche 5 (charge physique). Le Module 11 de l'outil est une méthode
+      d'évaluation de la pathologie TMS, pas un risque ED840 en soi.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FICHES DÉTAILLÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ╔═══════════════════════════════════════════════════════════════════════════════════╗
+  ║  RISQUES AIGUS  (cotation G × P — Module APR standard)                         ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+  ── FICHE 1 — Chute de plain-pied  ───────────────────────────────────────────────
+
+  Définition : Glissades, trébuchements, faux pas sur surface plane ou avec faible
+  dénivellation. 2e cause d'AT — souvent sous-estimée.
+
+  Situations dangereuses types :
+    · Sols glissants (eau, huile, déversements)
+    · Espaces de circulation encombrés
+    · Éclairage insuffisant
+    · Chaussures inadaptées ou usagées
+
+  Prévention principale : conception des sols (anti-dérapant, signalisation),
+  entretien, rangement, EPI (chaussures de sécurité adaptées).
+
+
+  ── FICHE 2 — Chute de hauteur  ──────────────────────────────────────────────────
+
+  Définition : Chute avec différence de niveau significative (échelles, toits,
+  fosses, quais...). Conséquences souvent graves.
+
+  Situations dangereuses types :
+    · Travail sur échelle, échafaudage, toit
+    · Bords de quai ou de fosse non protégés
+    · Ouvertures dans les planchers
+    · Éclairage insuffisant
+
+  Prévention principale : protections collectives (garde-corps, filets), consignation
+  des zones, EPI (harnais antichute), formation travail en hauteur.
+  Référence INRS : ED 6110 (travail en hauteur)
+
+
+  ── FICHE 3 — Circulations internes de véhicules et d'engins  ───────────────────
+
+  Définition : Heurt d'une personne par un véhicule ou engin interne (chariot,
+  camion, voiture...) ou collision entre véhicules.
+
+  Situations dangereuses types :
+    · Coactivité piétons/véhicules sans séparation
+    · Voies mal identifiées, étroites, en mauvais état
+    · Mauvais état des véhicules (freins, pneus...)
+    · Manœuvres en marche arrière sans surveillance
+
+  Prévention principale : séparation des flux, signalisation, entretien,
+  formation, limitation de vitesse.
+
+
+  ── FICHE 4 — Risques routiers en mission  ───────────────────────────────────────
+
+  Définition : Accidents lors de déplacements professionnels (voiture, utilitaire,
+  deux-roues, poids lourd). Risque physique mais aussi vibrations, bruit, RPS.
+
+  Situations dangereuses types :
+    · Déplacements fréquents, conditions difficiles
+    · Véhicules mal entretenus ou mal équipés
+    · Usage d'appareils pendant la conduite
+    · Pression de performance (paiement à la course, délais...)
+
+  Prévention principale : organisation des déplacements (favoriser alternatives),
+  entretien véhicules, charte téléphone, politique de prévention routière.
+
+
+  ── FICHE 6 — Manutention mécanique  ─────────────────────────────────────────────
+
+  Définition : Risques d'accident liés à la charge manutentionnée (chute, heurt,
+  renversement) ou au moyen de manutention (rupture, défaillance).
+  Distinct de la fiche 5 (manuelle) — ici c'est la manutention par engin.
+
+  Situations dangereuses types :
+    · Moyen de manutention inadapté à la charge
+    · Déplacement sans visibilité suffisante
+    · Charge instable ou mal arrimée
+    · Engin mal entretenu
+
+  Prévention principale : matériel conforme, arrimage rigoureux, formation CACES,
+  vérifications périodiques.
+  Références INRS : ED 766, ED 949, ED 6178, ED 6339
+
+
+  ── FICHE 9 — Équipements de travail (machines, outils)  ─────────────────────────
+
+  Définition : Blessures mécaniques par éléments de machines, outils, projections.
+  Également : énergies, températures, rayonnements, bruit, postures.
+
+  Situations dangereuses types :
+    · Parties mobiles accessibles (organes de transmission)
+    · Fluides sous pression ou projections de matière
+    · Outils tranchants (couteaux, scies, cutters)
+    · Non-consignation lors de maintenance
+    · Parties brûlantes accessibles
+
+  Prévention principale : machines conformes CE, protecteurs fixes/mobiles,
+  procédures de consignation, EPI adaptés.
+
+
+  ── FICHE 10 — Effondrements et chutes d'objets  ─────────────────────────────────
+
+  Définition : Chute d'objets depuis un niveau supérieur, effondrement de
+  matériaux ou de structures.
+
+  Situations dangereuses types :
+    · Stockage en casquette ou vrac instable
+    · Racks de stockage non adaptés
+    · Travaux simultanés à différentes hauteurs
+    · Travaux en tranchées ou galeries non étayées
+
+  Prévention principale : organisation des stockages, hauteur limitée,
+  protections contre chutes d'objets, casque obligatoire.
+
+
+  ── FICHE 13 — Incendie et explosion (ATEX)  ─────────────────────────────────────
+
+  Définition : Risques présents dans toutes les entreprises. Brûlures, blessures,
+  intoxication, rupture de tympan, décès.
+
+  Situations dangereuses types :
+    · Produits inflammables, explosifs ou comburants
+    · Atmosphères explosibles (solvants, poussières de bois/farine/sucre...)
+    · Travaux par points chauds (soudage, meulage)
+    · Réseau électrique surchargé
+
+  Prévention principale : substitution, limitation des quantités, captation des
+  vapeurs/poussières, matériel ATEX en zone, compartimentage.
+  [!] ATEX = réglementation spécifique (Directive 1999/92/CE, décrets dédiés)
+
+
+  ── FICHE 14 — Électricité  ──────────────────────────────────────────────────────
+
+  Définition : Brûlures, électrisation, électrocution par contact avec pièce sous
+  tension ou arc électrique. Présent dans toutes les entreprises.
+
+  Situations dangereuses types :
+    · Armoire électrique non fermée à clé
+    · Câble d'alimentation détérioré
+    · Travail à proximité de lignes aériennes
+    · Non-consignation lors d'intervention
+
+  Prévention principale : installations par personnel habilité, contrôles
+  périodiques, habilitation électrique, consignation.
+  Références INRS : ED 6109, ED 6127, ED 6177
+
+
+  ── FICHE 19 — Heurt, cognement  ─────────────────────────────────────────────────
+
+  Définition : Heurt contre éléments fixes de l'environnement (objets, structures,
+  matériels). Contusions, plaies, entorses — peut provoquer une chute.
+
+  Situations dangereuses types :
+    · Objets dépassant des espaces de stockage
+    · Éléments saillants non signalés ou non protégés
+    · Espaces de travail encombrés
+    · Éclairage insuffisant, espaces étroits
+
+  Prévention principale : rangement, signalisation, éclairage adapté, dégagement
+  des zones de circulation.
+
+
+  ╔═══════════════════════════════════════════════════════════════════════════════════╗
+  ║  RISQUES CHRONIQUES  (méthodes normées dédiées)                                ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+  ── FICHE 5 — Charge physique de travail  ────────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : 9 | Méthode : ED 6161
+
+  Définition : Source de MP (TMS, cardiovasculaires...) et de fatigue chronique.
+  Facteurs : efforts physiques, fréquence des gestes, organisation, environnement.
+
+  Situations dangereuses types :
+    · Manutention manuelle > 15 kg, fréquence élevée
+    · Charge éloignée du corps, au sol, au-dessus des épaules
+    · Postures contraignantes : debout permanent, à genoux, accroupi
+    · Membres supérieurs en élévation statique
+    · Gestes répétitifs avec ou sans efforts
+
+  Conséquences : TMS (principalement rachis et membres supérieurs),
+  fatigue, inaptitude au travail.
+
+  Prévention principale : aides techniques, conception des postes, formation PRAP,
+  alternance des postures, implication des salariés dans les projets.
+  Références INRS : ED 6161, ED 6291
+
+
+  ── FICHE 8 — Agents biologiques  ────────────────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : À créer (07_BIOLOGIQUE)
+
+  Définition : Risques d'infection, allergie ou intoxication liés à des
+  micro-organismes (bactéries, virus, parasites, champignons).
+  Transmission : voie respiratoire, cutanée/muqueuse, ingestion.
+
+  Populations particulièrement exposées :
+    · Traitement des eaux usées et déchets
+    · Secteur agroalimentaire (poussières, moisissures)
+    · Soins à domicile / hôpital / aide à la personne
+    · Crèches et écoles maternelles
+    · Laboratoires (cultures de micro-organismes)
+    · Travailleurs en contact avec animaux
+
+  Prévention principale : ventilation, mécanisation, désinfection, vaccinations,
+  EPI (gants, masques), formation hygiène.
+
+
+  ── FICHE 11 — Bruit / Nuisances sonores  ────────────────────────────────────────
+
+  Type : LES DEUX | Module outil : 8 | Méthode : ED 6035 + ISO 9612
+
+  Composante aiguë : traumatisme sonore aigu (bruit soudain intense)
+  Composante chronique : surdité professionnelle (exposition quotidienne prolongée)
+  Effets extra-auditifs : stress, fatigue, masquage des signaux d'alarme.
+  La surdité est IRRÉVERSIBLE.
+
+  Situations dangereuses types :
+    · Outils portatifs bruyants, martelage, machines-outils
+    · Chocs métalliques, échappements d'air comprimé
+    · Presses, marteaux-pilons, réacteurs
+    · Ambiance sonore masquant les alarmes
+
+  Prévention principale : réduction à la source (encoffrement, silencieux),
+  organisation (rotation), protecteurs auditifs (EPI en dernier recours).
+  Références INRS : ED 6035 | Norme : ISO 9612
+
+
+  ── FICHE 12 — Ambiances thermiques  ─────────────────────────────────────────────
+
+  Type : LES DEUX | Module outil : À créer (08_THERMIQUE)
+
+  Composante aiguë : coup de chaleur, hyperthermie, gelures
+  Composante chronique : fatigue chronique, dermatoses, stress thermique
+
+  Situations dangereuses types :
+    · Proximité de sources de chaleur (fours, surfaces chaudes)
+    · Chambres frigorifiques, travail de la viande/poisson
+    · Postes extérieurs (intempéries, forte chaleur, froid)
+    · Courants d'air, humidité excessive
+
+  Prévention principale : climatisation/chauffage adapté, pauses en local tempéré,
+  hydratation, EPI thermiques, surveillance médicale.
+  Indices de référence : WBGT (chaleur), IREQ (froid)
+
+
+  ── FICHE 15 — Ambiances lumineuses  ─────────────────────────────────────────────
+
+  Type : CHRONIQUE (ergonomique) | Module outil : [À décider]
+
+  Définition : Éclairage inadapté favorisant fatigue visuelle, accidents,
+  postures contraignantes (TMS). Souvent sous-estimé.
+
+  Situations dangereuses types :
+    · Locaux aveugles, zones de circulation mal éclairées
+    · Éblouissements (lampes nues, reflets solaires)
+    · Reflets sur écrans favorisant les mauvaises postures
+    · Éclairage ne tenant pas compte du vieillissement ou du handicap
+
+  Prévention principale : éclairage naturel dès la conception, adaptation
+  selon les tâches, réduction des éblouissements, maintenance.
+  [!] Lien direct avec TMS (postures contraignantes liées à l'éclairage).
+
+
+  ── FICHE 16 — Rayonnements  ─────────────────────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : À créer (09_RAYONNEMENTS)
+
+  3 familles de rayonnements :
+
+  Champs électromagnétiques (CEM) :
+    · Soudage électrique, chauffage par induction, électrolyse, IRM...
+    · Effets : chaleur tissulaire, perturbation de dispositifs médicaux implantés
+
+  Rayonnements optiques artificiels (ROA) :
+    · Lampes UV, laser, procédés de traitement à chaud
+    · Effets : lésions cutanées, oculaires (photokeratite, cataracte)
+
+  Rayonnements ionisants :
+    · Radon, appareils radio (Rx), accélérateurs de particules
+    · Effets : mutations cellulaires, cancers (latence longue)
+
+  Prévention principale :
+    CEM : blindages, zones de sécurité, éloignement de la source
+    Optiques : écrans filtrants, protection oculaire, accès restreint
+    Ionisants : zonage, dosimétrie, surveillance médicale renforcée
+  Références : Directive 2013/59/Euratom, Directive 2013/35/UE
+
+
+  ── FICHE 17 — Risques psychosociaux (RPS)  ──────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : À créer (05_RPS)
+
+  Définition : Risques d'atteinte à la santé mentale et physique liés aux
+  conditions de travail et aux relations sociales.
+  Modèles de référence : Karasek (demande/latitude/soutien), Siegrist (effort/récompense)
+
+  Facteurs de risque types :
+    · Surcharge de travail, délais intenables
+    · Manque d'autonomie et de marges de manœuvre
+    · Manque de reconnaissance
+    · Conflits de valeurs
+    · Relations sociales dégradées, harcèlement
+    · Insécurité de l'emploi
+    · Changements organisationnels mal gérés
+
+  Conséquences : burn-out, dépression, troubles anxieux, maladies
+  cardiovasculaires, absentéisme, accidents liés à la baisse de vigilance.
+
+  Prévention principale : points individuels réguliers, organisation du travail,
+  management participatif, expression des salariés, anticipation des changements.
+  Outils INRS : RPS-DU (ED 6403), Faire le point RPS (Outil 37)
+  Références : ED 6250, ED 6349, ED 6403
+
+
+  ── FICHE 18 — Vibrations  ───────────────────────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : 10 | Méthode : OSEV INRS
+
+  2 types d'exposition :
+
+  Vibrations main-bras (VMB) :
+    · Outils vibrants (meuleuses, marteaux-piqueurs, tronçonneuses)
+    · Conséquences : syndrome de Raynaud, neuropathies, atteintes ostéo-articulaires
+
+  Vibrations corps entier (VCE) :
+    · Engins de chantier, chariots élévateurs, véhicules tout-terrain
+    · Conséquences : lombalgies chroniques, hernies discales
+
+  Valeurs limites d'exposition (Directive 2002/44/CE) :
+    · VMB : VLE = 5 m/s² | VA = 2,5 m/s²  (sur 8h)
+    · VCE : VLE = 1,15 m/s² | VA = 0,5 m/s²  (sur 8h)
+
+  Prévention principale : choix des équipements (vibrations à la source),
+  organisation (rotation, pauses), maintenance, EPI (gants anti-vibratiles).
+
+
+  ── FICHE 20 — Pratiques addictives  ─────────────────────────────────────────────
+
+  Type : CHRONIQUE | Module outil : [À décider]
+
+  Définition : Risques liés à la consommation de substances psychoactives
+  (alcool, tabac, cannabis, médicaments psychotropes...).
+  Causes mixtes : vie privée ET facteurs de travail (horaires décalés, RPS,
+  activité physique contraignante, pots professionnels).
+
+  Conséquences : dépression, troubles de la vigilance, problèmes cardiovasculaires,
+  cancers, dépendance, accidents du travail.
+
+  Lien fort avec : RPS (fiche 17) et charge physique (fiche 5).
+  [!] Risque souvent traité dans le cadre du programme de prévention global,
+      pas toujours comme un risque autonome dans le DUERP.
+
+
+  ╔═══════════════════════════════════════════════════════════════════════════════════╗
+  ║  RISQUE À DOUBLE COMPOSANTE (aigu ET chronique selon le niveau d'exposition)   ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+  ┌──────────────────┬────────────────────────────────┬──────────────────────────────┐
+  │  Risque          │  Composante AIGUË              │  Composante CHRONIQUE        │
+  ├──────────────────┼────────────────────────────────┼──────────────────────────────┤
+  │  Bruit (F.11)    │  Traumatisme sonore aigu       │  Surdité professionnelle     │
+  │  Thermique (F.12)│  Coup de chaleur, gelure       │  Stress thermique chronique  │
+  │  Chimique (F.7)  │  Intoxication aiguë, brûlure   │  Cancer professionnel, MP    │
+  │  Routier (F.4)   │  Accident de la route          │  Vibrations, RPS, bruit      │
+  └──────────────────┴────────────────────────────────┴──────────────────────────────┘
+
+  Dans l'outil, ces risques peuvent générer deux lignes APR pour la même opération :
+  une en type "Aigu" et une en type "Chronique".
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RÉCAPITULATIF — COUVERTURE DE L'OUTIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────────────────────┬───────────────────────────────────────────┐
+  │  Fiches couvertes par module dédié   │  F5 (M9), F7 (M12), F11 (M8), F18 (M10) │
+  │                                      │  + F5/TMS (M11 — pathologie)             │
+  ├──────────────────────────────────────┼───────────────────────────────────────────┤
+  │  Fiches à développer (plan d'action) │  F8 (bio), F12 (therm.), F16 (rayon.),   │
+  │                                      │  F17 (RPS)                               │
+  ├──────────────────────────────────────┼───────────────────────────────────────────┤
+  │  Fiches à décider                    │  F15 (lumineux), F20 (addictions)        │
+  ├──────────────────────────────────────┼───────────────────────────────────────────┤
+  │  Fiches couvertes par APR standard   │  F1, F2, F3, F4, F6, F9, F10, F13,      │
+  │  (cotation G×P — risques aigus)      │  F14, F19                                │
+  └──────────────────────────────────────┴───────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RÉFÉRENCES COMPLÉMENTAIRES ED 840
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Documents INRS cités dans l'ED 840 :
+    · ED 6161     Méthode d'analyse de la charge physique de travail
+    · ED 6291     Charge physique — secteur sanitaire et social
+    · ED 6035     Évaluation du risque bruit
+    · ED 6403     RPS-DU — outil d'évaluation des RPS
+    · ED 6250     RPS — 9 conseils pour agir au quotidien
+    · ED 6349     RPS — Comment agir en prévention ?
+    · ED 6109     Consignations et déconsignations
+    · ED 6127     Habilitation électrique
+    · ED 6177     Travailler en sécurité face au risque électrique
+    · ED 771      Rayonnages métalliques
+    · ED 140      Heurts, glissades et perturbations du mouvement
+    · ED 79       Conception et aménagement des postes de travail
+    · ED 6505     Addictions — comprendre et prévenir
+    · Outil 37    Faire le point RPS (petites entreprises)
+
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 1a TERMINÉE — Fichier : C_ED840/ED840_SYNTHESE.txt                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝

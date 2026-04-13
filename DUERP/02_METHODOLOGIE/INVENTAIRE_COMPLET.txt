@@ -1,0 +1,491 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║              INVENTAIRE COMPLET DES RISQUES CHRONIQUES — DUERP SaaS               ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 2a
+  Fichier  : D_RISQUES_CHRONIQUES/INVENTAIRE_COMPLET.txt
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OBJECTIF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Recenser l'intégralité des risques chroniques à couvrir dans l'outil DUERP SaaS,
+  avec pour chacun : sa définition, ses effets sur la santé, les populations exposées,
+  le module associé dans l'outil, la méthode d'évaluation retenue, et les liens avec
+  la réglementation (tableaux de MP, C2P).
+
+  Ce fichier sert de référence de cohérence entre les phases 3 et 4.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RAPPEL — DÉFINITION D'UN RISQUE CHRONIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Un risque chronique est un risque dont l'effet sur la santé se développe sur
+  le long terme, par accumulation d'expositions répétées — à l'opposé du risque aigu
+  qui se matérialise par un événement soudain (accident).
+
+  Caractéristiques :
+    · Latence longue entre exposition et apparition des symptômes (mois à années)
+    · Effet dose-dépendant : plus l'exposition est fréquente/longue, plus le risque est élevé
+    · Réversibilité souvent partielle ou nulle (surdité, silicose, cancer...)
+    · Souvent sous-déclaré car difficile à attribuer à une cause unique
+
+  Méthode de cotation APR standard (sans module dédié) :
+    Criticité brute = Gravité × Durée d'exposition (DE)
+    Criticité résiduelle = Criticité brute × Plan de Maîtrise (PM)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TABLEAU DE SYNTHÈSE — VUE D'ENSEMBLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌────┬──────────────────────────────┬──────────┬──────────┬───────────────────────────┐
+  │ #  │  Risque                      │  Fiche   │  Module  │  Méthode retenue          │
+  │    │                              │  ED840   │  outil   │                           │
+  ├────┼──────────────────────────────┼──────────┼──────────┼───────────────────────────┤
+  │ 01 │  Bruit                       │  11      │  M8      │  ED 6035 + ISO 9612       │
+  │ 02 │  Vibrations corps entier     │  18      │  M10     │  OSEV INRS (CE)           │
+  │ 03 │  Vibrations membres sup.     │  18      │  M10     │  OSEV INRS (MS)           │
+  │ 04 │  Charge physique de travail  │  5       │  M9      │  ED 6161                  │
+  │ 05 │  TMS                         │  —       │  M11     │  À définir (Phase 3.03)   │
+  │ 06 │  Risque chimique             │  7       │  M12     │  SEIRICH INRS (V1)        │
+  │ 07 │  CMR                         │  7       │  M12     │  SEIRICH + régl. CMR      │
+  │ 08 │  Agents biologiques          │  8       │  M15     │  INRS bio (à définir)     │
+  │ 09 │  Ambiances thermiques        │  12      │  M14     │  WBGT (chaud) / IREQ (froid)│
+  │ 10 │  Rayonnements ionisants      │  16      │  M16     │  ASN / R4451              │
+  │ 11 │  Rayonnements non ionisants  │  16      │  M16     │  INRS / R4453             │
+  │ 12 │  RPS                         │  17      │  M13     │  RPS-DU (ED 6403)         │
+  │ 13 │  Pratiques addictives        │  20      │  M13     │  Intégré RPS              │
+  │ 14 │  Ambiances lumineuses        │  15      │  APR std │  G × Durée d'exposition   │
+  │ 15 │  ATEX                        │  13      │  M17     │  Module dédié (V2)        │
+  │ 16 │  Pénibilité C2P              │  —       │  transv. │  6 facteurs C2P           │
+  └────┴──────────────────────────────┴──────────┴──────────┴───────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DÉTAIL PAR RISQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  01 — BRUIT  (Fiche 11 ED840)                                                │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition :
+    Exposition répétée à des niveaux sonores élevés qui provoque des dommages
+    progressifs et irréversibles à l'oreille interne.
+
+  Effets sur la santé :
+    · Surdité professionnelle (hypoacousie de perception bilatérale)
+    · Acouphènes permanents
+    · Fatigue auditive, troubles du sommeil, hypertension (exposition prolongée)
+
+  Populations exposées :
+    BTP, industrie (fabrication, usinage, presse), restauration, agriculture
+    (machines agricoles), musique, transports, grande distribution.
+
+  Module outil : M8
+  Dossier : D_RISQUES_CHRONIQUES/01_BRUIT/
+  Méthode : ED 6035 (INRS) + ISO 9612
+  Indicateur clé : LEX,8h (niveau d'exposition sonore journalier)
+  Valeurs seuils :
+    · ≥ 80 dB(A) ou 135 dB(C) → valeur d'action inférieure
+    · ≥ 85 dB(A) ou 137 dB(C) → valeur d'action supérieure
+    · ≥ 87 dB(A) ou 140 dB(C) → valeur limite d'exposition (VLE)
+
+  Tableaux MP : MP 42 (régime général) — surdité professionnelle
+  Facteur C2P : OUI — "exposition aux bruits mécaniques intenses"
+    Seuil C2P : ≥ 81 dB(A) sur 600 h/an OU ≥ 135 dB(C) en impulsionnel
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  02-03 — VIBRATIONS  (Fiche 18 ED840)                                        │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Deux catégories distinctes :
+
+  ─── Vibrations transmises aux membres supérieurs (MS) ───
+    Source : outils vibrants (perceuse, meuleuse, tronçonneuse, marteau-piqueur...)
+    Effets : syndrome main-bras, maladie de Raynaud, atteintes neuro-vasculaires
+    Indicateur : A(8) en m/s² — valeurs : action = 2,5 m/s², limite = 5 m/s²
+    Tableaux MP : MP 69 (affections dues aux vibrations d'outils)
+    Facteur C2P : OUI — seuil 2,5 m/s² sur 450 h/an
+
+  ─── Vibrations transmises à l'ensemble du corps (CE) ───
+    Source : engins, chariots, véhicules de chantier, camions, tracteurs
+    Effets : lombalgies chroniques, hernies discales, troubles digestifs
+    Indicateur : A(8) en m/s² — valeurs : action = 0,5 m/s², limite = 1,15 m/s²
+    Tableaux MP : MP 97 (lombalgies dues aux vibrations corps entier)
+    Facteur C2P : NON (pas dans les 6 facteurs C2P actuels)
+
+  Module outil : M10
+  Dossier : D_RISQUES_CHRONIQUES/02_VIBRATIONS/
+  Méthode : OSEV INRS (Outil Simplifié d'Évaluation des Vibrations)
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  04 — CHARGE PHYSIQUE DE TRAVAIL  (Fiche 5 ED840)                            │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition :
+    Ensemble des contraintes biomécaniques exercées sur le corps lors du travail :
+    port de charges, manutentions manuelles, postures contraignantes, gestes répétitifs.
+
+  Effets sur la santé :
+    · Lombalgies aiguës et chroniques, hernies discales
+    · Arthrose (épaule, genou, hanche) par usure prématurée
+    · Pathologies tendineuses (coiffe des rotateurs, épicondylite...)
+    → Ces pathologies sont regroupées sous le terme TMS (voir risque 05)
+
+  Populations exposées :
+    Manutentionnaires, aides-soignants, BTP, industries de process,
+    coiffeurs, caissiers, jardiniers, livreurs.
+
+  Module outil : M9
+  Dossier : D_RISQUES_CHRONIQUES/04_CHARGE_PHYSIQUE/
+  Méthode : ED 6161 (INRS) — évaluation de la charge physique au travail
+  Paramètres clés : poids, fréquence, posture de prise, distance de transport,
+    hauteur de départ et d'arrivée, durée quotidienne
+
+  Tableaux MP : MP 98 (lombalgies liées aux manutentions manuelles)
+  Facteur C2P : OUI — "manutention manuelle de charges"
+    Seuil C2P : charges > 15 kg cumulant ≥ 7,5 T/j OU port de ≥ 20 kg
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  05 — TMS — TROUBLES MUSCULO-SQUELETTIQUES                                   │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Statut : pathologie — pas un risque ED840 autonome.
+  Les TMS sont la conséquence clinique d'une exposition prolongée aux facteurs
+  de risque de la Fiche 5 (charge physique, répétitivité, posture, vibrations).
+
+  Pathologies couvertes :
+    · Syndrome du canal carpien (poignet)
+    · Épicondylite latérale / médiale (coude)
+    · Tendinopathie de la coiffe des rotateurs (épaule)
+    · Lombalgie chronique (dos)
+    · Syndrome de De Quervain (pouce)
+    · Hygroma du genou / coude
+
+  Populations exposées :
+    Tous secteurs avec travail répétitif ou port de charge : industrie, BTP,
+    agriculture, soins, grande distribution, bureautique.
+
+  Module outil : M11 (déclenché depuis M9 si seuils atteints, ou si TMS déclaré)
+  Dossier : D_RISQUES_CHRONIQUES/03_TMS/
+  Méthode : à définir lors Phase 3.03 (OCRA / RULA / REBA / RITMS3 — arbitrage)
+
+  Tableaux MP : MP 57 (affections périarticulaires), MP 98 (lombalgies)
+  Facteur C2P : OUI (via manutention manuelle de charges et postures pénibles)
+    "Postures pénibles" : seuil ≥ 900 h/an en maintien de postures forcées
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  06-07 — RISQUE CHIMIQUE / CMR  (Fiche 7 ED840)                             │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  ─── Risque chimique général ───
+    Définition : exposition des travailleurs à des substances ou mélanges chimiques
+    (liquides, gaz, vapeurs, poussières, fumées) susceptibles de nuire à la santé
+    par voie respiratoire, cutanée ou digestive.
+
+    Effets : irritations, sensibilisation cutanée ou respiratoire, atteintes
+    hépatiques, rénales, neurologiques, cancers professionnels (selon substances).
+
+    Principales familles : solvants organiques, acides et bases, huiles de coupe,
+    poussières de bois, poussières de silice cristalline, isocyanates, amines...
+
+  ─── CMR — Cancérogènes, Mutagènes, Reprotoxiques ───
+    Sous-catégorie du risque chimique avec réglementation renforcée (R4412-59 à 93).
+    Obligation de substitution prioritaire.
+    Classement EU : catégories 1A (avéré), 1B (probable), 2 (suspecté).
+    Exemples : benzène, amiante (hors bâtiment), silice cristalline, formaldéhyde,
+    plomb, produits phytosanitaires, certains solvants chlorés...
+
+  Module outil : M12
+  Dossier : D_RISQUES_CHRONIQUES/06_CHIMIQUE_CMR/
+  Méthode V1 : renvoi vers SEIRICH (https://www.seirich.fr) — outil INRS gratuit
+  Méthode cible (V2+) : méthode propre inspirée de SEIRICH (par bandes d'exposition)
+
+  Populations exposées :
+    Industrie chimique, pharmacie, agriculture, BTP (peintures, solvants, poussières),
+    coiffure, nettoyage, imprimerie, soudure, laboratoires.
+
+  Tableaux MP : nombreux (liste complète lors Phase 3.06)
+    Exemples : MP 4 (benzène), MP 10 (poussières de bois), MP 15 (amiante),
+    MP 16 (silice), MP 47 (solvants), MP 66 (formaldéhyde)...
+  Facteur C2P : OUI — "agents chimiques dangereux"
+    Seuil C2P : ≥ 450 h/an en dépassement des valeurs VLEP réglementaires
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  08 — AGENTS BIOLOGIQUES  (Fiche 8 ED840)                                   │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition :
+    Micro-organismes (bactéries, virus, champignons, parasites, prions) pouvant
+    causer des infections, des allergies ou des intoxications lors de l'exposition
+    professionnelle.
+
+  Classification par groupe de risque (Directive 2000/54/CE) :
+    · Groupe 1 : peu probable de causer une maladie chez l'homme sain
+    · Groupe 2 : peut causer une maladie — traitement efficace disponible (ex : grippe)
+    · Groupe 3 : peut causer une maladie grave — traitement disponible (ex : tuberculose)
+    · Groupe 4 : maladie grave sans traitement efficace (ex : virus Ebola)
+
+  Voies de contamination :
+    Respiratoire (aérosols, poussières) / cutanée / muqueuse / digestive /
+    AES (accidents d'exposition au sang)
+
+  Effets sur la santé :
+    Infections (tuberculose, hépatites B/C, légionellose, leptospirose...),
+    allergies respiratoires (asthme professionnel), réactions toxiniques.
+
+  Populations exposées :
+    Santé (soignants), agriculture (contact animaux/sol), agroalimentaire,
+    assainissement, collecte de déchets, laboratoires, services funèbres,
+    jardinage/espaces verts.
+
+  Module outil : M15
+  Dossier : D_RISQUES_CHRONIQUES/07_BIOLOGIQUE/
+  Méthode : à définir lors Phase 3.07 (grille INRS par groupe d'agents)
+
+  Tableaux MP : MP 45 (hépatites), MP 76 (leptospirose), MP 80 (kératoconjonctivites)
+  Facteur C2P : NON
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  09 — AMBIANCES THERMIQUES  (Fiche 12 ED840)                                 │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Deux expositions chroniques distinctes :
+
+  ─── Stress thermique par la chaleur ───
+    Situations : travail en locaux chauds (fonderies, cuisines, fours industriels),
+    travail en extérieur par forte chaleur, canicule.
+    Effets chroniques : déshydratation répétée, coups de chaleur (risque aigu/chronique),
+    pathologies cardiovasculaires, fatigue chronique.
+    Indicateur : WBGT (Wet Bulb Globe Temperature) — norme ISO 7243
+
+  ─── Stress thermique par le froid ───
+    Situations : chambres froides, travail en extérieur en hiver, industrie du froid.
+    Effets chroniques : troubles vasculaires périphériques (syndrome de Raynaud),
+    gelures, hypothermie (risque aigu), troubles musculo-squelettiques aggravés.
+    Indicateur : IREQ (Isolement REQuis) — norme ISO 11079
+
+  Module outil : M14
+  Dossier : D_RISQUES_CHRONIQUES/08_THERMIQUE/
+  Méthode : WBGT (chaleur) + IREQ (froid) — à détailler lors Phase 3.08
+
+  Tableaux MP : MP 29 (eczéma / travail au froid), MP 69 (Raynaud par vibrations + froid)
+  Facteur C2P : OUI — "températures extrêmes"
+    Seuil C2P : ≥ 900 h/an en température ≤ -5°C OU ≥ 30°C
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  10-11 — RAYONNEMENTS  (Fiche 16 ED840)                                      │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  ─── Rayonnements ionisants ───
+    Définition : rayonnements capables d'ioniser la matière (rayons X, gamma,
+    neutrons, alpha, bêta). Réglementation : ASN, R4451-1 à R4456-9.
+    Effets : cancers (leucémies, thyroïde, poumon...), effets génétiques,
+    syndrome aigu des rayonnements en cas de sur-exposition.
+    Doses limites : 20 mSv/an (travailleurs classifiés) / 1 mSv/an (public)
+    Populations : radiologie médicale / industrielle, industrie nucléaire,
+    recherche, soudure radiographique.
+    Tableaux MP : MP 6 (rayonnements ionisants)
+    Facteur C2P : NON
+
+  ─── Rayonnements non ionisants (RNI) ───
+    Plusieurs sous-catégories :
+    · Rayonnements optiques (UV, IR, lumière visible intense, lasers)
+      Effets : kératoconjonctivites, cataractes, lésions rétiniennes, cancers cutanés
+      Populations : soudeurs, poseurs de résines UV, personnel médical (lasers)
+      Directive 2006/25/CE / Décret du 4 juillet 2012
+    · Champs électromagnétiques (CEM : ELF, RF, micro-ondes)
+      Effets : perturbations du système nerveux, effets thermiques (RF), risques
+      pour porteurs de dispositifs médicaux implantables
+      Directive 2013/35/UE, R4453-1 à R4453-9
+      Populations : soudage, induction, IRM, émetteurs radio, four micro-ondes industriel
+
+  Module outil : M16
+  Dossier : D_RISQUES_CHRONIQUES/09_RAYONNEMENTS/
+  Méthode : ASN/INRS selon le type — à définir lors Phase 3.09
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  12-13 — RPS — RISQUES PSYCHOSOCIAUX + PRATIQUES ADDICTIVES  (Fiches 17+20) │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition des RPS :
+    Risques liés à l'organisation, au contenu et aux conditions du travail, ainsi
+    qu'aux relations interpersonnelles. Ils agissent sur la santé mentale et physique.
+
+  Modèles théoriques de référence :
+    · Modèle de Karasek : demande psychologique, latitude décisionnelle, soutien social
+    · Modèle de Siegrist : efforts consentis vs récompenses perçues
+    · Modèle de Gollac : 6 axes (intensité, horaires, autonomie, relations, conflits
+      de valeur, insécurité)
+
+  Manifestations principales :
+    Stress chronique, burn-out (épuisement professionnel), bore-out, brown-out,
+    harcèlement moral et/ou sexuel, violences internes ou externes.
+
+  Effets sur la santé :
+    Troubles anxieux et dépressifs, maladies cardiovasculaires (infarctus,
+    hypertension), troubles du sommeil, troubles musculo-squelettiques aggravés,
+    consommation accrue d'alcool / médicaments / drogues.
+
+  ─── Intégration des Pratiques addictives (Fiche 20 ED840) ───
+    Les conduites addictives en milieu professionnel (alcool, cannabis, médicaments
+    psychoactifs, tabac) sont des facteurs aggravants et des conséquences des RPS.
+    Elles sont évaluées dans le cadre du module RPS (M13) et non de façon autonome.
+
+  Module outil : M13
+  Dossier : D_RISQUES_CHRONIQUES/05_RPS/
+  Méthode : RPS-DU (ED 6403 INRS) — questionnaire anonyme par population / UT
+
+  Tableaux MP : MP 57 (affections périarticulaires — stress aggravant), pas de tableau
+  MP spécifique RPS actuellement.
+  Facteur C2P : NON (les RPS ne font pas partie des 6 facteurs du C2P)
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  14 — AMBIANCES LUMINEUSES  (Fiche 15 ED840)  — APR standard                │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition :
+    Conditions d'éclairage au poste de travail pouvant entraîner des contraintes
+    visuelles chroniques (éclairage insuffisant, éblouissement, reflets, travail
+    sur écran, éclairage inadapté à la tâche).
+
+  Effets sur la santé :
+    Fatigue visuelle chronique (asthénopie), maux de tête, erreurs de perception,
+    risque d'accident secondaire (mauvaise visibilité), troubles posturaux liés
+    aux compensations visuelles.
+
+  Traitement dans l'outil :
+    Pas de module dédié — évaluation via l'APR standard :
+    Criticité brute = Gravité × Durée d'exposition
+
+  Normes de référence : NF EN 12464-1 (éclairage des lieux de travail intérieurs)
+  Valeurs recommandées : 500 lux pour tâches de précision, 300 lux pour bureaux
+
+  Tableaux MP : aucun tableau MP spécifique pour les seules ambiances lumineuses.
+  Facteur C2P : NON
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  15 — ATEX — ATMOSPHÈRES EXPLOSIBLES  (Fiche 13 ED840)                      │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Définition :
+    Mélange avec l'air de substances inflammables (gaz, vapeurs, brouillards,
+    poussières) en proportions telles qu'une source d'inflammation peut provoquer
+    une explosion.
+
+  Risque principalement AIGU (explosion soudaine), mais avec dimension chronique
+  pour l'exposition continue aux vapeurs et poussières inflammables (risque chimique
+  associé).
+
+  Zones ATEX :
+    · Zone 0 / 20 : atmosphère explosive en permanence (gaz / poussières)
+    · Zone 1 / 21 : atmosphère explosive de façon occasionnelle
+    · Zone 2 / 22 : atmosphère explosive en cas de dysfonctionnement
+
+  Réglementation : Directive 1999/92/CE (ATEX utilisateurs), Articles R4227-42 à
+  R4227-54 Code du travail.
+  Document obligatoire : DRPCE (Document Relatif à la Protection Contre les Explosions)
+
+  Traitement dans l'outil : Module M17 dédié (trop complexe pour l'APR standard)
+  Dossier : traité dans D_RISQUES_CHRONIQUES (à créer : 10_ATEX/)
+  Statut V1 : hors scope — à planifier en V2.
+
+  Tableaux MP : pas de tableau MP spécifique ATEX.
+  Facteur C2P : NON
+
+
+  ┌───────────────────────────────────────────────────────────────────────────────┐
+  │  16 — PÉNIBILITÉ C2P  (transversal)                                          │
+  └───────────────────────────────────────────────────────────────────────────────┘
+
+  Le Compte Professionnel de Prévention (C2P) identifie 6 facteurs de risques
+  professionnels à déclarer par l'employeur si les seuils sont dépassés.
+  Ces facteurs traversent plusieurs modules de l'outil.
+
+  Les 6 facteurs C2P avec seuils (décret 2017-1769) :
+
+  ┌───┬─────────────────────────────────┬─────────────────────────────────────────┐
+  │ # │  Facteur                        │  Seuil de déclaration                   │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 1 │  Bruit                          │  ≥ 81 dB(A) sur 600 h/an               │
+  │   │                                 │  OU ≥ 135 dB(C) en impulsionnel         │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 2 │  Températures extrêmes          │  ≤ -5°C ou ≥ 30°C sur ≥ 900 h/an      │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 3 │  Travail en milieu hyperbare    │  ≥ 1 200 h/an ou 60 interventions/an    │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 4 │  Vibrations mécaniques (MS)     │  A(8) ≥ 2,5 m/s² sur ≥ 450 h/an       │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 5 │  Agents chimiques dangereux     │  ≥ 450 h/an en dépassement VLEP         │
+  │   │  (dont CMR cat. 1 et 2)         │  (dont cancérogènes cat. 1A/1B)         │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 6 │  Manutention manuelle de        │  > 15 kg × ≥ 600 h/an                  │
+  │   │  charges                        │  OU > 20 kg en charge individuelle       │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 7 │  Postures pénibles              │  ≥ 900 h/an en postures forcées          │
+  │   │  (articulations en position     │                                          │
+  │   │  extrême)                       │                                          │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 8 │  Travail de nuit                │  ≥ 1 h entre 0h et 5h — ≥ 120 nuits/an │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │ 9 │  Travail en équipes successives │  Travail en équipes alternantes ou de    │
+  │   │  alternantes                    │  suppléance ≥ 50 nuits/an               │
+  ├───┼─────────────────────────────────┼─────────────────────────────────────────┤
+  │10 │  Travail répétitif              │  Temps cycle ≤ 30s ou répétition d'un   │
+  │   │                                 │  même geste > 15 fois/min ≥ 900 h/an   │
+  └───┴─────────────────────────────────┴─────────────────────────────────────────┘
+
+  [!] Note : le C2P liste 10 facteurs mais seuls 6 sont "actifs" depuis 2018
+      (les 4 facteurs "organisationnels" ont été réintroduits progressivement).
+      Vérification de la liste exacte requise lors Phase 3.
+
+  Intégration dans l'outil :
+    Les facteurs C2P liés à un module dédié (bruit, vibrations, charge physique,
+    chimique, thermique) seront signalés automatiquement dans le résultat du module.
+    Les facteurs organisationnels (nuit, équipes, répétitif) seront mentionnés
+    dans l'APR ou dans un sous-module C2P à créer.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MATRICE DE COUVERTURE — CE QUI EST TRAITÉ EN V1 vs V2+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────────────┬──────────┬────────────────────────────────────────┐
+  │  Risque                      │  V1      │  Commentaire                           │
+  ├──────────────────────────────┼──────────┼────────────────────────────────────────┤
+  │  Bruit                       │  ✓ M8    │  ED 6035 + ISO 9612                    │
+  │  Vibrations                  │  ✓ M10   │  OSEV INRS                             │
+  │  Charge physique             │  ✓ M9    │  ED 6161                               │
+  │  TMS                         │  ✓ M11   │  Méthode à arbitrer Phase 3.03         │
+  │  Chimique / CMR              │  ✓ M12   │  Renvoi SEIRICH (méthode propre V2+)   │
+  │  RPS + addictions            │  ✓ M13   │  RPS-DU (ED 6403)                      │
+  │  Ambiances thermiques        │  ✓ M14   │  WBGT + IREQ                           │
+  │  Agents biologiques          │  ✓ M15   │  Méthode INRS à définir Phase 3.07     │
+  │  Rayonnements                │  ✓ M16   │  ASN / INRS selon type                 │
+  │  ATEX                        │  ~ M17   │  Module dédié — scope V2               │
+  │  Ambiances lumineuses        │  ✓ APR   │  G × Durée d'exposition                │
+  │  Pénibilité C2P              │  ~ transv│  Signalement dans modules existants    │
+  └──────────────────────────────┴──────────┴────────────────────────────────────────┘
+
+  Légende : ✓ = intégré V1 | ~ = partiellement / à planifier
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  Phase 2a terminée — Suite : Phase 2c (TEMPLATE_METHODE.txt)                       ║
+║  Fichier : D_RISQUES_CHRONIQUES/INVENTAIRE_COMPLET.txt                             ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝

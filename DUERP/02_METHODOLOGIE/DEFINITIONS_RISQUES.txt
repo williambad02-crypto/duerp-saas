@@ -1,0 +1,286 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║                  DÉFINITIONS ET DISTINCTIONS FONDAMENTALES                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 0c
+  Fichier  : B_METHODOLOGIE/DEFINITIONS_RISQUES.txt
+  Dernière mise à jour : Avril 2026
+
+  Ce fichier pose le vocabulaire de référence de l'outil.
+  Toute ambiguïté de définition ici crée une incohérence dans le DUERP final.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. CHAÎNE DE L'ACCIDENT — LES 5 CONCEPTS CLÉS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Ces 5 concepts forment la chaîne logique de l'analyse des risques.
+  Ils correspondent directement aux colonnes de l'APR (Module 5).
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  DANGER → SITUATION DANGEREUSE → ÉVÉNEMENT DANGEREUX → DOMMAGE                │
+  │                ↑                                                               │
+  │            (le salarié s'y expose)                                            │
+  └─────────────────────────────────────────────────────────────────────────────────┘
+
+  ── DANGER ────────────────────────────────────────────────────────────────────────
+
+  Définition : Propriété intrinsèque d'un agent, d'une substance, d'un équipement
+  ou d'une méthode de travail susceptible de causer un dommage.
+
+  C'est la SOURCE, indépendamment de toute personne exposée.
+  Le danger existe qu'il y ait ou non quelqu'un à proximité.
+
+  Exemples :
+    · Une machine en mouvement (danger mécanique)
+    · Un produit chimique corrosif (danger chimique)
+    · Un sol glissant (danger physique)
+    · Une charge lourde à manutentionner (danger lié à la charge physique)
+    · Un niveau sonore élevé (danger bruit)
+
+  Dans l'outil (colonne APR) : "Ce qui fait mal / ce qui peut blesser l'opérateur"
+
+
+  ── SITUATION DANGEREUSE ──────────────────────────────────────────────────────────
+
+  Définition : Toute situation dans laquelle une personne est exposée à un ou
+  plusieurs dangers. C'est la rencontre entre un salarié et un danger.
+
+  Elle dépend à la fois du danger ET du comportement/de l'activité du salarié.
+
+  Exemples :
+    · Salarié qui passe les mains dans la zone de coupe d'une machine
+    · Salarié qui manipule un solvant sans protection
+    · Salarié qui marche sur le sol glissant avec des chaussures inadaptées
+    · Salarié qui soulève une charge de 25 kg sans aide technique
+
+  Dans l'outil (colonne APR) : "Ce que fait l'opérateur qui le met en danger"
+
+
+  ── RISQUE ────────────────────────────────────────────────────────────────────────
+
+  Définition : Combinaison de la probabilité d'occurrence d'un événement dangereux
+  et de la gravité du dommage pouvant en résulter.
+
+  RISQUE = f (Probabilité × Gravité)
+
+  Le risque n'est pas le danger. Il mesure la vraisemblance et les conséquences
+  d'un accident. Il est évalué et coté (voir COTATION.txt).
+
+  Dans l'outil (colonne APR) : sélectionné dans la liste INRS (ED 840)
+
+
+  ── ÉVÉNEMENT DANGEREUX ───────────────────────────────────────────────────────────
+
+  Définition : Événement, survenant à partir d'une situation dangereuse, qui peut
+  causer un dommage. C'est le déclencheur de l'accident.
+
+  [!] Applicable UNIQUEMENT aux risques aigus.
+  Pour les risques chroniques, il n'y a pas d'événement déclencheur ponctuel —
+  c'est l'exposition cumulée dans le temps qui cause le dommage.
+
+  Exemples :
+    · Démarrage inopiné d'une machine → blessure
+    · Projection d'un produit chimique → brûlure
+    · Glissade → chute
+
+  Dans l'outil (colonne APR) : "L'exemple de l'accident possible"
+
+
+  ── DOMMAGE ───────────────────────────────────────────────────────────────────────
+
+  Définition : Atteinte physique et/ou atteinte à la santé, résultant d'un événement
+  dangereux (aigu) ou d'une exposition prolongée (chronique).
+
+  Types de dommages :
+    · Blessure (coupure, fracture, brûlure...)
+    · Maladie professionnelle (surdité, TMS, cancer professionnel...)
+    · Trouble psychologique (burnout, dépression...)
+    · Décès
+
+  Dans l'outil (colonne APR) : "Ce que peut subir l'opérateur"
+
+
+  ── SIÈGE DES LÉSIONS ─────────────────────────────────────────────────────────────
+
+  Définition : Localisation anatomique des dommages sur le corps du salarié.
+
+  Exemples :
+    · Membres supérieurs (mains, poignets, épaules)
+    · Rachis (lombaire, cervical)
+    · Oreilles / système auditif
+    · Voies respiratoires
+    · Peau / yeux
+
+  Dans l'outil (colonne APR) : "Là où les dommages sont appliqués"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  2. CLASSIFICATION DES RISQUES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  L'outil distingue trois grandes familles de risques. Cette distinction est
+  structurante : elle détermine la méthode d'évaluation à appliquer.
+
+  ┌─────────────────────┬──────────────────────────────────────────────────────────┐
+  │  RISQUE AIGU        │  Survenue liée à un événement ponctuel (accident à un   │
+  │                     │  instant T). Effets immédiats et identifiables.         │
+  │                     │                                                          │
+  │                     │  Méthode : Gravité × Probabilité (cotation simple)      │
+  │                     │  Exemples : chute, coupure, électrocution, explosion    │
+  ├─────────────────────┼──────────────────────────────────────────────────────────┤
+  │  RISQUE CHRONIQUE   │  Lié à une exposition répétée et prolongée dans le      │
+  │                     │  temps. Effets différés, pouvant prendre des années     │
+  │                     │  à se manifester. Pas d'événement déclencheur unique.  │
+  │                     │                                                          │
+  │                     │  Méthode : Norme spécifique par type de risque         │
+  │                     │  Exemples : surdité, TMS, cancer professionnel, RPS    │
+  ├─────────────────────┼──────────────────────────────────────────────────────────┤
+
+  ── DIFFÉRENCES CLÉS AIGU vs CHRONIQUE ───────────────────────────────────────────
+
+  ┌──────────────────────────────┬──────────────────────┬────────────────────────┐
+  │  Critère                     │  Risque AIGU         │  Risque CHRONIQUE      │
+  ├──────────────────────────────┼──────────────────────┼────────────────────────┤
+  │  Déclencheur                 │  Événement ponctuel  │  Exposition cumulée    │
+  │  Délai d'apparition          │  Immédiat            │  Différé (mois/années) │
+  │  Réversibilité               │  Souvent réversible  │  Souvent irréversible  │
+  │  Méthode d'évaluation        │  G × P (cotation)    │  Norme dédiée          │
+  │  Événement dangereux (APR)   │  Oui                 │  Non applicable        │
+  │  Valeurs limites             │  Non                 │  Oui (VLEP, LEX...)    │
+  │  Maladie professionnelle     │  Rarement            │  Fréquemment           │
+  └──────────────────────────────┴──────────────────────┴────────────────────────┘
+
+  ── RISQUES POUVANT ÊTRE LES DEUX ────────────────────────────────────────────────
+
+  Certains risques ont une composante aiguë ET chronique selon le niveau d'exposition :
+
+    · Bruit : traumatisme sonore aigu (explosion) + surdité chronique (exposition quotidienne)
+    · Thermique : coup de chaleur aigu + stress thermique chronique
+    · Chimique : intoxication aiguë + maladie professionnelle à long terme
+
+  Dans l'outil, ces risques sont saisis deux fois si les deux composantes existent :
+  une ligne en "aigu" et une ligne en "chronique".
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  3. L'UNITÉ DE TRAVAIL (UT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Définition réglementaire (R4121-1) :
+  L'évaluation des risques comporte un inventaire des risques identifiés dans
+  chaque UNITÉ DE TRAVAIL de l'entreprise ou de l'établissement.
+
+  L'UT est le découpage de référence du DUERP. Elle regroupe des salariés
+  exposés aux mêmes risques dans des conditions comparables.
+
+  ── COMMENT DÉFINIR UNE UNITÉ DE TRAVAIL ? ───────────────────────────────────────
+
+  Une UT peut être définie par :
+    · Un poste de travail : "Opérateur machine X", "Cariste", "Soudeur"
+    · Un atelier / une zone : "Atelier usinage", "Zone de stockage", "Bureau"
+    · Une fonction : "Commercial itinérant", "Agent de maintenance"
+    · Une activité : "Travail en hauteur", "Nettoyage des cuves"
+
+  Critères pour regrouper dans la même UT :
+    · Même nature de tâches
+    · Mêmes dangers présents
+    · Même environnement de travail
+    · Niveau d'exposition comparable
+
+  ── EXEMPLES DE DÉCOUPAGE ─────────────────────────────────────────────────────────
+
+  Entreprise de fabrication (exemple) :
+    UT 1 : Opérateurs machines
+    UT 2 : Caristes / Magasiniers
+    UT 3 : Agents de maintenance
+    UT 4 : Personnel administratif / Bureau
+    UT 5 : Responsables / Encadrement terrain
+
+  ── RÈGLE DANS L'OUTIL ────────────────────────────────────────────────────────────
+
+  Dans l'outil DUERP, l'UT correspond au "Poste de travail" (Module 5 — APR).
+  C'est le premier niveau de saisie, avant les opérations et les risques.
+  Un même poste peut avoir plusieurs opérations, chacune pouvant générer des risques
+  aigus et/ou chroniques différents.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  4. HIÉRARCHIE DES MESURES DE PRÉVENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Fondée sur les 9 principes généraux de prévention (L4121-2), la hiérarchie
+  des mesures suit un ordre de priorité strict : agir à la source d'abord,
+  protéger l'individu en dernier recours.
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  NIVEAU 1 — SUPPRESSION                                                        │
+  │  Éliminer le danger à la source (principe 1 : éviter le risque)               │
+  │  Ex : remplacer un produit CMR par un produit non dangereux                   │
+  ├─────────────────────────────────────────────────────────────────────────────────┤
+  │  NIVEAU 2 — RÉDUCTION À LA SOURCE                                              │
+  │  Réduire le risque là où il se crée (principe 3 : combattre à la source)      │
+  │  Ex : capotage d'une machine bruyante, aspiration des poussières              │
+  ├─────────────────────────────────────────────────────────────────────────────────┤
+  │  NIVEAU 3 — MESURES COLLECTIVES (T.H.O.)                                       │
+  │  Protéger l'ensemble des travailleurs (principe 8 : priorité au collectif)    │
+  │                                                                                 │
+  │  T — TECHNIQUE       Équipements, protections physiques, automatisation       │
+  │  H — HUMAIN          Travail en binôme, rotation des équipes, formation       │
+  │  O — ORGANISATIONNEL Horaires, procédures, aménagement, organisation          │
+  ├─────────────────────────────────────────────────────────────────────────────────┤
+  │  NIVEAU 4 — EPI (Équipements de Protection Individuelle)                       │
+  │  Dernier recours, protège uniquement l'individu                               │
+  │  Ex : casque, bouchons d'oreille, gants, masque respiratoire                 │
+  │  [!] L'EPI ne supprime pas le risque — il réduit les conséquences            │
+  └─────────────────────────────────────────────────────────────────────────────────┘
+
+  ── DANS L'OUTIL ──────────────────────────────────────────────────────────────────
+
+  Les moyens de maîtrise existants (Module 5 — bloc C) sont classés en T.H.O.
+  Les EPI ne sont pas un niveau T.H.O. — ils sont traités séparément.
+  Le Plan d'action (Module 6) doit respecter cet ordre de priorité :
+  proposer d'abord des mesures techniques avant des mesures organisationnelles
+  avant de recourir aux EPI.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  5. GLOSSAIRE COMPLÉMENTAIRE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌─────────────────────────────┬──────────────────────────────────────────────────┐
+  │  Terme                      │  Définition courte                               │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  AT — Accident du Travail   │  Accident survenu par le fait ou à l'occasion   │
+  │                             │  du travail (L411-1 Code SS)                    │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  MP — Maladie Pro.          │  Maladie résultant d'une exposition habituelle   │
+  │                             │  à un risque lié à l'activité professionnelle   │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  CMR                        │  Cancérogène, Mutagène, Reprotoxique — catégorie │
+  │                             │  de substances chimiques à réglementation renforcée│
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  VLEP                       │  Valeur Limite d'Exposition Professionnelle —    │
+  │                             │  concentration max d'un agent chimique dans l'air│
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  C2P                        │  Compte Professionnel de Prévention — 6 facteurs │
+  │                             │  de pénibilité ouvrant des droits aux salariés  │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  CSE / CSSCT                │  Comité Social et Économique / Commission Santé  │
+  │                             │  Sécurité et Conditions de Travail              │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  SPST                       │  Service de Prévention et de Santé au Travail   │
+  │                             │  (ex-service de médecine du travail)            │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  Criticité brute            │  Score de risque avant prise en compte des       │
+  │                             │  moyens de maîtrise existants                   │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  Criticité résiduelle       │  Score de risque après moyens de maîtrise        │
+  │                             │  existants = état actuel du risque              │
+  ├─────────────────────────────┼──────────────────────────────────────────────────┤
+  │  Criticité finale           │  Score de risque après plan d'action =           │
+  │                             │  état cible du risque                           │
+  └─────────────────────────────┴──────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 0c TERMINÉE — Fichier : B_METHODOLOGIE/DEFINITIONS_RISQUES.txt             ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
