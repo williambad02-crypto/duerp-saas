@@ -25,14 +25,18 @@ export interface InfoAbonnement {
 export async function getInfoAbonnement(userId: string): Promise<InfoAbonnement> {
   const supabase = await createClient()
 
-  const { data: abo } = await supabase
+  const { data: abo, error } = await supabase
     .from('abonnements')
     .select('statut, trial_ends_at, current_period_end, plan, periode, stripe_customer_id')
     .eq('user_id', userId)
-    .single()
+    .maybeSingle()
+
+  // Log temporaire — à supprimer une fois le bug résolu
+  console.log('[abonnement] userId:', userId, '| data:', JSON.stringify(abo), '| error:', JSON.stringify(error))
 
   // Aucun enregistrement → mode découverte
   if (!abo) {
+    if (error) console.error('[abonnement] Erreur query Supabase:', error)
     return aucun()
   }
 
