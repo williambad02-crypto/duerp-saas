@@ -40,11 +40,14 @@ export function MarketingNav() {
         className={cn(
           'sticky top-0 z-50 transition-all duration-300',
           scrolled
-            ? 'bg-brand-cream/90 backdrop-blur-md border-b border-brand-sand shadow-[0_1px_8px_rgba(3,25,72,0.06)]'
+            ? 'bg-brand-cream/95 backdrop-blur-md border-b border-brand-sand shadow-[0_1px_8px_rgba(3,25,72,0.06)]'
             : 'bg-brand-cream border-b border-transparent'
         )}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <div className={cn(
+          'max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300',
+          scrolled ? 'h-14' : 'h-20'
+        )}>
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Logo variant="full" theme="default" height={28} />

@@ -5,6 +5,9 @@ import { envoyerContact, EtatContact } from "./actions"
 
 const etatInitial: EtatContact = { statut: "idle" }
 
+const inputClass = "block w-full rounded-lg border border-brand-sand bg-brand-cream px-3.5 py-2.5 text-brand-navy placeholder-brand-bronze/40 focus:border-brand-navy focus:ring-2 focus:ring-brand-navy/10 text-sm transition outline-none"
+const labelClass = "block text-sm font-medium text-brand-navy mb-1.5"
+
 export function ContactForm() {
   const [etat, action, pending] = useActionState(envoyerContact, etatInitial)
 
@@ -33,8 +36,8 @@ export function ContactForm() {
       )}
 
       <div>
-        <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-1.5">
-          Nom complet <span className="text-red-500">*</span>
+        <label htmlFor="nom" className={labelClass}>
+          Nom complet <span className="text-red-400">*</span>
         </label>
         <input
           id="nom"
@@ -42,14 +45,14 @@ export function ContactForm() {
           type="text"
           required
           autoComplete="name"
-          className="block w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm transition"
+          className={inputClass}
           placeholder="Jean Dupont"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-          Adresse email <span className="text-red-500">*</span>
+        <label htmlFor="email" className={labelClass}>
+          Adresse email <span className="text-red-400">*</span>
         </label>
         <input
           id="email"
@@ -57,29 +60,47 @@ export function ContactForm() {
           type="email"
           required
           autoComplete="email"
-          className="block w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm transition"
+          className={inputClass}
           placeholder="jean.dupont@entreprise.fr"
         />
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">
-          Message <span className="text-red-500">*</span>
+        <label htmlFor="sujet" className={labelClass}>
+          Sujet
+        </label>
+        <select
+          id="sujet"
+          name="sujet"
+          className={inputClass}
+          defaultValue=""
+        >
+          <option value="" disabled>Choisir un sujet…</option>
+          <option value="question">Question sur l&apos;outil</option>
+          <option value="devis">Demande de devis consulting</option>
+          <option value="technique">Problème technique</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="message" className={labelClass}>
+          Message <span className="text-red-400">*</span>
         </label>
         <textarea
           id="message"
           name="message"
           required
-          rows={6}
-          className="block w-full rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-900 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm transition resize-none"
-          placeholder="Décrivez votre demande..."
+          rows={5}
+          className={`${inputClass} resize-none`}
+          placeholder="Décrivez votre demande…"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-blue-700 hover:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold px-5 py-2.5 text-sm transition flex items-center justify-center gap-2"
+        className="w-full rounded-lg bg-brand-gold hover:bg-brand-gold-light disabled:opacity-60 disabled:cursor-not-allowed text-brand-off font-semibold px-5 py-2.5 text-sm transition flex items-center justify-center gap-2"
       >
         {pending ? (
           <>
@@ -90,13 +111,13 @@ export function ContactForm() {
             Envoi en cours…
           </>
         ) : (
-          "Envoyer le message"
+          "Envoyer le message →"
         )}
       </button>
 
-      <p className="text-xs text-gray-400 text-center">
-        Vos données sont traitées conformément à notre{" "}
-        <a href="/confidentialite" className="underline hover:text-gray-600">
+      <p className="text-xs text-brand-bronze/50 text-center">
+        Données traitées conformément à notre{" "}
+        <a href="/confidentialite" className="underline hover:text-brand-navy transition-colors">
           politique de confidentialité
         </a>
         .

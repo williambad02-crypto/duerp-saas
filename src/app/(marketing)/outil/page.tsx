@@ -65,16 +65,90 @@ const fonctionnalites = [
   },
 ]
 
+// 20 risques ED840 avec type et description courte
+const risquesED840 = [
+  { num: "01", nom: "Chute de plain-pied", type: "AIGU", desc: "Sol glissant, encombrement, obstacles au sol" },
+  { num: "02", nom: "Chute de hauteur", type: "AIGU", desc: "Échelles, toitures, passerelles, fosses" },
+  { num: "03", nom: "Circulations internes", type: "AIGU", desc: "Chariots, piétons, zones de croisement" },
+  { num: "04", nom: "Risques routiers", type: "AIGU", desc: "Mission, trajet domicile-travail, conduite" },
+  { num: "05", nom: "Charge physique", type: "CHRONIQUE", desc: "Postures contraignantes, effort physique répété" },
+  { num: "06", nom: "Manutention mécanique", type: "AIGU", desc: "Ponts roulants, chariots élévateurs, nacelles" },
+  { num: "07", nom: "Produits chimiques", type: "MIXTE", desc: "CMR, irritants, corrosifs, solvants" },
+  { num: "08", nom: "Agents biologiques", type: "CHRONIQUE", desc: "Bactéries, virus, moisissures, zoonoses" },
+  { num: "09", nom: "Équipements de travail", type: "AIGU", desc: "Machines, outils, organes en mouvement" },
+  { num: "10", nom: "Chutes d'objets", type: "AIGU", desc: "Effondrements, chutes depuis des étagères ou racks" },
+  { num: "11", nom: "Bruit", type: "MIXTE", desc: "Exposition sonore, niveaux d'action LEX,8h / Lc" },
+  { num: "12", nom: "Ambiances thermiques", type: "MIXTE", desc: "Chaleur, froid, ambiances extrêmes" },
+  { num: "13", nom: "Incendie / ATEX", type: "AIGU", desc: "Stockage, sources d'inflammation, zones explosibles" },
+  { num: "14", nom: "Électricité", type: "AIGU", desc: "Habilitation, armoires, câbles, humidité" },
+  { num: "15", nom: "Ambiances lumineuses", type: "CHRONIQUE", desc: "Éclairage insuffisant, éblouissement, UV" },
+  { num: "16", nom: "Rayonnements", type: "CHRONIQUE", desc: "Ionisants, UV, infrarouge, électromagnétique" },
+  { num: "17", nom: "Risques psychosociaux", type: "CHRONIQUE", desc: "Stress, harcèlement, surcharge cognitive" },
+  { num: "18", nom: "Vibrations", type: "CHRONIQUE", desc: "Vibrations main-bras, corps entier — valeurs limites" },
+  { num: "19", nom: "Heurts / Cognements", type: "AIGU", desc: "Angles saillants, protubérances, espaces étroits" },
+  { num: "20", nom: "Pratiques addictives", type: "CHRONIQUE", desc: "Alcool, stupéfiants, médicaments détournés" },
+]
+
+const typeColor: Record<string, string> = {
+  AIGU: 'bg-orange-50 text-orange-700 border-orange-200',
+  CHRONIQUE: 'bg-blue-50 text-blue-700 border-blue-200',
+  MIXTE: 'bg-brand-gold-pale text-brand-bronze border-brand-sand',
+}
+const typeLabel: Record<string, string> = {
+  AIGU: 'Aigu',
+  CHRONIQUE: 'Chronique',
+  MIXTE: 'Mixte',
+}
+
 const modules = [
-  { code: "M01", nom: "Bruit", statut: "actif", desc: "Exposition sonore, niveaux d'action, protection auditive" },
-  { code: "M02", nom: "Vibrations", statut: "bientot", desc: "Vibrations main-bras, corps entier, valeurs limites" },
-  { code: "M03", nom: "TMS", statut: "bientot", desc: "Troubles musculo-squelettiques, cotation RULA/REBA" },
-  { code: "M04", nom: "Charge physique", statut: "bientot", desc: "Port de charges, manutentions manuelles (ED6161)" },
-  { code: "M05", nom: "Risques psychosociaux", statut: "bientot", desc: "Stress, harcèlement, conditions de travail" },
-  { code: "M06", nom: "Chimique / CMR", statut: "bientot", desc: "Produits chimiques, cancérogènes, mutagènes" },
-  { code: "M07", nom: "Biologique", statut: "bientot", desc: "Agents biologiques, risques infectieux" },
-  { code: "M08", nom: "Thermique", statut: "bientot", desc: "Chaleur, froid, ambiances thermiques" },
-  { code: "M09", nom: "Rayonnements", statut: "bientot", desc: "UV, ionisants, electromagnétiques" },
+  { code: "M01", nom: "Bruit", statut: "actif", desc: "Exposition sonore, niveaux d'action, protection auditive", norme: "ED 6035 · ISO 9612" },
+  { code: "M02", nom: "Vibrations", statut: "bientot", desc: "Vibrations main-bras, corps entier, valeurs limites", norme: "OSEV INRS" },
+  { code: "M03", nom: "TMS", statut: "bientot", desc: "Troubles musculo-squelettiques, cotation RULA/REBA", norme: "TMS PRO INRS" },
+  { code: "M04", nom: "Charge physique", statut: "bientot", desc: "Port de charges, manutentions manuelles (ED6161)", norme: "ED 6161" },
+  { code: "M05", nom: "Risques psychosociaux", statut: "bientot", desc: "Stress, harcèlement, conditions de travail", norme: "RPS-DU INRS" },
+  { code: "M06", nom: "Chimique / CMR", statut: "bientot", desc: "Produits chimiques, cancérogènes, mutagènes", norme: "SEIRICH INRS" },
+  { code: "M07", nom: "Biologique", statut: "bientot", desc: "Agents biologiques, risques infectieux", norme: "À venir" },
+  { code: "M08", nom: "Thermique", statut: "bientot", desc: "Chaleur, froid, ambiances thermiques", norme: "À venir" },
+  { code: "M09", nom: "Rayonnements", statut: "bientot", desc: "UV, ionisants, electromagnétiques", norme: "À venir" },
+]
+
+const methodes = [
+  {
+    ref: "ED 6035 (INRS)",
+    module: "Bruit",
+    desc: "Guide d'évaluation de l'exposition sonore au poste de travail. Niveaux d'action et valeurs limites LEX,8h et Lc,peak.",
+    color: "border-brand-gold",
+  },
+  {
+    ref: "ISO 9612",
+    module: "Bruit — mesure",
+    desc: "Norme internationale pour la mesure du bruit en milieu de travail. Méthode d'ingénierie pour le calcul de l'exposition journalière.",
+    color: "border-brand-gold",
+  },
+  {
+    ref: "ED 6161 (INRS)",
+    module: "Charge physique",
+    desc: "Méthode d'évaluation des manutentions manuelles. Grilles de cotation des charges portées, tirées ou poussées.",
+    color: "border-brand-bronze",
+  },
+  {
+    ref: "OSEV INRS",
+    module: "Vibrations",
+    desc: "Outil de screening d'exposition aux vibrations mécaniques. Évalue les vibrations main-bras et corps entier par poste.",
+    color: "border-brand-bronze",
+  },
+  {
+    ref: "TMS PRO (INRS)",
+    module: "TMS",
+    desc: "Démarche en 4 étapes pour prévenir les troubles musculo-squelettiques. Cotation RULA/REBA et analyse des facteurs de risque.",
+    color: "border-blue-400",
+  },
+  {
+    ref: "RPS-DU (INRS)",
+    module: "RPS",
+    desc: "Outil d'évaluation des risques psychosociaux pour le Document Unique. Basé sur les 6 dimensions du modèle de Gollac.",
+    color: "border-blue-400",
+  },
 ]
 
 export default function OutilPage() {
@@ -123,6 +197,79 @@ export default function OutilPage() {
         </div>
       </section>
 
+      {/* ── 20 Risques ED840 ─────────────────────────────────────────── */}
+      <section className="py-20 bg-brand-cream">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimateOnScroll>
+            <div className="text-center mb-14">
+              <h2 className="text-3xl font-bold text-brand-navy">Les 20 risques couverts</h2>
+              <p className="mt-3 text-brand-bronze max-w-xl mx-auto">
+                Basé sur la grille ED840 de l&apos;INRS — référence nationale pour l&apos;inventaire des risques professionnels.
+              </p>
+            </div>
+          </AnimateOnScroll>
+
+          {/* Légende types */}
+          <AnimateOnScroll>
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+              {Object.entries(typeLabel).map(([k, v]) => (
+                <span key={k} className={`inline-flex items-center gap-1.5 text-xs font-medium border px-3 py-1 rounded-full ${typeColor[k]}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+                  {v}
+                </span>
+              ))}
+              <span className="text-xs text-brand-bronze/60 italic ml-2">Source : INRS ED840</span>
+            </div>
+          </AnimateOnScroll>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {risquesED840.map((r, i) => (
+              <AnimateOnScroll key={r.num} delay={([0, 100, 200, 0, 100, 200, 0, 100, 200, 0, 100, 200, 0, 100, 200, 0, 100, 200, 0, 100] as const)[i]} animation="fade-up">
+                <div className="flex gap-3 bg-brand-off border border-brand-sand rounded-xl p-4 hover:shadow-[0_2px_8px_rgba(3,25,72,0.07)] hover:-translate-y-0.5 transition-all duration-200">
+                  <span className="text-xs font-bold text-brand-bronze/40 w-6 shrink-0 mt-0.5">{r.num}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="font-semibold text-brand-navy text-sm">{r.nom}</span>
+                      <span className={`inline-flex text-[10px] font-bold border px-1.5 py-0.5 rounded ${typeColor[r.type]}`}>
+                        {typeLabel[r.type]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-brand-bronze leading-relaxed">{r.desc}</p>
+                  </div>
+                </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Méthodes INRS ────────────────────────────────────────────── */}
+      <section className="py-20 bg-brand-cream-light">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimateOnScroll>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-brand-navy">Des méthodes officielles intégrées</h2>
+              <p className="mt-3 text-brand-bronze max-w-xl mx-auto">
+                Chaque module s&apos;appuie sur des publications et outils reconnus par l&apos;INRS et les normes en vigueur.
+              </p>
+            </div>
+          </AnimateOnScroll>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {methodes.map((m, i) => (
+              <AnimateOnScroll key={i} delay={([0, 100, 200, 0, 100, 200] as const)[i]} animation="fade-up">
+                <div className={`bg-brand-off border border-brand-sand rounded-xl p-5 border-l-4 ${m.color}`}>
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <span className="text-xs font-bold text-brand-gold">{m.ref}</span>
+                    <span className="text-xs text-brand-bronze/60 bg-brand-cream border border-brand-sand px-2 py-0.5 rounded-full shrink-0">{m.module}</span>
+                  </div>
+                  <p className="text-sm text-brand-bronze leading-relaxed">{m.desc}</p>
+                </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Modules ───────────────────────────────────────────────────── */}
       <section className="py-20 bg-brand-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,7 +287,7 @@ export default function OutilPage() {
                 <div className="flex items-center gap-4 bg-brand-off border border-brand-sand rounded-xl px-5 py-4">
                   <span className="text-xs font-bold text-brand-bronze/60 w-8 shrink-0">{m.code}</span>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span className="font-semibold text-brand-navy text-sm">{m.nom}</span>
                       {m.statut === 'actif' ? (
                         <span className="inline-flex items-center gap-1 text-xs font-medium bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full">
@@ -155,6 +302,7 @@ export default function OutilPage() {
                     </div>
                     <p className="text-xs text-brand-bronze">{m.desc}</p>
                   </div>
+                  <span className="text-xs text-brand-bronze/50 hidden sm:block shrink-0">{m.norme}</span>
                 </div>
               </AnimateOnScroll>
             ))}

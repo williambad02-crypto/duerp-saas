@@ -173,6 +173,66 @@ export default function ReglementationPage() {
           </div>
         </AnimateOnScroll>
 
+        {/* ── 9 principes généraux ─────────────────────────────────── */}
+        <AnimateOnScroll animation="fade-up">
+          <div className="bg-brand-off border border-brand-sand rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-brand-navy mb-2">Les 9 principes généraux de prévention</h2>
+            <p className="text-sm text-brand-bronze/70 italic mb-6">Article L4121-2 du Code du travail</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { n: "1", t: "Éviter les risques", d: "Supprimer le danger ou l'exposition au danger." },
+                { n: "2", t: "Évaluer les risques", d: "Apprécier les risques qui ne peuvent pas être évités." },
+                { n: "3", t: "Combattre à la source", d: "Agir sur les risques à la source plutôt que sur les conséquences." },
+                { n: "4", t: "Adapter le travail à l'Homme", d: "Conception des postes, choix des équipements et méthodes de travail." },
+                { n: "5", t: "Tenir compte de l'évolution technique", d: "Intégrer les nouvelles technologies et connaissances dans la prévention." },
+                { n: "6", t: "Remplacer le dangereux", d: "Substituer le procédé ou la substance dangereux par un moins dangereux." },
+                { n: "7", t: "Planifier la prévention", d: "Ensemble cohérent avec technique, organisation, conditions de travail et social." },
+                { n: "8", t: "Protection collective d'abord", d: "Donner la priorité aux mesures collectives sur les protections individuelles." },
+                { n: "9", t: "Donner les instructions appropriées", d: "Former et informer les travailleurs sur les risques et les mesures de prévention." },
+              ].map((p) => (
+                <div key={p.n} className="flex gap-3 rounded-xl bg-brand-cream border border-brand-sand p-4">
+                  <div className="w-7 h-7 rounded-full bg-brand-navy text-brand-cream flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                    {p.n}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-brand-navy text-sm mb-1">{p.t}</p>
+                    <p className="text-xs text-brand-bronze leading-relaxed">{p.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimateOnScroll>
+
+        {/* ── Comment SafeAnalyse. vous aide ───────────────────────── */}
+        <AnimateOnScroll animation="fade-up">
+          <div className="bg-brand-gold-pale border border-brand-sand rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-brand-navy mb-4">Comment SafeAnalyse. vous aide</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                {
+                  titre: "Identifier",
+                  desc: "Le wizard vous guide à travers les 20 risques ED840 pour ne rien oublier, poste par poste, opération par opération.",
+                },
+                {
+                  titre: "Évaluer",
+                  desc: "Les grilles de cotation normées INRS (G×P, LEX,8h, RULA…) sont intégrées directement — aucun calcul manuel.",
+                },
+                {
+                  titre: "Documenter",
+                  desc: "L'export PDF génère un DUERP conforme et horodaté, avec versioning 40 ans, prêt à présenter à l'inspection.",
+                },
+              ].map((item, i) => (
+                <div key={i} className="bg-brand-off rounded-xl border border-brand-sand p-4">
+                  <div className="w-2 h-2 rounded-full bg-brand-gold mb-3" />
+                  <p className="font-semibold text-brand-navy mb-2 text-sm">{item.titre}</p>
+                  <p className="text-xs text-brand-bronze leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimateOnScroll>
+
         {/* ── Contenu obligatoire ───────────────────────────────────── */}
         <AnimateOnScroll animation="fade-up">
           <div className="bg-brand-off border border-brand-sand rounded-2xl p-8">
