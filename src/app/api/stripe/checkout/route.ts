@@ -3,6 +3,7 @@
 // Le trial de 14 jours est géré côté DB (créé à l'onboarding) — pas de trial Stripe.
 
 import { NextRequest, NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { stripe, STRIPE_PRICES, PeriodeAbonnement } from '@/lib/stripe'
 
@@ -25,7 +26,9 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const headersList = await headers()
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+    || `${headersList.get('x-forwarded-proto') || 'https'}://${headersList.get('host')}`
 
   // Récupérer l'email et l'abonnement existant pour réutiliser le customer Stripe
   const { data: abo } = await supabase

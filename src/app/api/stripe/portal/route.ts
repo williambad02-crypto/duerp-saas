@@ -2,6 +2,7 @@
 // Crée une session Stripe Billing Portal pour que l'utilisateur gère son abonnement.
 
 import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe'
 
@@ -27,7 +28,9 @@ export async function POST() {
     )
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const headersList = await headers()
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+    || `${headersList.get('x-forwarded-proto') || 'https'}://${headersList.get('host')}`
 
   try {
     const session = await stripe.billingPortal.sessions.create({
