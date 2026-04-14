@@ -119,7 +119,7 @@ Avant chaque module : 3 questions OUI/NON par couple (Opération × Module).
 
 ### Phase 1 — MVP fonctionnel (avant mise en ligne)
 - [x] Phase 1A : Scaffold + Auth + Schéma DB + Config Vercel
-- [ ] Phase 1B : Onboarding + Navigation Postes/Opérations
+- [X] Phase 1B : Onboarding + Navigation Postes/Opérations
 - [ ] Phase 1C : Présélection + Module Bruit (M01)
 - [ ] Phase 1D : Tableau APR + Dashboard + Polish
 - [ ] Phase 1E : Export PDF du DUERP

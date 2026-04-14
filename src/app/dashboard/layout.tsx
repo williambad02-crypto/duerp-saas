@@ -45,6 +45,17 @@ export default async function DashboardLayout({
         <Header nomEntreprise={nomEntreprise} />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           {children}
+          <footer className="mt-12 border-t border-gray-200 pt-4 pb-2">
+            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-gray-400">
+              <a href="/mentions-legales" className="hover:text-gray-600 transition-colors">Mentions légales</a>
+              <span aria-hidden>·</span>
+              <a href="/cgu" className="hover:text-gray-600 transition-colors">CGU</a>
+              <span aria-hidden>·</span>
+              <a href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</a>
+              <span aria-hidden>·</span>
+              <a href="/contact" className="hover:text-gray-600 transition-colors">Contact</a>
+            </nav>
+          </footer>
         </main>
       </div>
     </div>

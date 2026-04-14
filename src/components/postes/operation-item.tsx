@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { modifierOperation, supprimerOperation } from '@/app/dashboard/postes/actions'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -92,10 +93,13 @@ export function OperationItem({ operation, posteId }: OperationItemProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-1.5 shrink-0">
-        {/* Bouton Évaluer — actif en Phase 1C */}
-        <Button variant="outline" size="sm" className="text-blue-600 border-blue-200 hover:bg-blue-50" disabled>
+        {/* Bouton Évaluer */}
+        <Link
+          href={`/dashboard/postes/${posteId}/operations/${operation.id}/risques`}
+          className={buttonVariants({ variant: 'outline', size: 'sm', className: 'text-blue-600 border-blue-200 hover:bg-blue-50' })}
+        >
           Évaluer
-        </Button>
+        </Link>
 
         {/* Modifier — pas disponible pour "Toutes opérations" */}
         {!operation.est_transversale && (
