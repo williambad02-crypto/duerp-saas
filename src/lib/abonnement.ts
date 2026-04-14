@@ -31,12 +31,9 @@ export async function getInfoAbonnement(userId: string): Promise<InfoAbonnement>
     .eq('user_id', userId)
     .maybeSingle()
 
-  // Log temporaire — à supprimer une fois le bug résolu
-  console.log('[abonnement] userId:', userId, '| data:', JSON.stringify(abo), '| error:', JSON.stringify(error))
-
   // Aucun enregistrement → mode découverte
   if (!abo) {
-    if (error) console.error('[abonnement] Erreur query Supabase:', error)
+    if (error) console.error('[abonnement] Erreur query Supabase:', error.message)
     return aucun()
   }
 
