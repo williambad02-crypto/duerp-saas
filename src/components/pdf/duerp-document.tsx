@@ -62,7 +62,7 @@ export interface PDFData {
 // ── Couleurs ───────────────────────────────────────────────────────────────────
 
 const C = {
-  primary: '#1e40af',    // blue-800
+  primary: '#031948',    // brand-navy SafeAnalyse.
   gray900: '#111827',
   gray700: '#374151',
   gray500: '#6b7280',
@@ -513,7 +513,7 @@ function CoverPage({ data }: { data: PDFData }) {
 
       <Text style={s.coverLegal}>
         Conformément aux articles L4121-1 à L4121-4 du Code du travail et à la Loi du 2 août 2021.{'\n'}
-        Document à conserver 40 ans minimum (Article R4121-4). — Généré via DUERP SaaS
+        Document à conserver 40 ans minimum (Article R4121-4). — Généré via SafeAnalyse.
       </Text>
     </View>
   )
@@ -843,7 +843,7 @@ export function DuerpDocument({ data }: { data: PDFData }) {
   return (
     <Document
       title={`DUERP - ${data.entreprise.nom}`}
-      author="DUERP SaaS"
+      author="SafeAnalyse."
       subject="Document Unique d'Évaluation des Risques Professionnels"
       keywords="DUERP, risques professionnels, évaluation"
     >

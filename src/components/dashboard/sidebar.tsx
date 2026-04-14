@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { AbonnementBadge } from './abonnement-badge'
+import { Logo } from '@/components/brand/logo'
 import type { AbonnementProps } from '@/lib/abonnement'
 
 const navigation = [
@@ -60,19 +61,14 @@ export function Sidebar({ nomEntreprise, onClose, abonnement }: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200">
+    <div className="flex flex-col h-full bg-brand-navy">
       {/* Logo */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
-        <div>
-          <span className="text-lg font-bold text-gray-900">DUERP</span>
-          <span className="ml-1 text-xs font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
-            SaaS
-          </span>
-        </div>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-brand-navy-light">
+        <Logo variant="full" theme="white" height={28} />
         {onClose && (
           <button
             onClick={onClose}
-            className="lg:hidden text-gray-400 hover:text-gray-600"
+            className="lg:hidden text-brand-cream/50 hover:text-brand-cream"
             aria-label="Fermer le menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,9 +80,9 @@ export function Sidebar({ nomEntreprise, onClose, abonnement }: SidebarProps) {
 
       {/* Nom entreprise */}
       {nomEntreprise && (
-        <div className="px-6 py-3 bg-gray-50 border-b border-gray-200">
-          <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">Entreprise</p>
-          <p className="text-sm font-medium text-gray-900 truncate mt-0.5">{nomEntreprise}</p>
+        <div className="px-6 py-3 border-b border-brand-navy-light">
+          <p className="text-xs text-brand-cream/40 uppercase tracking-wide font-medium">Entreprise</p>
+          <p className="text-sm font-medium text-brand-cream truncate mt-0.5">{nomEntreprise}</p>
         </div>
       )}
 
@@ -100,13 +96,17 @@ export function Sidebar({ nomEntreprise, onClose, abonnement }: SidebarProps) {
               href={item.href}
               onClick={onClose}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                'relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-brand-navy-light text-brand-off'
+                  : 'text-brand-off/70 hover:bg-brand-navy-light hover:text-brand-off'
               )}
             >
-              <span className={isActive ? 'text-blue-600' : 'text-gray-400'}>
+              {/* Barre active gauche */}
+              {isActive && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-brand-gold-light rounded-r-full" />
+              )}
+              <span className={isActive ? 'text-brand-gold-light' : 'text-brand-off/50'}>
                 {item.icon}
               </span>
               {item.label}
@@ -116,14 +116,14 @@ export function Sidebar({ nomEntreprise, onClose, abonnement }: SidebarProps) {
       </nav>
 
       {/* Badge abonnement + pied */}
-      <div className="px-4 py-4 border-t border-gray-200 space-y-2">
+      <div className="px-4 py-4 border-t border-brand-navy-light space-y-2">
         {abonnement && (
           <AbonnementBadge
             statut={abonnement.statut}
             joursRestantsTrial={abonnement.joursRestantsTrial}
           />
         )}
-        <p className="text-xs text-gray-400">DUERP SaaS — v1.0</p>
+        <p className="text-xs text-brand-cream/30">SafeAnalyse. — v1.0</p>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Mentions légales — DUERP SaaS",
+  title: "Mentions légales — SafeAnalyse.",
 }
 
 export default function MentionsLegalesPage() {

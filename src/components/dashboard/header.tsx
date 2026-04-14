@@ -17,11 +17,11 @@ export function Header({ nomEntreprise, abonnement }: HeaderProps) {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between lg:px-6">
+      <header className="bg-brand-off border-b border-brand-sand px-4 py-3 flex items-center justify-between lg:px-6">
         {/* Bouton hamburger — mobile/tablette */}
         <button
           onClick={() => setMenuOuvert(true)}
-          className="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="lg:hidden text-brand-bronze hover:text-brand-navy focus:outline-none"
           aria-label="Ouvrir le menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,14 +30,14 @@ export function Header({ nomEntreprise, abonnement }: HeaderProps) {
         </button>
 
         {/* Titre — visible sur mobile */}
-        <span className="lg:hidden text-sm font-semibold text-gray-700">
-          {nomEntreprise ?? 'DUERP SaaS'}
+        <span className="lg:hidden text-sm font-semibold text-brand-navy">
+          {nomEntreprise ?? 'SafeAnalyse.'}
         </span>
 
         {/* Spacer desktop avec nom entreprise */}
-        <div className="hidden lg:flex items-center gap-2 text-sm text-gray-500">
+        <div className="hidden lg:flex items-center gap-2 text-sm text-brand-bronze">
           <span>Bonjour,</span>
-          <span className="font-medium text-gray-900">{nomEntreprise}</span>
+          <span className="font-medium text-brand-navy">{nomEntreprise}</span>
         </div>
 
         {/* Badge abonnement (desktop) + déconnexion */}

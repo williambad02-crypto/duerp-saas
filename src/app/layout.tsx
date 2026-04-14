@@ -1,20 +1,18 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export const viewport: Viewport = {
+  themeColor: "#031948",
+};
 
 export const metadata: Metadata = {
-  title: "DUERP SaaS — Évaluation des risques professionnels",
-  description: "Réalisez votre Document Unique d'Évaluation des Risques Professionnels de manière guidée et conforme.",
+  title: "SafeAnalyse. — Votre DUERP en ligne, simple et conforme",
+  description: "L'outil DUERP guidé pour les PME françaises. Évaluation des risques professionnels simplifiée, conforme au Code du travail. Essai gratuit 14 jours.",
+  openGraph: {
+    title: "SafeAnalyse. — Votre DUERP en ligne",
+    description: "L'outil DUERP guidé pour les PME françaises. Évaluation des risques professionnels simplifiée, conforme au Code du travail.",
+    url: "https://duerp-saas.vercel.app",
+  },
 };
 
 export default function RootLayout({
@@ -23,10 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="fr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="fr" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

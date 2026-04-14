@@ -1,7 +1,7 @@
 import { ContactForm } from "./contact-form"
 
 export const metadata = {
-  title: "Contact — DUERP SaaS",
+  title: "Contact — SafeAnalyse.",
 }
 
 export default function ContactPage() {

@@ -4,7 +4,7 @@ import { getInfoAbonnement } from '@/lib/abonnement'
 import { PortailStripeButton } from './portail-stripe-button'
 import { CheckoutButton } from './checkout-button'
 
-export const metadata = { title: "Paramètres — DUERP SaaS" }
+export const metadata = { title: "Paramètres — SafeAnalyse." }
 
 function labelStatut(statut: string): string {
   const labels: Record<string, string> = {

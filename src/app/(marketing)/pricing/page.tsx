@@ -3,7 +3,7 @@ import { PricingToggle } from './pricing-toggle'
 import { redirect } from 'next/navigation'
 
 export const metadata = {
-  title: "Tarifs — DUERP SaaS",
+  title: "Tarifs — SafeAnalyse.",
   description: "Un seul plan tout inclus. 14 jours d'essai gratuit sans carte bancaire.",
 }
 

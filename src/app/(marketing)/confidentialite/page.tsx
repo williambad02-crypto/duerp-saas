@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Politique de confidentialité — DUERP SaaS",
+  title: "Politique de confidentialité — SafeAnalyse.",
 }
 
 export default function ConfidentialitePage() {
@@ -18,7 +18,7 @@ export default function ConfidentialitePage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Responsable du traitement</h2>
           <p className="leading-relaxed">
             Le responsable du traitement des données personnelles collectées via le Service
-            DUERP SaaS est :<br />
+            SafeAnalyse. est :<br />
             <strong>William Maréchal</strong> — [Raison sociale — À COMPLÉTER]<br />
             Contact DPO : <a href="mailto:[email — À COMPLÉTER]" className="text-blue-600 hover:underline">[email — À COMPLÉTER]</a>
           </p>

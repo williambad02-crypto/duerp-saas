@@ -39,7 +39,7 @@ export default async function DashboardLayout({
   const aboProp = serializeAbonnement(infoAbonnement)
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-brand-cream-light overflow-hidden">
       {/* Sidebar desktop */}
       <aside className="hidden lg:flex lg:flex-shrink-0 lg:w-64">
         <Sidebar nomEntreprise={nomEntreprise} abonnement={aboProp} />
@@ -59,15 +59,15 @@ export default async function DashboardLayout({
 
           {children}
 
-          <footer className="mt-12 border-t border-gray-200 pt-4 pb-2">
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-gray-400">
-              <a href="/mentions-legales" className="hover:text-gray-600 transition-colors">Mentions légales</a>
+          <footer className="mt-12 border-t border-brand-sand pt-4 pb-2">
+            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-brand-bronze/50">
+              <a href="/mentions-legales" className="hover:text-brand-navy transition-colors">Mentions légales</a>
               <span aria-hidden>·</span>
-              <a href="/cgu" className="hover:text-gray-600 transition-colors">CGU</a>
+              <a href="/cgu" className="hover:text-brand-navy transition-colors">CGU</a>
               <span aria-hidden>·</span>
-              <a href="/confidentialite" className="hover:text-gray-600 transition-colors">Confidentialité</a>
+              <a href="/confidentialite" className="hover:text-brand-navy transition-colors">Confidentialité</a>
               <span aria-hidden>·</span>
-              <a href="/contact" className="hover:text-gray-600 transition-colors">Contact</a>
+              <a href="/contact" className="hover:text-brand-navy transition-colors">Contact</a>
             </nav>
           </footer>
         </main>

@@ -20,7 +20,7 @@ export default async function OnboardingPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Bienvenue sur DUERP SaaS</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Bienvenue sur SafeAnalyse.</h1>
         <p className="mt-1 text-sm text-gray-500">
           Commençons par configurer votre entreprise. Ces informations apparaîtront dans votre Document Unique.
         </p>

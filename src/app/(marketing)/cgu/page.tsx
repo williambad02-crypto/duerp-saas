@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Conditions Générales d'Utilisation — DUERP SaaS",
+  title: "Conditions Générales d'Utilisation — SafeAnalyse.",
 }
 
 export default function CGUPage() {
@@ -18,7 +18,7 @@ export default function CGUPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Objet</h2>
           <p className="leading-relaxed">
             Les présentes Conditions Générales d&apos;Utilisation (ci-après &laquo; CGU &raquo;) régissent
-            l&apos;accès et l&apos;utilisation de la plateforme <strong>DUERP SaaS</strong> (ci-après
+            l&apos;accès et l&apos;utilisation de la plateforme <strong>SafeAnalyse.</strong> (ci-après
             &laquo; le Service &raquo;), un outil en ligne permettant aux employeurs de réaliser
             leur Document Unique d&apos;Évaluation des Risques Professionnels (DUERP) conformément
             à l&apos;article L4121-1 du Code du travail français.
