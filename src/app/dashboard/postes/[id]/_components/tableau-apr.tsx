@@ -413,12 +413,14 @@ function BadgeCriticite({ score }: { score: number | null }) {
 function LigneRisque({
   risque, posteId, celluleActive, onActivateCell, onSaveCell,
   onDelete, onMove, autresOperations, groupBg,
+  firstInGroup, operationRowSpan, operationCell, isFirstGroup,
 }: {
   risque: RisqueUI; posteId: string; celluleActive: CelluleActive
   onActivateCell: (ligneId: string, colonne: string) => void
   onSaveCell: (ligneId: string, colonne: string, valeur: unknown) => Promise<void>
   onDelete: () => void; onMove: (operationId: string) => Promise<void>
   autresOperations: OperationUI[]; groupBg: string
+  firstInGroup?: boolean; operationRowSpan?: number; operationCell?: React.ReactNode; isFirstGroup?: boolean
 }) {
   const [menuOuvert, setMenuOuvert] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -473,15 +475,27 @@ function LigneRisque({
     : groupBg === 'bg-gray-50' ? 'bg-gray-50'
     : 'bg-white'
 
+  const borderTop = !isFirstGroup && firstInGroup ? 'border-t-2 border-t-gray-400' : ''
+
   return (
     <tr
       ref={setNodeRef}
       style={style}
       className={`${groupBg} border-0`}
     >
-      {/* Handle drag — sticky col 1 */}
+      {/* Cellule opération — rowSpan sur la première ligne uniquement */}
+      {firstInGroup && (
+        <td
+          rowSpan={operationRowSpan}
+          className={`sticky left-0 z-[12] ${stickyBg} border-r-2 border-r-gray-400 border-b border-b-gray-300 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+        >
+          {operationCell}
+        </td>
+      )}
+
+      {/* Handle drag — sticky col 2 */}
       <td
-        className={`sticky left-0 z-[11] ${stickyBg} border-r border-b border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors`}
+        className={`sticky left-[140px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors ${borderTop}`}
         {...attributes}
         {...listeners}
       >
@@ -492,19 +506,19 @@ function LigneRisque({
         </svg>
       </td>
 
-      {/* Réf — sticky col 2 */}
-      <td className={`sticky left-[32px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-20 px-3 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap`}>
+      {/* Réf — sticky col 3 */}
+      <td className={`sticky left-[172px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-20 px-3 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap ${borderTop}`}>
         {risque.identifiant_auto ?? '—'}
       </td>
 
-      {/* Danger — sticky col 3 + ombre de séparation */}
+      {/* Danger — sticky col 4 + ombre de séparation */}
       <CelluleTexte
         ligneId={risque.id} colonne="danger" valeur={risque.danger} placeholder="Danger…"
         isActive={isCell('danger')} onActivate={() => activate('danger')}
         onSave={v => onSaveCell(risque.id, 'danger', v)}
         onTab={() => nextCol('danger')}
         minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
-        tdClassName={`sticky left-[112px] z-[11] ${stickyBg} shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}
+        tdClassName={`sticky left-[252px] z-[11] ${stickyBg} shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)] ${borderTop}`}
       />
 
       {/* Situation dangereuse */}
@@ -730,118 +744,131 @@ function GroupeOperation({
   }
 
   const groupBg = getGroupBg(operation, groupIndex)
+  const isFirstGroup = groupIndex === 0
 
-  // Fond de l'en-tête de groupe — légèrement plus contrasté
-  const headerBg = operation.est_transversale
-    ? 'bg-amber-100/60 border-b border-amber-200'
-    : groupBg === 'bg-gray-50'
-      ? 'bg-gray-100 border-b border-gray-200'
-      : 'bg-gray-50 border-b border-gray-200'
+  // Fond solide pour la cellule sticky de l'opération
+  const opCellBg = operation.est_transversale ? 'bg-amber-50'
+    : groupBg === 'bg-gray-50' ? 'bg-gray-50'
+    : 'bg-white'
+
+  // Nombre de lignes : risques + 1 ligne pour le bouton "Ajouter"
+  const nbLignes = Math.max(operation.risques.length, 1) + 1
+
+  // Contenu de la cellule opération (rowSpan)
+  const operationCell = (
+    <div className={`flex flex-col h-full px-2 py-2 gap-1.5 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}
+      style={{ minHeight: `${nbLignes * 36}px` }}
+    >
+      {/* Icône + Nom */}
+      <div className="flex items-start gap-1.5">
+        {operation.est_transversale ? (
+          <svg className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
+          </svg>
+        ) : (
+          <svg className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+          </svg>
+        )}
+
+        {renaming ? (
+          <input
+            ref={renameRef}
+            value={nomDraft}
+            onChange={e => setNomDraft(e.target.value)}
+            onBlur={handleRenameCommit}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleRenameCommit()
+              if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
+            }}
+            className="text-xs font-semibold bg-white text-gray-800 border border-blue-400 rounded px-1.5 py-0.5 focus:outline-none w-full"
+          />
+        ) : (
+          <span className={`text-xs font-semibold leading-tight flex-1 break-words ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
+            {operation.nom}
+          </span>
+        )}
+      </div>
+
+      {operation.est_transversale && (
+        <span className="text-[10px] text-amber-600/70 italic leading-tight">
+          Transversal
+        </span>
+      )}
+
+      <span className="text-[10px] text-gray-400">
+        {operation.risques.length} risque{operation.risques.length !== 1 ? 's' : ''}
+      </span>
+
+      {/* Actions renommer / supprimer — sauf transversale */}
+      {!operation.est_transversale && (
+        <div className="flex items-center gap-0.5 mt-auto">
+          <button
+            onClick={() => setRenaming(true)}
+            className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded hover:bg-gray-200"
+            title="Renommer"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </button>
+          <button
+            onClick={() => onDeleteOperation(operation.id, operation.nom, operation.risques.length)}
+            className="text-red-400/60 hover:text-red-500 transition-colors p-1 rounded hover:bg-red-50"
+            title="Supprimer"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+      )}
+    </div>
+  )
 
   return (
-    <>
-      {/* En-tête de groupe */}
-      <tr className="select-none">
-        <td colSpan={16} className={`${headerBg} px-4 py-2.5 border-b border-gray-300`}>
-          <div className="flex items-center gap-3">
-            {/* Icône */}
-            {operation.est_transversale ? (
-              <svg className="w-4 h-4 text-amber-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4 text-gray-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-              </svg>
-            )}
-
-            {/* Nom */}
-            {renaming ? (
-              <input
-                ref={renameRef}
-                value={nomDraft}
-                onChange={e => setNomDraft(e.target.value)}
-                onBlur={handleRenameCommit}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') handleRenameCommit()
-                  if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
-                }}
-                className="text-sm font-semibold bg-white text-gray-800 border border-blue-400 rounded px-2 py-0.5 focus:outline-none w-64"
-              />
-            ) : (
-              <span className={`text-sm font-semibold flex-1 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
-                {operation.nom}
-              </span>
-            )}
-
-            {operation.est_transversale && (
-              <span className="text-[11px] text-amber-600/80 italic">
-                Risques transversaux au poste
-              </span>
-            )}
-
-            <span className="text-xs text-gray-400 ml-auto">
-              {operation.risques.length} risque{operation.risques.length !== 1 ? 's' : ''}
-            </span>
-
-            {/* Actions — sauf transversale */}
-            {!operation.est_transversale && (
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setRenaming(true)}
-                  className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded hover:bg-gray-200"
-                  title="Renommer"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => onDeleteOperation(operation.id, operation.nom, operation.risques.length)}
-                  className="text-red-400/60 hover:text-red-500 transition-colors p-1 rounded hover:bg-red-50"
-                  title="Supprimer"
-                >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
-        </td>
-      </tr>
-
-      {/* Lignes de risques */}
-      <SortableContext
-        items={operation.risques.map(r => r.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        {operation.risques.length === 0 && (
-          <tr className={groupBg}>
-            <td colSpan={16} className="px-6 py-3 text-xs text-gray-400 italic border-b border-gray-200">
-              Aucun risque identifié — cliquez sur &quot;+ Ajouter un risque&quot; ci-dessous.
-            </td>
-          </tr>
-        )}
-        {operation.risques.map((risque) => (
-          <LigneRisque
-            key={risque.id}
-            risque={risque}
-            posteId={posteId}
-            celluleActive={celluleActive}
-            onActivateCell={onActivateCell}
-            onSaveCell={onSaveCell}
-            onDelete={() => onDeleteRisque(risque.id)}
-            onMove={opId => onMoveRisque(risque.id, opId)}
-            autresOperations={autresOperations}
-            groupBg={groupBg}
+    <SortableContext
+      items={operation.risques.map(r => r.id)}
+      strategy={verticalListSortingStrategy}
+    >
+      {/* Si aucun risque, on rend une ligne vide avec le bouton + */}
+      {operation.risques.length === 0 && (
+        <tr className={groupBg}>
+          {/* Cellule opération (rowSpan=2 : ligne vide + ligne bouton) */}
+          <td
+            rowSpan={2}
+            className={`sticky left-0 z-[12] ${opCellBg} border-r-2 border-r-gray-400 border-b border-b-gray-300 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+          >
+            {operationCell}
+          </td>
+          <td
+            colSpan={15}
+            className={`px-4 py-3 text-xs text-gray-400 border-b border-gray-200 ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
           />
-        ))}
-      </SortableContext>
+        </tr>
+      )}
+      {operation.risques.map((risque, idx) => (
+        <LigneRisque
+          key={risque.id}
+          risque={risque}
+          posteId={posteId}
+          celluleActive={celluleActive}
+          onActivateCell={onActivateCell}
+          onSaveCell={onSaveCell}
+          onDelete={() => onDeleteRisque(risque.id)}
+          onMove={opId => onMoveRisque(risque.id, opId)}
+          autresOperations={autresOperations}
+          groupBg={groupBg}
+          firstInGroup={idx === 0}
+          operationRowSpan={operation.risques.length + 1}
+          operationCell={operationCell}
+          isFirstGroup={isFirstGroup}
+        />
+      ))}
 
       {/* Ligne + Ajouter un risque */}
       <tr className={groupBg}>
-        <td colSpan={16} className="px-4 py-2 border-b border-gray-300">
+        <td colSpan={15} className="px-4 py-2 border-b border-gray-300">
           {ajoutEnCours ? (
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <svg className="w-3.5 h-3.5 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
@@ -860,12 +887,12 @@ function GroupeOperation({
               className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors"
             >
               <span className="w-5 h-5 rounded border border-gray-300 bg-white flex items-center justify-center text-gray-400 text-base leading-none">+</span>
-              Ajouter un risque à <em className="not-italic font-medium">{operation.nom}</em>
+              Ajouter un risque
             </button>
           )}
         </td>
       </tr>
-    </>
+    </SortableContext>
   )
 }
 
@@ -936,11 +963,26 @@ function ModaleSuppressionOperation({
             </div>
           </>
         ) : (
-          <p className="text-sm text-gray-600 mb-6">Cette opération est vide. Supprimer ?</p>
+          <>
+            <p className="text-sm text-gray-600 mb-6">Cette opération est vide. Supprimer ?</p>
+            <div className="flex items-center justify-end gap-3">
+              <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">
+                Annuler
+              </button>
+              <button
+                onClick={onCascade}
+                className="text-sm font-semibold px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors"
+              >
+                Supprimer
+              </button>
+            </div>
+          </>
         )}
-        <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Annuler
-        </button>
+        {nbRisques > 0 && (
+          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+            Annuler
+          </button>
+        )}
       </div>
     </div>
   )
@@ -1264,12 +1306,14 @@ export function TableauAPR({
         {/* En-tête sticky */}
         <thead className="sticky top-0 z-20">
           <tr>
-            {/* Handle — sticky col 1 */}
-            <th className={`${TH} sticky left-0 z-30 w-8`} />
-            {/* Réf — sticky col 2 */}
-            <th className={`${TH} sticky left-[32px] z-30 w-20 text-left`}>Réf.</th>
-            {/* Danger — sticky col 3 + ombre */}
-            <th className={`${TH} sticky left-[112px] z-30 min-w-[180px] text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}>
+            {/* Opération — sticky col 1 */}
+            <th className={`${TH} sticky left-0 z-30 w-[140px] min-w-[140px] text-left border-r-2 border-r-gray-400`}>Opération</th>
+            {/* Handle — sticky col 2 */}
+            <th className={`${TH} sticky left-[140px] z-30 w-8`} />
+            {/* Réf — sticky col 3 */}
+            <th className={`${TH} sticky left-[172px] z-30 w-20 text-left`}>Réf.</th>
+            {/* Danger — sticky col 4 + ombre */}
+            <th className={`${TH} sticky left-[252px] z-30 min-w-[180px] text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}>
               Danger
             </th>
             <th className={`${TH} min-w-[200px] text-left`}>Situation dangereuse</th>

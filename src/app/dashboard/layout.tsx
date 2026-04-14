@@ -39,16 +39,18 @@ export default async function DashboardLayout({
 
   return (
     <DashboardShell nomEntreprise={nomEntreprise} abonnement={aboProp}>
-      <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-        {/* Bandeau paywall si nécessaire */}
-        {aboProp.bandeau && (
-          <PaywallBanner
-            bandeau={aboProp.bandeau}
-            joursRestantsTrial={aboProp.joursRestantsTrial}
-          />
-        )}
+      <main className="flex-1 overflow-y-auto p-4 lg:p-6 flex flex-col">
+        <div className="flex-1">
+          {/* Bandeau paywall si nécessaire */}
+          {aboProp.bandeau && (
+            <PaywallBanner
+              bandeau={aboProp.bandeau}
+              joursRestantsTrial={aboProp.joursRestantsTrial}
+            />
+          )}
 
-        {children}
+          {children}
+        </div>
 
         <footer className="mt-12 border-t border-brand-sand pt-4 pb-2">
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-brand-bronze/50">

@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PosteCard } from '@/components/postes/poste-card'
 import { NouveauPosteModal } from '@/components/postes/nouveau-poste-modal'
-import { Button } from '@/components/ui/button'
 
 export default async function PostesPage() {
   const supabase = await createClient()
@@ -43,21 +42,11 @@ export default async function PostesPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* En-tête */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Postes de travail</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            {postes?.length ?? 0} poste{(postes?.length ?? 0) > 1 ? 's' : ''} configuré{(postes?.length ?? 0) > 1 ? 's' : ''}
-          </p>
-        </div>
-        <NouveauPosteModal>
-          <Button>
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Ajouter un poste
-          </Button>
-        </NouveauPosteModal>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Postes de travail</h1>
+        <p className="mt-1 text-sm text-gray-500">
+          {postes?.length ?? 0} poste{(postes?.length ?? 0) > 1 ? 's' : ''} configuré{(postes?.length ?? 0) > 1 ? 's' : ''}
+        </p>
       </div>
 
       {/* Liste des postes ou état vide */}
@@ -75,7 +64,9 @@ export default async function PostesPage() {
             (ex&nbsp;: Soudeur, Cariste, Agent administratif).
           </p>
           <NouveauPosteModal>
-            <Button>Créer mon premier poste</Button>
+            <button className="bg-brand-navy text-brand-cream text-sm font-medium px-5 py-2 rounded-lg hover:bg-brand-navy/90 transition-colors">
+              Créer mon premier poste
+            </button>
           </NouveauPosteModal>
         </div>
       ) : (
@@ -92,6 +83,19 @@ export default async function PostesPage() {
               }}
             />
           ))}
+          {/* Carte "+" pour ajouter un poste */}
+          <NouveauPosteModal>
+            <button className="group bg-white border-2 border-dashed border-gray-200 rounded-xl p-5 shadow-sm hover:border-brand-navy hover:shadow-md transition-all text-left w-full flex flex-col items-center justify-center gap-3 min-h-[140px]">
+              <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-300 group-hover:border-brand-navy flex items-center justify-center transition-colors">
+                <svg className="w-6 h-6 text-gray-400 group-hover:text-brand-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+              <span className="text-sm font-medium text-gray-400 group-hover:text-brand-navy transition-colors">
+                Ajouter un poste
+              </span>
+            </button>
+          </NouveauPosteModal>
         </div>
       )}
     </div>

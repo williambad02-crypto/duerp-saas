@@ -65,15 +65,19 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
   if (collapsed) {
     return (
       <div className="flex flex-col h-full w-16 bg-brand-navy items-center">
-        {/* Logo symbole */}
+        {/* Logo symbole — cercle gold avec "S" */}
         <div className="py-4 border-b border-brand-navy-light w-full flex justify-center">
-          <Logo variant="symbol" theme="white" height={28} />
+          <div className="w-8 h-8 rounded-lg bg-brand-gold-light flex items-center justify-center">
+            <span className="text-brand-navy font-bold text-base leading-none">S</span>
+          </div>
         </div>
 
         {/* Icônes de navigation */}
         <nav className="flex-1 py-3 w-full flex flex-col items-center gap-1">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            const isActive = item.href === '/dashboard'
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(item.href + '/')
             return (
               <div key={item.href} className="relative group w-full flex justify-center">
                 <Link
@@ -137,7 +141,9 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {navigation.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+          const isActive = item.href === '/dashboard'
+            ? pathname === item.href
+            : pathname === item.href || pathname.startsWith(item.href + '/')
           return (
             <Link
               key={item.href}
