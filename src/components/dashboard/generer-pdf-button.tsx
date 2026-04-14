@@ -1,8 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 
-export function GenererPDFButton() {
+interface GenererPDFButtonProps {
+  bloque?: boolean
+}
+
+export function GenererPDFButton({ bloque = false }: GenererPDFButtonProps) {
   const [enCours, setEnCours] = useState(false)
   const [erreur, setErreur] = useState<string | null>(null)
 
@@ -39,6 +44,25 @@ export function GenererPDFButton() {
     } finally {
       setEnCours(false)
     }
+  }
+
+  if (bloque) {
+    return (
+      <div className="flex flex-col items-start gap-2">
+        <div className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-5 py-2.5 text-sm font-semibold text-gray-400 cursor-not-allowed border border-gray-200">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Générer le DUERP (PDF)
+        </div>
+        <p className="text-xs text-gray-500">
+          Disponible avec un abonnement actif.{' '}
+          <Link href="/pricing" className="text-blue-600 hover:underline">
+            Voir les offres →
+          </Link>
+        </p>
+      </div>
+    )
   }
 
   return (

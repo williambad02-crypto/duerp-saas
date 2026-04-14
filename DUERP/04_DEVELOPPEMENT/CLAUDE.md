@@ -123,7 +123,7 @@ Avant chaque module : 3 questions OUI/NON par couple (Opération × Module).
 - [x] Phase 1C : Présélection + Module Bruit (M01)
 - [x] Phase 1D : Tableau APR + Dashboard + Polish
 - [x] Phase 1E : Export PDF du DUERP
-- [ ] Phase 1F : Landing page + Pages légales + Déploiement production
+- [X] Phase 1F : Landing page + Pages légales + Déploiement production
 
 ### Phase 2 — Monétisation + Modules
 - [ ] Phase 2A : Stripe (abonnements + paywall + portail client)

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MODULE_PAR_CODE } from '@/lib/constants/modules'
 import { CodeModule } from '@/types'
 import { GenererPDFButton } from '@/components/dashboard/generer-pdf-button'
+import { getInfoAbonnement } from '@/lib/abonnement'
 
 function getCouleurScore(score: number, module: CodeModule): 'vert' | 'jaune' | 'orange' | 'rouge' {
   if (module === 'M01_BRUIT') {
@@ -48,12 +49,13 @@ export default async function DashboardPage() {
 
   if (!entreprise) redirect('/dashboard/onboarding')
 
-  // Charger toutes les données en parallèle
+  // Charger toutes les données en parallèle (dont abonnement pour le paywall PDF)
   const [
     { data: postes },
     { data: operations },
     { data: evaluations },
     { data: versions },
+    infoAbonnement,
   ] = await Promise.all([
     supabase.from('postes').select('id').eq('entreprise_id', entreprise.id),
     supabase
@@ -78,6 +80,7 @@ export default async function DashboardPage() {
       .eq('entreprise_id', entreprise.id)
       .order('date_generation', { ascending: false })
       .limit(5),
+    getInfoAbonnement(user.id),
   ])
 
   const nbPostes = postes?.length ?? 0
@@ -366,7 +369,7 @@ export default async function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <GenererPDFButton />
+            <GenererPDFButton bloque={!infoAbonnement.peutExporterPDF} />
 
             {/* Historique des versions */}
             {(versions?.length ?? 0) > 0 && (

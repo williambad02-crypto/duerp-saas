@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { Sidebar } from '@/components/dashboard/sidebar'
 import { Header } from '@/components/dashboard/header'
+import { PaywallBanner } from '@/components/dashboard/paywall-banner'
+import { getInfoAbonnement, serializeAbonnement } from '@/lib/abonnement'
 
 export default async function DashboardLayout({
   children,
@@ -14,15 +16,17 @@ export default async function DashboardLayout({
 
   if (!user) redirect('/auth/login')
 
-  // Récupérer le nom de l'entreprise
-  const { data: entreprise } = await supabase
-    .from('entreprises')
-    .select('id, nom')
-    .eq('user_id', user.id)
-    .single()
+  // Récupérer entreprise et abonnement en parallèle
+  const [{ data: entreprise }, infoAbonnement] = await Promise.all([
+    supabase
+      .from('entreprises')
+      .select('id, nom')
+      .eq('user_id', user.id)
+      .single(),
+    getInfoAbonnement(user.id),
+  ])
 
-  // Rediriger vers l'onboarding si pas d'entreprise,
-  // sauf si on est déjà sur la page onboarding (évite la boucle infinie)
+  // Rediriger vers onboarding si pas d'entreprise
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') ?? ''
   const estSurOnboarding = pathname === '/dashboard/onboarding'
@@ -32,19 +36,29 @@ export default async function DashboardLayout({
   }
 
   const nomEntreprise = entreprise?.nom ?? user.email ?? 'Mon Entreprise'
+  const aboProp = serializeAbonnement(infoAbonnement)
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Sidebar desktop — masquée sur mobile */}
+      {/* Sidebar desktop */}
       <aside className="hidden lg:flex lg:flex-shrink-0 lg:w-64">
-        <Sidebar nomEntreprise={nomEntreprise} />
+        <Sidebar nomEntreprise={nomEntreprise} abonnement={aboProp} />
       </aside>
 
       {/* Contenu principal */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header nomEntreprise={nomEntreprise} />
+        <Header nomEntreprise={nomEntreprise} abonnement={aboProp} />
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+          {/* Bandeau paywall si nécessaire */}
+          {aboProp.bandeau && (
+            <PaywallBanner
+              bandeau={aboProp.bandeau}
+              joursRestantsTrial={aboProp.joursRestantsTrial}
+            />
+          )}
+
           {children}
+
           <footer className="mt-12 border-t border-gray-200 pt-4 pb-2">
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-gray-400">
               <a href="/mentions-legales" className="hover:text-gray-600 transition-colors">Mentions légales</a>

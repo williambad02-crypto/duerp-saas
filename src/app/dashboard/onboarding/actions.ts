@@ -35,5 +35,18 @@ export async function creerEntreprise(formData: FormData) {
     return { erreur: 'Erreur lors de la sauvegarde. Veuillez réessayer.' }
   }
 
+  // Créer le trial de 14 jours (idempotent — ignore si déjà existant)
+  const trialEnd = new Date()
+  trialEnd.setDate(trialEnd.getDate() + 14)
+  await supabase.from('abonnements').upsert(
+    {
+      user_id: user.id,
+      statut: 'trial',
+      plan: 'essentiel',
+      trial_ends_at: trialEnd.toISOString(),
+    },
+    { onConflict: 'user_id', ignoreDuplicates: true }
+  )
+
   redirect('/dashboard')
 }

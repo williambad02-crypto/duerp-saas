@@ -7,6 +7,7 @@ import React from 'react'
 import { renderToBuffer, DocumentProps } from '@react-pdf/renderer'
 import type { JSXElementConstructor, ReactElement } from 'react'
 import { createClient } from '@/lib/supabase/server'
+import { getInfoAbonnement } from '@/lib/abonnement'
 import { DuerpDocument, PDFData, PDFPoste, PDFOperation, PDFEvaluation, CouleurCriticite } from '@/components/pdf/duerp-document'
 import { MODULE_PAR_CODE } from '@/lib/constants/modules'
 import { CodeModule } from '@/types'
@@ -80,6 +81,16 @@ export async function POST() {
 
   if (!user) {
     return NextResponse.json({ erreur: 'Non authentifié' }, { status: 401 })
+  }
+
+  // Vérifier le droit d'exporter (paywall)
+  const abo = await getInfoAbonnement(user.id)
+  if (!abo.peutExporterPDF) {
+    console.warn(`[pdf] user ${user.id} — export bloqué (statut: ${abo.statut})`)
+    return NextResponse.json(
+      { erreur: "L'export PDF nécessite un abonnement actif. Rendez-vous sur /pricing." },
+      { status: 403 }
+    )
   }
 
   // Récupérer l'entreprise

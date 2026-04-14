@@ -4,12 +4,15 @@ import { useState } from 'react'
 import { logout } from '@/app/auth/actions'
 import { Button } from '@/components/ui/button'
 import { Sidebar } from './sidebar'
+import { AbonnementBadge } from './abonnement-badge'
+import type { AbonnementProps } from '@/lib/abonnement'
 
 interface HeaderProps {
   nomEntreprise?: string
+  abonnement?: Pick<AbonnementProps, 'statut' | 'joursRestantsTrial'>
 }
 
-export function Header({ nomEntreprise }: HeaderProps) {
+export function Header({ nomEntreprise, abonnement }: HeaderProps) {
   const [menuOuvert, setMenuOuvert] = useState(false)
 
   return (
@@ -31,32 +34,41 @@ export function Header({ nomEntreprise }: HeaderProps) {
           {nomEntreprise ?? 'DUERP SaaS'}
         </span>
 
-        {/* Spacer desktop */}
+        {/* Spacer desktop avec nom entreprise */}
         <div className="hidden lg:flex items-center gap-2 text-sm text-gray-500">
           <span>Bonjour,</span>
           <span className="font-medium text-gray-900">{nomEntreprise}</span>
         </div>
 
-        {/* Bouton déconnexion */}
-        <form action={logout}>
-          <Button variant="outline" size="sm" type="submit">
-            Déconnexion
-          </Button>
-        </form>
+        {/* Badge abonnement (desktop) + déconnexion */}
+        <div className="flex items-center gap-3">
+          {abonnement && (
+            <div className="hidden sm:block">
+              <AbonnementBadge
+                statut={abonnement.statut}
+                joursRestantsTrial={abonnement.joursRestantsTrial}
+              />
+            </div>
+          )}
+          <form action={logout}>
+            <Button variant="outline" size="sm" type="submit">
+              Déconnexion
+            </Button>
+          </form>
+        </div>
       </header>
 
       {/* Overlay mobile */}
       {menuOuvert && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          {/* Fond semi-transparent */}
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setMenuOuvert(false)}
           />
-          {/* Panneau latéral */}
           <div className="absolute left-0 top-0 h-full w-72 z-50 shadow-xl">
             <Sidebar
               nomEntreprise={nomEntreprise}
+              abonnement={abonnement}
               onClose={() => setMenuOuvert(false)}
             />
           </div>

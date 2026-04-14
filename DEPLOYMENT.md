@@ -83,8 +83,10 @@ Dans Vercel → **Project Settings** → **Environment Variables**, ajouter :
 
 > Pour la Phase 2A (Stripe), ajouter également :
 > - `STRIPE_SECRET_KEY` (secret — **Production + Preview uniquement**)
-> - `STRIPE_WEBHOOK_SECRET` (secret)
+> - `STRIPE_WEBHOOK_SECRET` (secret — obtenu lors de la configuration du webhook)
 > - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (public)
+> - `STRIPE_PRICE_MENSUEL_ID` (obtenu via `npx tsx scripts/setup-stripe.ts`)
+> - `STRIPE_PRICE_ANNUEL_ID` (obtenu via `npx tsx scripts/setup-stripe.ts`)
 
 ### 2.4 Déclencher le déploiement
 
