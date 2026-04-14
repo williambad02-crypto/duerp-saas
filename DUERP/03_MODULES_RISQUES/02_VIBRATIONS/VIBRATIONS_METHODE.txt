@@ -1,0 +1,603 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║              VIBRATIONS MÉCANIQUES — MÉTHODE D'ÉVALUATION                          ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 4.02
+  Fichier  : D_RISQUES_CHRONIQUES/02_VIBRATIONS/VIBRATIONS_METHODE.txt
+  Module   : M03 (Vibrations mécaniques)
+  Fiche ED840 : Fiche 4 (mains-bras) + Fiche 5 (corps entier)
+  Source principale : OSEV INRS (outil simplifié) + ISO 5349 + ISO 2631
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  NOTE PRÉLIMINAIRE — DEUX TYPES DE VIBRATIONS, DEUX ÉVALUATIONS
+  ───────────────────────────────────────────────────────────────
+  Ce module traite deux risques vibratoires distincts, qui nécessitent chacun
+  une évaluation séparée :
+
+  · Type MB — Vibrations Mains-Bras : transmises aux membres supérieurs via
+    un outil ou une machine tenu(e) en main (tronçonneuses, marteaux-piqueurs,
+    meuleuses, ponceuses, clés à choc, vibreurs à béton, etc.)
+
+  · Type CE — Vibrations Corps Entier : transmises à l'ensemble du corps via
+    un siège ou un plancher en contact prolongé (engins de chantier, chariots
+    élévateurs, tracteurs, véhicules tout-terrain, certaines machines fixes
+    à fort déséquilibre)
+
+  Ces deux types peuvent coexister sur un même poste de travail.
+  Exemple : cariste utilisant un chariot élévateur (CE) et une clé à choc (MB).
+  → Évaluation à mener séparément pour chaque type détecté.
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 1 — DÉFINITION ET DESCRIPTION DU RISQUE
+──────────────────────────────────────────────────────────────────────────
+
+  DÉFINITION GÉNÉRALE
+  ────────────────────
+  Les vibrations mécaniques au travail sont des oscillations mécaniques
+  transmises au corps humain par contact avec une surface vibrante. Elles
+  agissent de manière cumulative : c'est l'accumulation d'exposition sur
+  des années qui provoque les pathologies, non une exposition unique.
+
+  Il s'agit donc typiquement d'un risque chronique, même si des vibrations
+  d'intensité très élevée peuvent provoquer des effets aigus (traumatismes
+  articulaires, syndrome de Raynaud immédiat).
+
+  MÉCANISME PHYSIQUE
+  ───────────────────
+  · Les vibrations sont caractérisées par leur fréquence (Hz), leur
+    amplitude et leur direction (axes x, y, z).
+  · Pour les MB : les fréquences les plus nocives sont comprises entre 8 et
+    16 Hz (arthrose) et au-dessus de 125 Hz (syndrome de Raynaud).
+  · Pour les CE : les fréquences les plus nocives pour le rachis lombaire
+    sont comprises entre 1 et 20 Hz (résonnance des organes internes et
+    des vertèbres).
+  · La pondération en fréquence (filtres Wh pour MB, Wk pour CE) permet de
+    prendre en compte ces sensibilités différentes dans le calcul de A(8).
+
+  DISTINCTION AIGU / CHRONIQUE
+  ─────────────────────────────
+  · Effet aigu : rare — possible à très haute intensité (coup de masse,
+    choc intense). Traité en risque aigu dans l'APR standard.
+  · Effet chronique : règle générale. Les pathologies se développent après
+    des années d'exposition régulière. C'est ce risque qui est traité ici.
+
+  FORMES À DISTINGUER DANS LE MODULE
+  ────────────────────────────────────
+  → Type MB : contact via un outil ou un objet tenu en main
+  → Type CE : contact via un siège, un plancher ou une plateforme
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 2 — EFFETS SUR LA SANTÉ ET POPULATIONS EXPOSÉES
+──────────────────────────────────────────────────────────────────────────
+
+  PATHOLOGIES — VIBRATIONS MAINS-BRAS (MB)
+  ─────────────────────────────────────────
+  · Syndrome de Raynaud professionnel (doigts blancs, vasospasme digital)
+    — Le plus caractéristique : blanchissement douloureux des doigts au froid
+    — Irréversible aux stades avancés
+  · Neuropathies périphériques des membres supérieurs (engourdissements,
+    fourmillements, perte de sensibilité tactile fine)
+  · Arthrose des poignets, des coudes et des épaules (lésions ostéo-articulaires)
+  · Syndrome du canal carpien (implication vibratoire documentée en MP 69)
+  · Tendinopathies de la coiffe des rotateurs
+  · Réduction de la dextérité manuelle
+
+  PATHOLOGIES — VIBRATIONS CORPS ENTIER (CE)
+  ────────────────────────────────────────────
+  · Lombalgies chroniques et hernie discale (L4-L5, L5-S1) — MP 97
+  · Tassements vertébraux et discopathies dégénératives
+  · Douleurs cervicales et dorsales (vertèbres D6-D12)
+  · Troubles digestifs et gastro-intestinaux (exposition aux basses fréquences)
+  · Pathologies urogénitales (exposition prolongée)
+  · Fatigue chronique et troubles du sommeil
+
+  FACTEURS AGGRAVANTS
+  ────────────────────
+  · Froid : aggrave le syndrome de Raynaud (vasoconstriction additionnelle)
+  · Postures contraignantes : amplifient l'effet des vibrations CE sur le rachis
+  · Manutention manuelle simultanée : synergie néfaste avec les CE
+  · Port d'équipements lourds : amplifie les vibrations transmises aux MB
+  · Age : les effets s'accumulent et les capacités de récupération diminuent
+  · Tabagisme : vasoconstriction → aggrave le syndrome de Raynaud
+  · Traitements médicaux vasoactifs (bêta-bloquants) : aggravation Raynaud
+
+  SECTEURS ET MÉTIERS PRINCIPALEMENT EXPOSÉS
+  ────────────────────────────────────────────
+
+  Type MB — Principaux métiers exposés :
+    · BTP : opérateurs de marteaux-piqueurs, de tronçonneuses, de compacteurs
+    · Industrie mécanique : meuleurs, ébarbeurs, rectifieurs
+    · Foresterie et espaces verts : bûcherons, élagueurs (tronçonneuses)
+    · Agriculture : opérateurs d'outils à main vibrants
+    · Industrie automobile et aéronautique : serrage pneumatique (clés à choc)
+    · Mines et carrières : perforatrices, marteaux perforateurs
+    · Maintenance : meuleuses, ponceuses, vibreurs à béton
+
+  Type CE — Principaux métiers exposés :
+    · Agriculture : tractoristes, opérateurs d'engins agricoles
+    · BTP : conducteurs d'engins de chantier (pelles, bulldozers, compacteurs)
+    · Logistique/entrepôts : caristes (chariots élévateurs sur sols dégradés)
+    · Transport : conducteurs de poids lourds, transports en commun
+    · Mines et carrières : conducteurs d'engins d'extraction
+    · Industrie : opérateurs sur machines fixes à fort déséquilibre
+
+  STATISTIQUES DE SINISTRALITÉ
+  ──────────────────────────────
+  · MP 69 (MB) : environ 1 500 à 2 000 cas reconnus/an en régime général.
+  · MP 97 (CE/lombalgies) : les lombalgies représentent 20% des AT en France
+    et constituent la première cause d'incapacité temporaire.
+  · Les vibrations sont identifiées comme facteur co-causal dans une proportion
+    significative des lombalgies professionnelles reconnues.
+  · Sous-déclaration importante : nombreux cas non reconnus faute de lien
+    établi avec l'exposition vibratoire documentée.
+  · Coût moyen d'une MP 69 ou 97 : plusieurs dizaines de milliers d'euros
+    (soins, IPP, reclassement).
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 3 — MÉTHODE D'IDENTIFICATION TERRAIN (PRÉSÉLECTION)
+──────────────────────────────────────────────────────────────────────────
+
+  ÉTAPE PRÉALABLE : LOGIGRAMME DE DÉCISION
+  ──────────────────────────────────────────
+  Avant toute mesure, répondre aux questions suivantes :
+
+  QUESTION 1 : L'opérateur utilise-t-il des outils à moteur tenus en main
+               (tronçonneuse, meuleuse, clé à choc, marteau-piqueur, etc.) ?
+    → OUI : risque MB potentiel → passer à l'évaluation MB (OSEV MB)
+    → NON : passer à la question 2
+
+  QUESTION 2 : L'opérateur conduit-il ou utilise-t-il des engins, véhicules
+               ou machines transmettant des vibrations via son siège ou le
+               plancher (chariot, tracteur, engin de chantier, etc.) ?
+    → OUI : risque CE potentiel → passer à l'évaluation CE (OSEV CE)
+    → NON : risque vibratoire absent sur ce poste
+
+  QUESTION 3 (pour les deux types) : L'exposition est-elle régulière ?
+  (au moins 1 à 2 heures par semaine en routine)
+    → NON : risque chronique faible — mentionner dans DUERP, surveillance légère
+    → OUI : évaluation quantitative obligatoire (OSEV ou mesure)
+
+  CRITÈRES DE NON-EXPOSITION (sortie du module)
+  ───────────────────────────────────────────────
+  Le risque vibratoire peut être écarté si :
+  · Aucun outil à moteur tenu en main, ET
+  · Aucun engin motorisé conduit en posture assise prolongée, ET
+  · Pas de contact prolongé avec des surfaces vibrantes (machines fixes, etc.)
+
+  QUESTIONS COMPLÉMENTAIRES TERRAIN
+  ────────────────────────────────────
+  Ces questions permettent d'affiner avant même la mesure :
+  · Depuis combien d'années le salarié utilise-t-il cet outil ou cet engin ?
+  · A-t-il des douleurs aux mains, au poignet, ou dans le dos ?
+  · Ressent-il des fourmillements, engourdissements ou blanchissement des doigts ?
+  · Les vibrations lui semblent-elles plus intenses que la normale (sol dégradé,
+    outil usé, absence d'anti-vibrations) ?
+  · Y a-t-il des dispositifs anti-vibratiles sur l'outil ou le siège ?
+    Sont-ils en bon état ?
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 4 — INDICATEURS ET OUTILS DE MESURE
+──────────────────────────────────────────────────────────────────────────
+
+  INDICATEUR PRINCIPAL : A(8)
+  ────────────────────────────
+  A(8) = valeur d'exposition journalière aux vibrations normalisée sur 8 heures.
+  Unité : m/s² (mètre par seconde au carré).
+
+  Pour les MB :
+    A(8)h = ahv × √(T/T0)
+    Où ahv = valeur d'accélération pondérée en fréquence (m/s²)
+         T = durée réelle d'exposition quotidienne (heures)
+         T0 = 8 heures (période de référence)
+    La pondération utilisée est le filtre Wh (selon ISO 5349-1).
+
+  Pour les CE :
+    A(8) = aw × √(T/T0)
+    Où aw = accélération pondérée dominante selon l'axe le plus exposé
+    La pondération utilisée est le filtre Wk (selon ISO 2631-1).
+
+  INDICATEUR ALTERNATIF CE : VDV
+  ───────────────────────────────
+  La Vibration Dose Value (VDV) est recommandée pour les expositions
+  à chocs répétitifs ou impulsionnels (engins sur terrain très accidenté) :
+    VDV = [ ∫ a⁴(t) dt ]^(1/4)   en m/s^1,75
+  VA VDV : 9,1 m/s^1,75 — VLE VDV : 21 m/s^1,75
+
+  SOURCES DE DONNÉES POUR LE CALCUL
+  ────────────────────────────────────
+  Par ordre de fiabilité décroissante :
+
+  1. Mesure sur site (méthode de référence ISO 5349-2 / ISO 2631-1)
+     → Nécessite un vibromètre homologué et un technicien qualifié
+     → Mesure directement les conditions réelles d'exposition
+     → Résultat le plus fiable mais plus coûteux
+
+  2. Déclaration fabricant (notice technique de la machine)
+     → Valeur d'émission déclarée selon Directive Machines 2006/42/CE
+     → Valeur souvent prudente (conditions d'essai standardisées)
+     → Peut sous-estimer l'exposition réelle (état de la machine, conditions d'usage)
+
+  3. Bases de données vibratoires (OSEV intégré, INRS, SUVA, HSE)
+     → Valeurs typiques par type de machine et secteur d'activité
+     → Approche pratique pour une évaluation initiale
+     → Incertitude plus grande — valable pour une première estimation
+
+  OUTIL PRINCIPAL RECOMMANDÉ : OSEV INRS
+  ────────────────────────────────────────
+  OSEV (Outil Simplifié d'Évaluation des Vibrations) — développé par l'INRS.
+  Disponible en deux versions en ligne :
+  · OSEV MB : https://www.inrs.fr/publications/outils/Osev-membres-superieurs.html
+  · OSEV CE : https://www.inrs.fr/publications/outils/Osev-Corps-Entier.html
+
+  OSEV permet de :
+  · Calculer A(8) à partir de valeurs fabricant ou mesurées
+  · Comparer aux seuils réglementaires (VA et VLE)
+  · Produire une fiche de résultat avec code couleur
+  · Évaluer plusieurs machines ou outils sur un même poste
+  · Modéliser des scénarios de réduction (changement d'outil, réduction durée)
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 5 — DÉMARCHE D'ÉVALUATION EN 3 NIVEAUX
+──────────────────────────────────────────────────────────────────────────
+
+  La démarche suit la même logique que pour le bruit : 3 niveaux progressifs,
+  du plus simple au plus précis. L'objectif est de conclure au niveau le plus
+  bas possible.
+
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  NIVEAU 1 — PRÉSÉLECTION QUALITATIVE (sans mesure)                  │
+  └──────────────────────────────────────────────────────────────────────┘
+
+  Objectif : déterminer rapidement si une évaluation quantitative est nécessaire.
+
+  Méthode :
+  · Utiliser le logigramme de la Section 3 (questions Oui/Non)
+  · Consulter les niveaux vibratoires typiques publiés par l'INRS ou les
+    fiches sectorielles (des bases de données génériques donnent des ordres
+    de grandeur par type de machine)
+  · Estimer la durée d'exposition journalière
+
+  Critère de sortie Niveau 1 :
+  → Si les valeurs typiques de la machine × √(T/8) sont nettement inférieures
+    à la VA (marge ×2 au moins), le risque peut être qualifié de faible.
+    Criticité APR : 1 (faible) — consigner dans DUERP sans action immédiate.
+  → Sinon : passer au Niveau 2.
+
+  Exemples d'ordres de grandeur (valeurs fabricant typiques) :
+  ┌────────────────────────────────────────────────────┬───────────┬───────────┐
+  │ Machine / Outil                                    │ MB m/s²   │ CE m/s²   │
+  ├────────────────────────────────────────────────────┼───────────┼───────────┤
+  │ Tronçonneuse professionnelle                       │ 4 - 7     │ —         │
+  │ Marteau-piqueur / burineur                         │ 10 - 25   │ —         │
+  │ Meuleuse angulaire                                 │ 4 - 8     │ —         │
+  │ Clé à choc pneumatique                             │ 4 - 20    │ —         │
+  │ Ponceuse excentrique                               │ 5 - 10    │ —         │
+  │ Vibreur à béton                                    │ 6 - 15    │ —         │
+  │ Tracteur agricole (terrain)                        │ —         │ 0,4 - 1,0 │
+  │ Chariot élévateur (sol dégradé)                    │ —         │ 0,5 - 1,5 │
+  │ Engin de chantier (pelle, bulldozer)               │ —         │ 0,6 - 1,2 │
+  │ Camion poids lourd (mauvaise route)                │ —         │ 0,5 - 0,9 │
+  │ Véhicule léger (route normale)                     │ —         │ 0,2 - 0,4 │
+  └────────────────────────────────────────────────────┴───────────┴───────────┘
+  [Source : données typiques INRS, HSE, SUVA — à confirmer par mesure réelle]
+
+
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  NIVEAU 2 — ÉVALUATION SIMPLIFIÉE AVEC OSEV                         │
+  └──────────────────────────────────────────────────────────────────────┘
+
+  Objectif : calculer A(8) et conclure avec une fiabilité suffisante pour
+  la majorité des situations (TPE/PME, situations non critiques).
+
+  Démarche OSEV en 8 étapes (applicable MB et CE) :
+  ──────────────────────────────────────────────────
+
+  Étape 1 : Choisir la version OSEV appropriée (MB ou CE)
+  Étape 2 : Identifier la ou les machines/outils concernés sur le poste
+  Étape 3 : Trouver les valeurs vibratoires :
+              · Déclaration fabricant (notice) : priorité
+              · Base de données OSEV intégrée (si fabricant indisponible)
+              · Mesure sur site (si disponible)
+  Étape 4 : Renseigner la durée d'exposition quotidienne par outil/machine
+  Étape 5 : OSEV calcule automatiquement A(8) pour chaque outil
+  Étape 6 : Si plusieurs outils/machines sur le même poste, OSEV combine
+              les expositions selon la règle de cumul :
+              A(8)total = √(A₁²×T₁/8 + A₂²×T₂/8 + ...)
+  Étape 7 : Lire le résultat avec code couleur :
+              VERT  : A(8) < VA → risque faible, pas d'action réglementaire
+              ORANGE: VA ≤ A(8) < VLE → programme de réduction requis
+              ROUGE : A(8) ≥ VLE → action immédiate obligatoire
+  Étape 8 : Éditer et conserver la fiche de résultat (conservation 10 ans)
+
+  Interprétation pour l'APR et la cotation DUERP :
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │ Résultat OSEV      │ A(8) MB       │ A(8) CE       │ Criticité APR suggérée │
+  ├──────────────────────────────────────────────────────────────────────────────┤
+  │ VERT               │ < 2,5 m/s²    │ < 0,5 m/s²    │ 1-2 (faible)           │
+  │ ORANGE bas         │ 2,5 - 3,5     │ 0,5 - 0,8     │ 3 (moyen)              │
+  │ ORANGE élevé       │ 3,5 - 5,0     │ 0,8 - 1,15    │ 4 (élevé)              │
+  │ ROUGE              │ ≥ 5,0 m/s²    │ ≥ 1,15 m/s²   │ 6 (critique)           │
+  └──────────────────────────────────────────────────────────────────────────────┘
+
+  Note sur la durée d'exposition :
+  · La durée retenue dans OSEV est le temps de contact effectif avec l'outil vibrant,
+    pas la durée de présence au poste.
+  · Exemple : un opérateur qui meule 3h mais n'a le meuleuse en main que 2h
+    → durée d'exposition MB = 2h (pas 3h).
+
+
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  NIVEAU 3 — MESURE INSTRUMENTALE (méthode de référence)             │
+  └──────────────────────────────────────────────────────────────────────┘
+
+  Objectif : mesure directe A(8) selon ISO 5349 (MB) ou ISO 2631 (CE).
+  À décloisonner si :
+  · OSEV conclut en ORANGE ou ROUGE et des actions de réduction sont envisagées
+  · Litige, doute sur les valeurs fabricant, situation atypique
+  · Surveillance médicale renforcée nécessite des données précises
+  · Machine ancienne sans déclaration fabricant disponible
+
+  Conditions de mesure :
+  · Vibromètre homologué (accréditation COFRAC recommandée)
+  · Mesure dans des conditions représentatives des tâches réelles
+  · Répétitions suffisantes (ISO 5349-2 recommande ≥3 mesures par tâche)
+  · Rapport de mesure conservé 10 ans (R.4447-1)
+
+  En pratique pour une PME/TPE :
+  → Le Niveau 2 (OSEV) est généralement suffisant pour l'évaluation initiale.
+  → Passer au Niveau 3 uniquement si OSEV conclut à une situation critique (ROUGE)
+    ou si la mesure est nécessaire pour justifier le choix d'un EPI ou d'une action.
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 6 — VALEURS RÉGLEMENTAIRES ET SEUILS C2P
+──────────────────────────────────────────────────────────────────────────
+
+  RAPPEL DES SEUILS RÉGLEMENTAIRES (Articles R.4443-1/2)
+  ────────────────────────────────────────────────────────
+
+  ┌─────────────────────────────────┬──────────────┬──────────────┐
+  │ Seuil                           │ Mains-Bras   │ Corps Entier │
+  ├─────────────────────────────────┼──────────────┼──────────────┤
+  │ Valeur d'action (VA)            │ 2,5 m/s²     │ 0,5 m/s²    │
+  │ Valeur limite d'exposition (VLE)│ 5,0 m/s²     │ 1,15 m/s²   │
+  └─────────────────────────────────┴──────────────┴──────────────┘
+
+  SEUIL C2P — COMPTE PROFESSIONNEL DE PRÉVENTION
+  ─────────────────────────────────────────────────
+  Facteur pénibilité : "Vibrations mécaniques" (Article L.4163-1)
+  Seuil de déclenchement (accumulation de points C2P) :
+    · Vibrations mains-bras : A(8) ≥ 2,5 m/s² sur ≥ 450 heures par an
+      (soit environ 56 jours d'exposition annuelle à la VA ou au-delà)
+    · [Le facteur CE n'est pas spécifiquement listé comme facteur C2P distinct]
+
+  Conséquence pratique pour l'outil DUERP :
+  → Si A(8)MB ≥ 2,5 m/s² ET durée annuelle ≥ 450h : signaler facteur C2P "vibrations"
+  → Consigner dans la fiche salarié concernée + déclaration DSFR annuelle
+
+  RÈGLE DE CUMUL MULTI-SOURCES (rappel)
+  ───────────────────────────────────────
+  Si un salarié utilise plusieurs outils vibrants dans la journée, l'A(8) est
+  calculé par sommation quadratique :
+
+    A(8)total = √[ (A₁² × T₁ + A₂² × T₂ + ... + Aₙ² × Tₙ) / 8 ]
+
+  Exemple : meuleuse 6 m/s² pendant 1h + clé à choc 5 m/s² pendant 2h
+    A(8) = √[ (36×1 + 25×2) / 8 ] = √[ 86/8 ] = √10,75 ≈ 3,28 m/s²
+    → Dépasse VA (2,5) — programme de réduction requis
+    → Ne dépasse pas VLE (5,0)
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 7 — ACTIONS DE PRÉVENTION ET HIÉRARCHIE DES MESURES
+──────────────────────────────────────────────────────────────────────────
+
+  HIÉRARCHIE T.H.O. + EPI (9 Principes généraux de prévention L.4121-2)
+
+  NIVEAU 1 — SUPPRESSION OU SUBSTITUTION (prioritaire)
+  ──────────────────────────────────────────────────────
+  · Remplacer l'outil ou la machine vibrant par un équipement moins vibrant
+    (ex : remplacement d'un marteau-piqueur par un perforateur à percussion
+    réductrice, ou d'un chariot sur sol dégradé par un engin adapté au terrain)
+  · Supprimer la tâche vibratoire par un changement de procédé
+    (ex : fraisage au lieu de meulage, préfabrication au lieu de perçage répétitif)
+  · Automatiser ou mécaniser la tâche pour que l'opérateur ne soit plus en contact
+    avec la source vibratoire
+
+  NIVEAU 2 — RÉDUCTION À LA SOURCE (technique)
+  ──────────────────────────────────────────────
+  · Maintenance préventive des outils et machines (l'usure augmente les vibrations)
+  · Remplacement des consommables usés (disques de meuleuse, lames de scie)
+  · Choix d'outils avec certification anti-vibration et valeurs d'émission basses
+  · Réglage correct de la pression d'air (outils pneumatiques)
+  · Pour les CE : amélioration des sols (revêtement, signalisation obstacles),
+    siège à suspension correctement réglé et entretenu
+  · Utilisation de poignées ou supports anti-vibratiles pour les outils MB
+
+  NIVEAU 3 — ORGANISATION DU TRAVAIL (humain/organisationnel)
+  ─────────────────────────────────────────────────────────────
+  · Rotation des postes entre travailleurs exposés (réduction de la durée individuelle)
+  · Planification des pauses (réduction de la durée d'exposition continue)
+  · Alternance des tâches vibratoires avec des tâches sans vibration
+  · Réduction de la durée d'utilisation quotidienne des outils vibrants
+  · Formation des opérateurs : bonne prise en main, pression adaptée sur les outils,
+    technique de travail réduisant les vibrations transmises
+  · Ne pas serrer excessivement les outils (une prise ferme mais non crispée
+    réduit les vibrations transmises par les MB)
+
+  NIVEAU 4 — SURVEILLANCE MÉDICALE
+  ──────────────────────────────────
+  · Surveillance médicale renforcée (SMR) obligatoire si VA dépassée (R.4446-1)
+  · Suivi par le médecin du travail avec test de sensibilité vibro-tactile
+  · Dépistage précoce du syndrome de Raynaud (test Allen, test ischémie)
+  · Surveillance du rachis lombaire (CE) : questionnaire nordic, bilan ostéo si besoin
+  · Déclaration MP si pathologie reconnue (MP 69 MB, MP 97 CE)
+
+  NIVEAU 5 — EPI (dernier recours, après optimisation des niveaux 1-4)
+  ──────────────────────────────────────────────────────────────────────
+  · Gants anti-vibration (MB) : attention aux limites !
+    — Les gants anti-vibration réduisent certaines fréquences mais pas toutes
+    — Leur efficacité réelle est souvent inférieure aux valeurs affichées
+    — Norme EN ISO 10819 : gants certifiés anti-vibration, mais efficacité variable
+    — Un gant anti-vibration ne dispense PAS d'une action sur la source
+    — Risque de compensation comportementale (prise plus ferme → plus de vibrations)
+  · Semelles anti-vibration pour les CE (siège) : efficacité prouvée si
+    dimensionnées à la fréquence de résonance du poste
+  · Vêtements chauds : réduction du facteur aggravant du froid pour le Raynaud
+
+  AVERTISSEMENT SUR LES EPI ANTI-VIBRATION
+  ──────────────────────────────────────────
+  Contrairement aux protecteurs auditifs (où le dB d'atténuation est relativement
+  prévisible), les EPI anti-vibration ont une efficacité réelle très variable
+  et souvent décevante. Leur usage ne doit être envisagé qu'en complément
+  des mesures collectives, jamais en substitution.
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 8 — MALADIES PROFESSIONNELLES ET LIEN C2P
+──────────────────────────────────────────────────────────────────────────
+
+  RÉCAPITULATIF DES TABLEAUX MP
+  ──────────────────────────────
+
+  Type MB :
+  · Tableau MP 69 (régime général) — délai prise en charge 1 à 10 ans selon
+    la pathologie. Pathologies reconnues : Raynaud, TMS membres supérieurs,
+    arthrose poignet/coude/épaule.
+  · Tableau RA 29 (régime agricole) — Vibrations MB et CE en milieu agricole
+    et forestier.
+
+  Type CE :
+  · Tableau MP 97 (régime général) — délai 6 mois de maladie sur 12 mois,
+    durée minimum d'exposition préalable : 5 ans. Pathologie reconnue :
+    hernie discale L4-L5 ou L5-S1 avec syndrome radiculaire.
+  · Tableau RA 29 (régime agricole) — également applicable pour CE.
+
+  PROCÉDURE DE DÉCLARATION
+  ─────────────────────────
+  1. Constat de la pathologie par le médecin traitant ou du travail
+  2. Vérification des conditions du tableau MP (durée d'exposition, délai de
+     prise en charge, liste des travaux)
+  3. Déclaration par l'assuré auprès de la CPAM dans les 15 jours de l'arrêt
+     ou de la constatation médicale
+  4. Enquête CPAM (éventuellement avec visite de l'entreprise)
+  5. Reconnaissance ou refus du caractère professionnel
+
+  RÔLE DE L'ÉVALUATION VIBRATOIRE DANS LA RECONNAISSANCE MP
+  ───────────────────────────────────────────────────────────
+  La documentation DUERP et les résultats OSEV ou de mesure constituent
+  des éléments de preuve importants en cas de litige sur la reconnaissance
+  d'une MP. L'absence de documentation vibratoire peut fragiliser la position
+  de l'employeur autant que de l'assuré.
+
+  C2P — COMPTE PROFESSIONNEL DE PRÉVENTION
+  ──────────────────────────────────────────
+  Seuil MB : A(8) ≥ 2,5 m/s² ET durée annuelle ≥ 450 h/an.
+  Impact pour l'entreprise : déclaration annuelle obligatoire (DSFR - Déclaration
+  Sociale Nominative pour les facteurs de pénibilité).
+  Impact pour le salarié : acquisition de points permettant formation, temps partiel
+  ou départ anticipé à la retraite.
+
+
+──────────────────────────────────────────────────────────────────────────
+SECTION 9 — RÉFÉRENCES ET SOURCES
+──────────────────────────────────────────────────────────────────────────
+
+  RÉFÉRENCES RÉGLEMENTAIRES
+  ──────────────────────────
+  [1] Code du travail — Articles R.4441-1 à R.4447-1 (vibrations mécaniques)
+  [2] Directive 2002/44/CE — Vibrations mécaniques — JOUE L177 du 6 juillet 2002
+  [3] Décret n°2005-746 du 4 juillet 2005 — transposition Directive 2002/44/CE
+  [4] Code du travail — Article L.4163-1 (C2P — Compte Professionnel de Prévention)
+  [5] Arrêté du 4 avril 2006 — valeurs limites d'exposition aux vibrations
+
+  NORMES
+  ───────
+  [6] ISO 5349-1:2001 — Vibrations mécaniques — Mesurage et évaluation MB
+  [7] ISO 5349-2:2001 — Guide pratique pour mesure sur site MB
+  [8] ISO 2631-1:1997 — Vibrations mécaniques — Évaluation exposition CE
+  [9] ISO 2631-5:2004 — Exposition à des vibrations multichocs (VDV)
+  [10] EN ISO 10819 — Gants anti-vibration — méthode d'essai
+
+  DOCUMENTS INRS
+  ───────────────
+  [11] INRS — ED 6018 "Les vibrations mains-bras" (brochure)
+  [12] INRS — ED 6019 "Les vibrations transmises à l'ensemble du corps"
+  [13] INRS — ED 840 "Aide à l'évaluation des risques dans les PME/PMI"
+       (Fiche 4 : vibrations mains-bras, Fiche 5 : vibrations corps entier)
+  [14] INRS — Fiche HST — OSEV Membres Supérieurs (décembre 2022)
+  [15] INRS — Logigramme évaluation vibrations mécaniques
+  [16] INRS — Outil OSEV MB : https://www.inrs.fr/publications/outils/Osev-membres-superieurs.html
+  [17] INRS — Outil OSEV CE : https://www.inrs.fr/publications/outils/Osev-Corps-Entier.html
+
+  MALADIES PROFESSIONNELLES
+  ──────────────────────────
+  [18] CNAM — Tableau MP 69 — Vibrations mains-bras (régime général)
+  [19] CNAM — Tableau MP 97 — Vibrations corps entier / lombalgies (régime général)
+  [20] MSA — Tableau RA 29 — Vibrations (régime agricole)
+
+  AUTRES RESSOURCES
+  ──────────────────
+  [21] SUVA (Suisse) — base de données vibratoires machines et outils
+  [22] HSE (Royaume-Uni) — Hand-Arm Vibration Exposure Calculator (HAVEX)
+  [23] Directive Machines 2006/42/CE — Déclarations d'émission vibratoire fabricants
+  [24] Règlement Machines 2023/1230/UE (entrée en application progressive 2027)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  INTÉGRATION DANS L'OUTIL DUERP — NOTES DE DÉVELOPPEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  MODULE M03 — VIBRATIONS MÉCANIQUES
+  ────────────────────────────────────
+
+  Interface utilisateur — Écrans à prévoir :
+  1. PRÉSÉLECTION : 2 questions binaires (MB ? / CE ?) + durée estimation
+  2. SAISIE DONNÉES MB :
+       · Liste déroulante outils/machines avec valeurs typiques pré-remplies
+       · Champ durée d'exposition (heures/jour)
+       · Option "valeur fabricant connue" → saisie manuelle
+       · Possibilité d'ajouter plusieurs outils (cumul automatique)
+  3. SAISIE DONNÉES CE :
+       · Liste déroulante engins/véhicules avec valeurs typiques pré-remplies
+       · Champ durée d'exposition (heures/jour)
+       · Option "siège à suspension" (réduction ≈ 20-30%)
+       · Possibilité d'ajouter plusieurs engins
+  4. RÉSULTAT :
+       · A(8) calculé séparément MB et CE
+       · Affichage code couleur VERT/ORANGE/ROUGE pour chaque type
+       · Criticité APR pré-calculée (suggestion modifiable par l'utilisateur)
+       · Mention C2P si seuil atteint
+       · Recommandations de prévention hiérarchisées (Section 7)
+  5. DOCUMENTATION :
+       · Export de la fiche OSEV simplifiée (base pour conservation 10 ans)
+       · Mention automatique dans DUERP avec date et valeurs
+
+  Logique de cotation chronique dans le DUERP :
+  · Criticité brute = f(A(8), niveau OSEV) selon table Section 5
+  · Durée d'exposition prise en compte dans le calcul A(8) (intégré)
+  · La criticité APR résulte du croisement Gravité × Durée, conformément
+    à la règle générale des risques chroniques décidée en Phase 0.
+
+  Cas particulier — cumul MB + CE sur même poste :
+  · Les deux criticités sont évaluées indépendamment
+  · Le DUERP liste deux lignes de risque distinctes pour ce poste
+  · Le Plan de Maîtrise s'applique séparément à chaque type
+
+  Données à conserver (R.4447-1) :
+  · Valeurs A(8) calculées ou mesurées par poste
+  · Source des données (fabricant, OSEV, mesure)
+  · Date de l'évaluation
+  · Durées d'exposition retenues
+  · Actions de prévention mises en œuvre
+  Conservation : 10 ans
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FIN DU FICHIER VIBRATIONS_METHODE.txt — Phase 4.02
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,223 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║         STANDARD PRÉSÉLECTION — 3 QUESTIONS PAR MODULE DE RISQUE CHRONIQUE         ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Fichier  : B_METHODOLOGIE/STANDARD_PRESELECTION.txt
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PRINCIPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Pour chaque couple (Opération × Module de risque), l'outil pose 3 questions
+  binaires OUI/NON AVANT d'ouvrir le module d'analyse complet.
+
+  RÈGLE D'AIGUILLAGE
+  ───────────────────
+  0 OUI → Criticité 1 automatique — module complet ignoré
+           Le couple Opération×Risque est enregistré avec la mention
+           "Présélection négative — criticité 1 — non applicable à cette opération"
+
+  1+ OUI → Module complet déclenché
+            L'utilisateur est dirigé vers la grille d'analyse détaillée du module
+
+  POURQUOI 3 QUESTIONS EXACTEMENT ?
+  ────────────────────────────────────
+  · 2 questions = trop peu de discrimination pour les risques multifactoriels
+  · 4+ questions = déjà perçu comme une charge (rupture UX avant même le module)
+  · 3 questions = compromis optimal pour un utilisateur non-spécialiste en PME
+
+  FORMAT DES QUESTIONS
+  ─────────────────────
+  · Formulées en langue naturelle non-technique (vocabulaire employeur PME)
+  · Réponse OUI/NON stricte (pas de "parfois" / "rarement" en présélection)
+  · Chaque question cible un signal d'alerte indépendant
+    → un seul OUI suffit à déclencher le module complet
+  · Les questions sont posées au niveau OPÉRATION (pas poste, pas entreprise)
+
+  NOTE SUR LES RISQUES TRANSVERSAUX
+  ────────────────────────────────────
+  Certains risques s'appliquent à toutes les opérations d'un poste (bruit ambiant,
+  RPS organisationnel, thermique). Dans ce cas, l'utilisateur les rattache à une
+  opération spéciale "Toutes opérations". Les 3 questions de présélection restent
+  identiques — seul le périmètre d'application change.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M01 — BRUIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Faut-il élever la voix pour se faire comprendre lors de cette opération ?
+  2. Des plaintes d'acouphènes ou de fatigue auditive ont-elles été signalées
+     par des salariés réalisant cette opération ?
+  3. Des machines, outils ou équipements bruyants sont-ils utilisés ou présents
+     à proximité lors de cette opération ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : OUI (bruit ambiant → "Toutes opérations")
+  Module : BRUIT_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M02 — VIBRATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération implique-t-elle l'utilisation d'un outil vibrant tenu
+     en main (meuleuse, marteau-piqueur, perceuse, tronçonneuse…) ?
+  2. Cette opération implique-t-elle la conduite d'un engin, véhicule ou
+     machine transmettant des vibrations au corps entier (chariot, tracteur,
+     camion, engin de chantier…) ?
+  3. Des plaintes de fourmillements, engourdissements dans les mains ou de
+     douleurs lombaires liées à la conduite ont-elles été signalées ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : NON (lié à un outil ou engin spécifique)
+  Module : VIBRATIONS_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M03 — TMS (Troubles Musculo-Squelettiques)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération comporte-t-elle des gestes répétitifs des bras ou des mains
+     sur une durée significative (assemblage, saisie, tri, emballage…) ?
+  2. Cette opération nécessite-t-elle des postures contraignantes maintenues
+     (bras en l'air, dos courbé, torsion, accroupissement…) ?
+  3. Des cas de tendinites, douleurs d'épaule, canal carpien ou lombalgies
+     ont-ils été signalés ou reconnus en MP sur ce type de poste ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : PARTIEL (gestes répétitifs peuvent être
+  communs à plusieurs opérations → regrouper si identiques)
+  Module : TMS_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M04 — CHARGE PHYSIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération implique-t-elle de soulever, porter, pousser ou tirer
+     des charges (objets, matériaux, patients, conteneurs…) ?
+  2. Cette opération nécessite-t-elle une activité physique soutenue
+     (debout en mouvement, déplacements fréquents, efforts répétés) ?
+  3. Des douleurs physiques (dos, membres) ou des accidents liés à un effort
+     ont-ils été signalés sur ce type d'opération ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : NON (la charge physique dépend de l'opération)
+  Module : CHARGE_PHYSIQUE_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M05 — RPS (Risques Psychosociaux)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Des salariés de ce poste sont-ils soumis à une pression de temps
+     importante, à des objectifs difficiles à atteindre ou à des conflits
+     de rôle fréquents ?
+  2. Des salariés de ce poste sont-ils en contact régulier avec du public,
+     des patients ou des clients pouvant être sources de tensions ou
+     d'agressivité ?
+  3. Des signaux RPS ont-ils été observés sur ce poste : absentéisme élevé,
+     turn-over, plaintes de mal-être, conflits internes ou tensions
+     managériales signalées ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : OUI (souvent rattaché à "Toutes opérations"
+  car lié à l'organisation et au management, pas à une opération spécifique.
+  Exception : certaines opérations spécifiques concentrent le stress, ex :
+  accueil conflictuel, gestion de situations d'urgence.)
+  Module : RPS_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M06 — CHIMIQUE / CMR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération implique-t-elle l'utilisation, la manipulation ou
+     la production de produits chimiques (solvants, peintures, colles,
+     acides, gaz, fumées de soudage, poussières de bois…) ?
+  2. Les produits utilisés portent-ils des pictogrammes de danger
+     (SGH/CLP) sur leurs étiquettes ou fiches de données sécurité ?
+  3. Des voies d'exposition sont-elles présentes lors de cette opération :
+     inhalation de vapeurs/poussières, contact cutané, ingestion possible ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : NON (lié aux produits de l'opération)
+  Module : CHIMIQUE_METHODE.txt (V1 → renvoi SEIRICH)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M07 — BIOLOGIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération expose-t-elle des salariés à des agents biologiques
+     (bactéries, virus, champignons, parasites) : soins, déchets, animaux,
+     eaux usées, déchets verts, laboratoire… ?
+  2. Des piqûres, coupures ou projections de liquides biologiques sont-elles
+     possibles lors de cette opération ?
+  3. Ce poste relève-t-il d'un secteur à risque biologique connu : santé,
+     agriculture, agroalimentaire, assainissement, collecte de déchets ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : OUI (ex : tout le poste infirmier)
+  Module : BIOLOGIQUE_METHODE.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M08 — THERMIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération se déroule-t-elle dans un environnement chaud (> 30°C),
+     froid (< 10°C), ou avec des variations thermiques importantes ?
+  2. L'activité physique liée à cette opération est-elle forte dans cet
+     environnement (travail physique par forte chaleur, entrepôt frigorifique…) ?
+  3. Des malaises, crampes ou incidents liés à la chaleur/au froid ont-ils
+     été signalés sur ce poste ou dans cet environnement ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : OUI (température ambiante uniforme sur tout
+  le poste → "Toutes opérations")
+  Module : THERMIQUE_METHODE.txt (V2)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  M09 — RAYONNEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Cette opération implique-t-elle l'utilisation ou la proximité d'une
+     source de rayonnements ionisants (radiographie, radioactivité, scanner
+     industriel…) ou non ionisants (laser, UV, arc de soudage, IRM, micro-ondes,
+     ondes RF…) ?
+  2. Des équipements de protection spécifiques contre les rayonnements
+     (dosimètre, écran plombé, lunettes laser…) sont-ils utilisés ou requis ?
+  3. Ce poste relève-t-il d'un secteur connu pour les rayonnements : médical,
+     nucléaire, soudage, traitement de surface, laboratoire ?
+
+  Seuil de déclenchement module complet : 1 OUI minimum
+  Risque transversal possible : NON (lié à l'équipement de l'opération)
+  Module : RAYONNEMENTS_METHODE.txt (V2)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TABLEAU RÉCAPITULATIF
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Module │ Risque          │ Transversal ?  │ Skip si 0 OUI │ Module fichier
+  ───────┼─────────────────┼────────────────┼───────────────┼──────────────────────
+  M01    │ Bruit           │ OUI (ambiant)  │ → Criticité 1 │ BRUIT_METHODE
+  M02    │ Vibrations      │ NON            │ → Criticité 1 │ VIBRATIONS_METHODE
+  M03    │ TMS             │ PARTIEL        │ → Criticité 1 │ TMS_METHODE
+  M04    │ Charge physique │ NON            │ → Criticité 1 │ CHARGE_PHYSIQUE_METHODE
+  M05    │ RPS             │ OUI            │ → Criticité 1 │ RPS_METHODE
+  M06    │ Chimique / CMR  │ NON            │ → Criticité 1 │ CHIMIQUE_METHODE
+  M07    │ Biologique      │ PARTIEL        │ → Criticité 1 │ BIOLOGIQUE_METHODE
+  M08    │ Thermique       │ OUI            │ → Criticité 1 │ THERMIQUE_METHODE
+  M09    │ Rayonnements    │ NON            │ → Criticité 1 │ RAYONNEMENTS_METHODE
+  ───────┴─────────────────┴────────────────┴───────────────┴──────────────────────
+
+  NOTE DÉVELOPPEMENT SAAS
+  ────────────────────────
+  · L'écran de présélection est identique pour tous les modules : 3 questions
+    avec boutons OUI/NON + une aide contextuelle (?) par question.
+  · En cas de 0 OUI : message "Ce risque ne semble pas présent sur cette
+    opération. Criticité 1 enregistrée. Vous pouvez revenir modifier ce choix
+    à tout moment."
+  · En cas de 1+ OUI : transition directe vers l'écran 1 du module concerné.
+  · Les questions de présélection sont pré-cochées sur OUI si l'opération
+    précédente du même poste avait déclenché le même module (suggestion IA).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FIN DU FICHIER STANDARD_PRESELECTION.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

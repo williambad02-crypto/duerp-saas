@@ -1,0 +1,378 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║             TEMPLATE MÉTHODOLOGIQUE — RISQUES CHRONIQUES — DUERP SaaS             ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 2c
+  Fichier  : D_RISQUES_CHRONIQUES/TEMPLATE_METHODE.txt
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OBJECTIF DU TEMPLATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Ce fichier est le plan-type appliqué uniformément à chaque fichier de méthode
+  (XXXX_METHODE.txt) produit lors de la Phase 4.
+
+  Son objectif est double :
+    · Garantir la cohérence structurelle entre tous les risques chroniques
+    · Servir de guide lors de la rédaction de chaque méthode pour ne rien oublier
+
+  Les fichiers de réglementation (XXXX_REGLEMENTATION.txt — Phase 3) ont leur propre
+  structure, documentée en section B ci-dessous.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION A — TEMPLATE POUR LES FICHIERS MÉTHODE (Phase 4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Chaque fichier XXXX_METHODE.txt doit contenir les 9 sections suivantes,
+  dans cet ordre.
+
+
+  ╔═══════════════════════════════════════════╗
+  ║  [NOM DU RISQUE] — MÉTHODE D'ÉVALUATION  ║
+  ╚═══════════════════════════════════════════╝
+
+    Phase    : 4.XX
+    Fichier  : D_RISQUES_CHRONIQUES/XX_[NOM]/[NOM]_METHODE.txt
+    Module   : M[X]
+    Fiche ED840 : [numéro] ou "sans équivalent autonome"
+    Source principale : [référence norme / outil INRS]
+    Dernière mise à jour : [date]
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 1 — DÉFINITION ET DESCRIPTION DU RISQUE
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : définir précisément le risque, son mécanisme physique ou chimique,
+  et ce qui le distingue des autres risques chroniques.
+
+  À renseigner :
+    · Définition courte (2-3 phrases, langage accessible non expert)
+    · Mécanisme de survenue (comment l'exposition endommage l'organisme)
+    · Distinction aigu / chronique pour ce risque spécifique
+    · Formes multiples à distinguer (ex : vibrations MS vs CE, UV vs CEM)
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 2 — EFFETS SUR LA SANTÉ ET POPULATIONS EXPOSÉES
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : permettre à l'utilisateur de comprendre les enjeux humains et
+  d'identifier si son entreprise est concernée.
+
+  À renseigner :
+    · Pathologies ou symptômes liés à ce risque (liste précise)
+    · Organes ou systèmes touchés
+    · Facteurs aggravants personnels (âge, grossesse, traitements médicaux...)
+    · Secteurs d'activité et métiers principalement exposés
+    · Statistiques de sinistralité si disponibles (données INRS/CNAM)
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 3 — MÉTHODE D'IDENTIFICATION TERRAIN
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : donner à l'utilisateur les outils pour détecter rapidement si
+  le risque est présent à son poste de travail, sans mesure instrumentale.
+
+  À renseigner :
+    · Mini-questionnaire de présélection (3 à 5 questions oui/non ou à choix)
+      → Niveau 0 : risque absent ou négligeable
+      → Niveau 1 : risque possible — évaluation recommandée
+      → Niveau 2 : risque probable — évaluation normée obligatoire
+    · Observations visuelles ou organisationnelles clés
+    · Éléments déclencheurs spécifiques (arrêts maladie répétés, plaintes salariés,
+      AT récents, signalements médecin du travail...)
+
+  Format du mini-questionnaire dans l'outil :
+    ┌──────────────────────────────────────────────────┬──────────────────────┐
+    │  Question                                        │  Résultat si OUI     │
+    ├──────────────────────────────────────────────────┼──────────────────────┤
+    │  [Question 1]                                    │  Niveau 2            │
+    │  [Question 2]                                    │  Niveau 1            │
+    │  [Question 3]                                    │  Niveau 0            │
+    └──────────────────────────────────────────────────┴──────────────────────┘
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 4 — OUTILS ET INDICATEURS DE MESURE
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : préciser les instruments, logiciels ou méthodes de calcul permettant
+  d'objectiver l'exposition.
+
+  À renseigner :
+    · Indicateur principal (ex : LEX,8h, A(8), WBGT, indice de charge...)
+    · Unité de mesure et plage typique
+    · Instruments de mesure (sonomètre, dosimètre, accéléromètre...)
+    · Outils numériques INRS ou autres (OSEV, SEIRICH, calculateur ISO...)
+    · Méthode de calcul simplifiée (si applicable sans instrument)
+    · Formule de calcul si pertinent
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 5 — MÉTHODE DE COTATION SPÉCIFIQUE
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : décrire comment le résultat de l'évaluation se traduit en score
+  de criticité réintégrable dans l'APR.
+
+  Deux cas possibles :
+
+  CAS A — Méthode normée avec score propre :
+    · Décrire la méthode de cotation de la norme (ex : ED 6035 pour bruit)
+    · Expliquer comment le résultat est converti en score APR
+    · Table de correspondance : résultat norme → criticité brute chronique
+
+  CAS B — Pas de méthode normée (APR standard) :
+    · Criticité brute = G × Durée d'exposition (DE)
+    · Grille de cotation G (1 à 5) et DE (1 à 4) à renseigner ici pour ce risque
+    · Exemples de cotation typiques pour ce risque
+
+  Dans tous les cas, renseigner :
+    · Comment le Plan de Maîtrise (PM) s'applique à ce risque
+    · Exemples de PM typiques (mesures collectives, EPI spécifiques à ce risque)
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 6 — VALEURS SEUILS ET NIVEAUX D'ACTION
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : fournir les références chiffrées permettant de qualifier le risque
+  et d'enclencher les actions réglementaires appropriées.
+
+  À renseigner :
+    · Valeur d'action inférieure (VAI) — seuil à partir duquel des actions
+      de prévention sont requises
+    · Valeur d'action supérieure (VAS) — seuil à partir duquel les mesures
+      collectives sont obligatoires
+    · Valeur limite d'exposition (VLE) — seuil ne pouvant jamais être dépassé
+    · Tableau de synthèse des seuils :
+
+    ┌──────────────────────────┬────────────────────┬──────────────────────────────┐
+    │  Niveau                  │  Valeur seuil      │  Actions requises            │
+    ├──────────────────────────┼────────────────────┼──────────────────────────────┤
+    │  Valeur d'action inf.    │  [valeur + unité]  │  Information, formation...   │
+    │  Valeur d'action sup.    │  [valeur + unité]  │  Protections collectives...  │
+    │  Valeur limite exp.      │  [valeur + unité]  │  Dépassement interdit        │
+    └──────────────────────────┴────────────────────┴──────────────────────────────┘
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 7 — HIÉRARCHIE DES MESURES DE PRÉVENTION
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : guider l'utilisateur vers les actions correctives les plus efficaces
+  pour ce risque, classées selon la hiérarchie T.H.O. + EPI et les 9 PGP.
+
+  Structure recommandée (du plus efficace au moins efficace) :
+
+    NIVEAU 1 — Suppression / Substitution (prioritaire)
+      · [Exemples spécifiques à ce risque]
+
+    NIVEAU 2 — Réduction à la source (mesures collectives TECHNIQUES)
+      · [Exemples : encoffrement, amortisseurs, ventilation, blindage...]
+
+    NIVEAU 3 — Réduction par ORGANISATION
+      · [Exemples : rotation, réduction des temps d'exposition, planification...]
+
+    NIVEAU 4 — Réduction HUMAINE (formation, procédures)
+      · [Exemples : formation, sensibilisation, méthodes de travail...]
+
+    NIVEAU 5 — EPI (dernier recours)
+      · [EPI spécifiques à ce risque : type, norme, niveau de protection requis]
+
+    SURVEILLANCE MÉDICALE
+      · Type de suivi médical renforcé requis (si applicable)
+      · Fréquence recommandée
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 8 — LIENS MALADIES PROFESSIONNELLES ET C2P
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : informer l'utilisateur de ses obligations déclaratives et des
+  droits des salariés.
+
+  À renseigner :
+    · Tableau(x) de MP applicable(s) au régime général (liste + pathologies)
+    · Tableau(x) de MP applicable(s) au régime agricole (si pertinent)
+    · Délai de prise en charge / délai de stage
+    · Facteur C2P concerné (OUI / NON)
+      → Si OUI : seuil de déclenchement, mode de déclaration
+
+  Format :
+    ┌────────────────────┬─────────────────────────────────────────────────────┐
+    │  MP n°             │  Pathologie(s) concernée(s)                         │
+    ├────────────────────┼─────────────────────────────────────────────────────┤
+    │  [numéro]          │  [pathologie — délai de prise en charge]             │
+    └────────────────────┴─────────────────────────────────────────────────────┘
+
+    Facteur C2P : OUI / NON
+    → Seuil : [valeur] pendant [durée]
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION 9 — RÉFÉRENCES NORMATIVES ET RÉGLEMENTAIRES
+  ──────────────────────────────────────────────────────────────────────────
+
+  Objectif : centraliser toutes les références officielles utilisées dans ce fichier.
+
+  À renseigner (format standardisé) :
+
+    RÉGLEMENTATION FRANÇAISE
+    · [Code du travail — articles] : [objet]
+    · [Décrets / arrêtés] : [objet]
+
+    DIRECTIVES EUROPÉENNES
+    · [Numéro et date] : [objet]
+
+    NORMES TECHNIQUES
+    · [Référence ISO / NF / EN] : [titre court]
+
+    DOCUMENTS INRS
+    · [Référence ED xxxx] : [titre court]
+
+    OUTILS NUMÉRIQUES
+    · [Nom outil] : [URL ou description]
+
+  ──────────────────────────────────────────────────────────────────────────
+  PIED DE FICHIER STANDARD
+  ──────────────────────────────────────────────────────────────────────────
+
+  ╔═══════════════════════════════════════════════════════════════════════════════════╗
+  ║  Phase 4.XX terminée — Fichier : XX_[NOM]/[NOM]_METHODE.txt                    ║
+  ║  Prochaine étape : [phase suivante]                                             ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION B — TEMPLATE POUR LES FICHIERS RÉGLEMENTATION (Phase 3)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Chaque fichier XXXX_REGLEMENTATION.txt doit contenir les 5 sections suivantes.
+
+
+  ╔═════════════════════════════════════════════════╗
+  ║  [NOM DU RISQUE] — RÉGLEMENTATION APPLICABLE   ║
+  ╚═════════════════════════════════════════════════╝
+
+    Phase    : 3.XX
+    Fichier  : D_RISQUES_CHRONIQUES/XX_[NOM]/[NOM]_REGLEMENTATION.txt
+    Dernière mise à jour : [date]
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION R1 — TEXTES FONDATEURS
+  ──────────────────────────────────────────────────────────────────────────
+
+  Textes européens et nationaux de rang supérieur :
+    · Directive(s) européenne(s) applicable(s) — titre, date, transposition française
+    · Articles du Code du travail (partie L et R) régissant ce risque
+    · Décrets et arrêtés spécifiques
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION R2 — OBLIGATIONS DE L'EMPLOYEUR
+  ──────────────────────────────────────────────────────────────────────────
+
+  Liste des obligations légales spécifiques à ce risque :
+    · Évaluation et mesures périodiques (fréquence obligatoire ?)
+    · Registres ou documents obligatoires (fiche d'exposition, notice de poste...)
+    · Déclarations obligatoires (inspection du travail, CARSAT, CPAM...)
+    · Formations obligatoires (habilitations, recyclages...)
+    · Surveillance médicale renforcée (SMR) — conditions de déclenchement
+    · Obligations d'information des salariés
+    · Obligations de substitution (CMR notamment)
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION R3 — VALEURS LIMITES RÉGLEMENTAIRES
+  ──────────────────────────────────────────────────────────────────────────
+
+  Tableau des valeurs limites avec leur source réglementaire :
+
+    ┌────────────────────────────────┬────────────────┬───────────────────────────┐
+    │  Valeur                        │  Seuil         │  Source réglementaire     │
+    ├────────────────────────────────┼────────────────┼───────────────────────────┤
+    │  Valeur d'action inférieure    │  [valeur]      │  [article]                │
+    │  Valeur d'action supérieure    │  [valeur]      │  [article]                │
+    │  Valeur limite d'exposition    │  [valeur]      │  [article]                │
+    └────────────────────────────────┴────────────────┴───────────────────────────┘
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION R4 — TABLEAUX DE MALADIES PROFESSIONNELLES
+  ──────────────────────────────────────────────────────────────────────────
+
+    ┌────────────────────┬──────────────────────────────┬────────────────────────┐
+    │  Tableau MP        │  Pathologie(s)               │  Régime                │
+    ├────────────────────┼──────────────────────────────┼────────────────────────┤
+    │  MP n°[XX]         │  [pathologie]                │  Général / Agricole    │
+    └────────────────────┴──────────────────────────────┴────────────────────────┘
+
+  Conditions de prise en charge : liste limitative ou indicative, délai de stage,
+  délai de prise en charge.
+
+  ──────────────────────────────────────────────────────────────────────────
+  SECTION R5 — NORMES TECHNIQUES ASSOCIÉES
+  ──────────────────────────────────────────────────────────────────────────
+
+  Normes de mesure et d'évaluation reconnues ou exigées :
+
+    ┌──────────────────────┬───────────────────────────────────────────────────────┐
+    │  Référence           │  Objet                                                │
+    ├──────────────────────┼───────────────────────────────────────────────────────┤
+    │  [ISO / NF / EN...]  │  [Description courte]                                 │
+    └──────────────────────┴───────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION C — RÈGLES DE RÉDACTION COMMUNES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Ces règles s'appliquent à TOUS les fichiers produits (méthode et réglementation).
+
+  ── STYLE ET LISIBILITÉ ────────────────────────────────────────────────────────────
+
+    · Langage accessible : accessible à un chef de PME non spécialiste HSE.
+    · Termes techniques expliqués dès leur première apparition dans le fichier.
+    · Exemples concrets tirés de situations réelles de terrain.
+    · Chaque acronyme est développé à sa première occurrence
+      (ex : VLEP — Valeur Limite d'Exposition Professionnelle).
+
+  ── FORMAT VISUEL ──────────────────────────────────────────────────────────────────
+
+    · En-tête standardisé (encadré ╔═╗) avec nom du risque et métadonnées.
+    · Séparateurs de sections (━━━) uniformes.
+    · Tableaux pour toute information comparative ou tabulaire.
+    · Indentation à 2 espaces pour les sous-listes.
+    · Puces · pour les listes simples.
+    · [!] pour les alertes importantes / [?] pour les points à confirmer.
+
+  ── COHÉRENCE INTER-RISQUES ───────────────────────────────────────────────────────
+
+    · Les renvois entre risques liés sont explicitement notés
+      (ex : TMS renvoie vers Charge physique et Vibrations).
+    · Les facteurs C2P communs à plusieurs risques sont cohérents entre fichiers.
+    · La cotation PM utilise toujours la même échelle (0,0 / 0,25 / 0,50 / 0,75 / 1,0).
+
+  ── TRAÇABILITÉ ───────────────────────────────────────────────────────────────────
+
+    · Toute valeur réglementaire cite sa source exacte (article + décret ou norme).
+    · Toute méthode de calcul cite sa référence normative.
+    · Date de mise à jour en en-tête (réglementation évolue fréquemment).
+    · Signaler [À VÉRIFIER] pour toute information dont la validité est incertaine.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ORDRE DE PRODUCTION RECOMMANDÉ (Phase 3 puis Phase 4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Priorité 1 (sources déjà disponibles) :
+    3.01 + 4.01  BRUIT             (ed6035.pdf, ISO 9612, méthode bruit.docx)
+    3.02 + 4.02  VIBRATIONS        (OSEV INRS.pdf, logigramme.pdf)
+    3.04 + 4.04  CHARGE PHYSIQUE   (ed6161.pdf)
+    3.03 + 4.03  TMS               (RITMS3.pdf, TMS PRO étapes 1-4)
+    3.05 + 4.05  RPS               (dossier à constituer)
+
+  Priorité 2 (sources à constituer via recherche) :
+    3.06 + 4.06  CHIMIQUE / CMR
+    3.07 + 4.07  BIOLOGIQUE
+    3.08 + 4.08  THERMIQUE
+    3.09 + 4.09  RAYONNEMENTS
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║  Phase 2c terminée — Fichier : D_RISQUES_CHRONIQUES/TEMPLATE_METHODE.txt           ║
+║  Prochaine étape : Phase 3.01 — Réglementation BRUIT                               ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝

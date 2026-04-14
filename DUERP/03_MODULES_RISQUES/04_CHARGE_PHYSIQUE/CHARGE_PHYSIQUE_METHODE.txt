@@ -1,0 +1,637 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║         CHARGE PHYSIQUE DE TRAVAIL — MÉTHODE D'ÉVALUATION                          ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 4.04
+  Fichier  : D_RISQUES_CHRONIQUES/04_CHARGE_PHYSIQUE/CHARGE_PHYSIQUE_METHODE.txt
+  Module   : M05 (Charge physique)
+  Source   : INRS ED 6161, 2e édition, mars 2019
+              NF X 35-109 (manutention manuelle) + INRS TM 33 (Borg)
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTE PRÉLIMINAIRE — ARTICULATION AVEC LE MODULE TMS (M04)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La charge physique de travail et les TMS sont deux risques distincts mais fortement
+  liés. Leurs périmètres se recoupent sans se confondre :
+
+  MODULE M04 — TMS             │  MODULE M05 — CHARGE PHYSIQUE
+  ─────────────────────────────┼───────────────────────────────────────────────────
+  Cible : pathologies           │  Cible : astreinte physique globale + locomotrice
+  (tendinites, canal carpien…)  │  (dos, membres supérieurs, corps entier)
+  ─────────────────────────────┼───────────────────────────────────────────────────
+  Méthode : facteurs de risques │  Méthode : 5 indicateurs quantitatifs
+  (répétitivité, force, posture)│  (efforts, dimensionnement, temporel,
+                                │   environnement, organisation)
+  ─────────────────────────────┼───────────────────────────────────────────────────
+  Cotation : scoring signaux    │  Cotation : grille 0/+/++/+++ par item → synthèse
+  ─────────────────────────────┼───────────────────────────────────────────────────
+  Résultats : criticité TMS     │  Résultats : criticité charge physique → APR DUERP
+  par région anatomique         │  + pistes de prévention structurées
+  ─────────────────────────────┴───────────────────────────────────────────────────
+
+  RÈGLE D'APPLICATION :
+  → Pour une UT avec manutention manuelle de charges ou postures contraignantes :
+    compléter OBLIGATOIREMENT les deux modules M04 et M05.
+  → La criticité retenue dans l'APR est le MAX des deux cotations.
+  → Les plans de maîtrise sont mutualisés (une action peut améliorer les deux scores).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 1 — DÉFINITION ET MÉCANISMES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  DÉFINITION
+  ───────────
+  La charge physique de travail = ensemble des contraintes d'une tâche déterminée
+  et de leurs conséquences sur l'opérateur. Elle comprend :
+  · La charge dynamique : contractions musculaires alternées (soulever, déplacer…)
+  · La charge statique : maintien de postures sans mouvement (tenir, stabiliser…)
+
+  L'astreinte physique = réponse physiologique et subjective de l'individu face
+  à ces contraintes (fatigue musculaire, douleurs, effort perçu, fréquence cardiaque).
+
+  MÉCANISMES PATHOLOGIQUES
+  ─────────────────────────
+  · Efforts excessifs → micro-lésions tendineuses et musculaires → TMS (M04)
+  · Efforts prolongés → fatigue musculaire → réduction de vigilance → accident
+  · Postures contraignantes → compression discale + réduction circulation → lombalgies
+  · Tirer-pousser > capacités → pics de charge → blessures aiguës
+  · Cumul charge × durée → effet chronique même à faible intensité unitaire
+
+  SPÉCIFICITÉ DE CE MODULE PAR RAPPORT AU MODULE TMS
+  ─────────────────────────────────────────────────────
+  · ED 6161 fournit des valeurs numériques (kg, actions/min, durée en heures)
+    contrairement aux TMS qui fonctionnent sur des facteurs qualitatifs.
+  · La méthode est applicable à TOUT type d'activité physique (pas seulement
+    les gestes répétitifs) : manutention lourde, conduite de mobiles, postures
+    statiques prolongées, travail sur écran debout, etc.
+  · Les 5 indicateurs couvrent l'environnement et l'organisation — dimensions
+    absentes des méthodes normées TMS (OCRA, NIOSH, REBA).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 2 — PHASE 1 : REPÉRAGE ET HIÉRARCHISATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  OBJECTIF : identifier les UT / postes à analyser en priorité
+
+  4 QUESTIONS DE REPÉRAGE (à poser lors d'une traversée d'entreprise)
+  ──────────────────────────────────────────────────────────────────────
+  1. Des salariés réalisent-ils des efforts physiques importants ?
+     (manutentions, tirer-pousser, maintien de postures contraignantes)
+
+  2. Les salariés se plaignent-ils de douleurs, gênes ou fatigue physique ?
+     (dos, épaules, membres supérieurs, membres inférieurs)
+
+  3. L'entreprise enregistre-t-elle des AT / MP liés à la charge physique ?
+     (entorses, lombalgies, hernies discales, TMS reconnus)
+
+  4. Des situations de travail sont-elles connues comme physiquement difficiles
+     par l'encadrement de proximité ou le CSSCT ?
+
+  SIGNAUX D'ALERTE COMPLÉMENTAIRES
+  ──────────────────────────────────
+  SIGNAUX ROUGES (analyse immédiate obligatoire) :
+  · MP reconnue liée à la charge physique sur le poste
+  · AT avec arrêt lié à un effort (hernie, entorse dos)
+  · Inaptitude prononcée pour contrainte physique
+  · Port de charges > 25 kg sans aide mécanique
+
+  SIGNAUX ORANGES (analyse à programmer) :
+  · Absentéisme ciblé sur postes physiquement chargés
+  · Plaintes récurrentes dos / épaules sur même poste
+  · Turn-over élevé / refus de postes connus comme durs
+  · Borg CR10 ressentis > 3 ou RPE > 12 signalés par les opérateurs
+
+  GRILLE D'IDENTIFICATION (traversée entreprise)
+  ────────────────────────────────────────────────
+  Lors de la traversée, noter pour chaque poste observé :
+
+  Indicateur observé               │ Oui │ Non │ À creuser
+  ─────────────────────────────────┼─────┼─────┼──────────
+  Manutentions manuelles visibles  │     │     │
+  Port de charges > 10 kg          │     │     │
+  Tirer-pousser de mobiles lourds  │     │     │
+  Postures tronc fléchi / tordu    │     │     │
+  Station debout prolongée > 4h    │     │     │
+  Gestes répétitifs membres sup.   │     │     │
+  Rythme imposé / flux tendu       │     │     │
+  Absence d'aides techniques       │     │     │
+  Ambiance thermique contraignante │     │     │
+  Plaintes connues sur ce poste    │     │     │
+
+  → Tout poste avec ≥ 3 "Oui" entre dans la Phase 2 d'analyse approfondie.
+  → Tout poste avec un signal rouge entre en Phase 2 sans seuil minimum.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 3 — PHASE 2 : ANALYSE PAR LES 5 INDICATEURS (ED 6161)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  SYSTÈME DE COTATION
+  ────────────────────
+  Chaque item est coté sur 4 niveaux :
+
+  NIVEAU   COULEUR      SIGNIFICATION
+  ───────────────────────────────────────────────────────────────────────
+  0        Vert foncé   Situation non contraignante — pas d'action requise
+  +        Vert clair   Situation légèrement contraignante — surveillance
+  ++       Jaune        Situation contraignante — action à envisager
+  +++      Rouge        Situation très contraignante — action prioritaire
+  ───────────────────────────────────────────────────────────────────────
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  INDICATEUR 1 — EFFORTS PHYSIQUES                                   │
+  └─────────────────────────────────────────────────────────────────────┘
+
+  SOULEVER / TRANSPORTER (masse unitaire)
+  ──────────────────────────────────────────
+  Item                    │  0        │  +         │  ++        │  +++
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Masse unitaire (kg)     │ ≤ 5 kg    │ 5–15 kg    │ 15–25 kg   │ ≥ 25 kg
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Distance de transport   │ ≤ 2 m     │ 2–5 m      │ 5–10 m     │ > 10 m
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Facilité de prise       │ Facile    │ Acceptable │ Difficile  │ Très diff.
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Tonnage / durée         │           │ < 4 t/j    │ 4 t/j si  │ > 4 t/j
+  (total journalier)      │           │            │ < 1h/jour  │ ou flux
+                          │           │            │            │ continu
+
+  [Note NIOSH : Recommandation Weight Limit (RWL) = 23 kg × multiplicateurs
+  de hauteur, distance, asymétrie, prise, fréquence → voir Module M04 Niveau 3]
+
+  TIRER / POUSSER (mobiles : chariots, transpalettes, lits, conteneurs)
+  ───────────────────────────────────────────────────────────────────────
+  Item                    │  0        │  +         │  ++        │  +++
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Effort initial (kg)     │ < 20 kg   │ 20–30 kg   │ 30–40 kg   │ > 40 kg
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Effort maintenu (kg)    │ < 10 kg   │ 10–15 kg   │ 15–20 kg   │ > 20 kg
+  ────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Distance parcourue (m)  │ < 2 m     │ 2–5 m      │ 5–10 m     │ > 10 m
+
+  [Référence NF X 35-109 pour valeurs détaillées selon fréquence et durée]
+
+  EFFORT PHYSIQUE PERÇU (Échelles de Borg — auto-évaluation opérateur)
+  ──────────────────────────────────────────────────────────────────────
+  · Échelle CR10 (astreinte locale : dos, épaules, membres)
+    0=Rien / 0,5=Très très faible / 1=Très faible / 2=Faible / 3=Modéré /
+    4=Un peu dur / 5=Dur / 7=Très dur / 10=Très très dur / •=Maximal
+    → Seuil d'alerte : CR10 > 3 (correspond à ~30% de l'effort maximal)
+
+  · Échelle RPE (astreinte corps entier — effort général)
+    6-20 ; RPE ≈ FC/10 (RPE=13 → FC≈130 bpm)
+    → Seuil d'alerte : RPE > 12 (effort "un peu dur")
+
+  Modalités d'utilisation : administrer à 10+ salariés (ou tous si <10) ;
+  répéter toutes les 2h pour détecter la fatigue cumulée.
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  INDICATEUR 2 — DIMENSIONNEMENT DU POSTE                           │
+  └─────────────────────────────────────────────────────────────────────┘
+
+  Item                       │  0          │  +          │  ++         │  +++
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Accès / circulation        │ Dégagé      │ Acceptable  │ Gêné        │ Très gêné
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Zone d'atteinte MS         │ Optimale    │ Acceptable  │ Contrainte  │ Très
+  (hauteur prise/dépôt)      │ 0,75-1,10 m │             │             │ contrainte
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Espace membres inférieurs  │ Suffisant   │ Acceptable  │ Insuffisant │ Bloqué
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Flexion/rotation tronc     │ Non visible │ Légère      │ Importante  │ Très
+  visibles à l'observation   │             │ et ponctuelle│ ou fréquente│ fréquente
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Postures inconfortables    │ Absentes    │ Rares       │ Fréquentes  │ Constantes
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Réglages disponibles       │ Complets    │ Partiels    │ Limités     │ Absents
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Objets encombrants         │ Absents     │ Peu gênants │ Gênants     │ Très
+  à manutentionner           │             │             │             │ gênants
+
+  [Repère dimensionnement : stockage des produits les plus lourds entre 0,75 et
+  1,10 m ; jambes sous plan de travail ; possibilité assis-debout]
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  INDICATEUR 3 — CARACTÉRISTIQUES TEMPORELLES                       │
+  └─────────────────────────────────────────────────────────────────────┘
+
+  Item                       │  0          │  +          │  ++         │  +++
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Fréquence corps entier     │ < 1/5 min   │ 1/5–1/2 min │ 1/2–1/min   │ ≥ 6/min
+  (tâches répétées CE)       │             │             │             │
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Actions techniques MS      │ < 20/min    │ 20–30/min   │ 30–40/min   │ ≥ 40/min
+  (membres supérieurs)       │             │             │             │
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Flux tendu / rythme imposé │ Non         │ Ponctuel    │ Fréquent    │ Continu
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Durée exposition charge    │ < 1h/j      │ 1–2h/j      │ 2–4h/j      │ ≥ 4h/j
+  physique lourde            │             │             │             │
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Période de récupération    │ > 10 min    │ 5–10 min    │ < 5 min     │ Absente
+  (par heure de travail)     │ / heure     │ / heure     │ / heure     │
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Liberté de pause           │ Totale      │ Partielle   │ Contrainte  │ Imposée
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Variabilité de l'activité  │ Forte       │ Normale     │ Faible      │ Nulle /
+  (incidents, aléas…)        │             │             │             │ imprévisible
+
+  [SEUILS CRITIQUES ISOLÉS → cotation +++ sans attendre la synthèse :
+   · Durée exposition charge lourde ≥ 4h/j → +++ immédiat
+   · Actions MS ≥ 40/min → +++ immédiat
+   · Récupération absente sur toute une demi-journée → +++ immédiat]
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  INDICATEUR 4 — CARACTÉRISTIQUES DE L'ENVIRONNEMENT               │
+  └─────────────────────────────────────────────────────────────────────┘
+
+  Item                       │  0          │  +          │  ++         │  +++
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Ambiance thermique         │ Confortable │ Acceptable  │ Inconfort.  │ Très
+  (température)              │ 16–24°C     │             │ < 10 ou     │ inconfort.
+                             │ selon act.  │             │ > 30°C      │ < 10°C ou
+                             │             │             │             │ > 30°C > 4h
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Bruit                      │ < 60 dB     │ 60–69 dB    │ 70–79 dB    │ ≥ 80 dB
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Éclairage                  │ Adapté      │ Acceptable  │ Insuffisant │ Inadapté
+  (lux selon tâche)          │ 300–1000 lux│             │             │ ou éblouis.
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Vibrations (CE ou MB)      │ < VA        │ VA–VLE/2    │ VLE/2–VLE   │ > VLE
+  [→ voir module M03 pour    │ CE<0,5 m/s² │             │             │ CE>1,15
+  détail seuils et méthode]  │ MB<2,5 m/s² │             │             │ MB>5 m/s²
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Poussières / toxiques      │ Absents     │ Traces      │ Présents    │ Concentrés
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Sols (état, dénivelés)     │ Plans propres│ Quelques   │ Encombrés   │ Glissants /
+                             │ dégagés     │ dénivelés   │ dégradés    │ Dénivelés > 2%
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  EPI (impact sur activité)  │ Non portés  │ Légère gêne │ Gêne        │ Entrave
+                             │ ou gêne nul.│             │ notable     │ significative
+  ───────────────────────────┼─────────────┼─────────────┼─────────────┼──────────
+  Relations difficiles       │ Absentes    │ Rares       │ Fréquentes  │ Constantes
+  (clients, fournisseurs…)   │             │             │             │
+
+  [Note vibrations : si un item vibrations est +++ dans la grille charge physique,
+  déclencher systématiquement l'analyse via Module M03 VIBRATIONS]
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  INDICATEUR 5 — ORGANISATION DU TRAVAIL                            │
+  └─────────────────────────────────────────────────────────────────────┘
+
+  Item                         │  0        │  +         │  ++        │  +++
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Possibilité de modifier /    │ Toujours  │ Souvent    │ Rarement   │ Jamais
+  d'adapter son travail        │           │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Ruptures de flux, reprises   │ Jamais    │ Rarement   │ Souvent    │ Toujours
+  de manutention               │           │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Objectifs de production      │ Jamais    │ Rarement   │ Souvent    │ Toujours
+  exigeants (pression cadences)│           │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Organisation en collectifs / │ Toujours  │ Souvent    │ Rarement   │ Jamais
+  travail à plusieurs          │           │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Horaires atypiques           │ Jamais    │ Rarement   │ Souvent    │ Toujours
+  (irréguliers, postés,        │           │            │            │
+  variables, nuit…)            │           │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Formation à la situation     │ Adaptée   │ Acceptable │ Inadaptée  │ Absente
+  de travail et à ses risques  │ (PRAP)    │            │            │
+  ─────────────────────────────┼───────────┼────────────┼────────────┼──────────
+  Utilisation des aides        │ Toujours  │ Souvent    │ Rarement   │ Jamais
+  techniques disponibles       │           │            │            │
+
+  [Note organisation : un poste bien conçu techniquement peut être coté +++
+  sur l'indicateur 5 si l'organisation annule tous les apports techniques.
+  L'indicateur 5 doit être analysé EN DERNIER — il peut aggraver les cotations
+  des indicateurs 1 à 4 ou révéler des solutions organisationnelles prioritaires.]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4 — SYNTHÈSE ET COTATION APR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  MÉTHODE DE SYNTHÈSE
+  ────────────────────
+  1. Pour chaque indicateur (1 à 5) : relever la cotation dominante
+     (la plus élevée représentée par au moins 2 items, ou l'item unique +++)
+  2. Identifier le profil global sur les 5 indicateurs
+  3. Appliquer la table de correspondance ci-dessous → criticité APR
+
+  TABLE DE CORRESPONDANCE COTATION → CRITICITÉ APR
+  ──────────────────────────────────────────────────
+
+  Profil des 5 indicateurs          │ Signal Borg │ Criticité APR
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  Majorité 0, quelques +            │ Sans        │ 1 — Très faible
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  Majorité +, pas de ++             │ Sans        │ 2 — Faible
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  1 à 2 indicateurs en ++,          │ Sans        │ 2 — Faible
+  aucun +++                         │             │
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  1 à 2 indicateurs en ++,          │ CR10 > 3    │ 3 — Modérée
+  aucun +++                         │ ou RPE > 12 │
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  3 indicateurs ou plus en ++       │ Quelconque  │ 3 — Modérée
+  OU 1 indicateur en +++            │             │
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  2 indicateurs ou plus en +++      │ Quelconque  │ 4 — Élevée
+  OU 1 +++ + durée exposition ≥ 4h/j│             │
+  ───────────────────────────────────┼─────────────┼───────────────────────
+  3 indicateurs ou plus en +++      │ Quelconque  │ 6 — Critique
+  OU item isolé +++ Indicateur 1    │ CR10 > 5    │
+  avec Durée ≥ 4h/j (charge ≥ 25kg) │ ou RPE > 15 │
+  ───────────────────────────────────┴─────────────┴───────────────────────
+
+  RÈGLE BORG : si un signal Borg CR10 > 5 ou RPE > 15 est recueilli sur
+  un poste, la criticité minimale est 4, quelle que soit la grille.
+
+  RÈGLE SEUIL CRITIQUE ISOLÉ : un item +++ seul sur Indicateur 1 avec
+  charge ≥ 25 kg ou durée ≥ 4h/j donne criticité ≥ 4 directement.
+
+  CORRESPONDANCE AVEC LE SYSTÈME APR GLOBAL
+  ───────────────────────────────────────────
+  Criticité 1 : Négligeable → Documentation, pas d'action prioritaire
+  Criticité 2 : Faible → Bonnes pratiques, rappel en formation
+  Criticité 3 : Modérée → Action de prévention planifiée (PM ≤ 12 mois)
+  Criticité 4 : Élevée → Action prioritaire (PM ≤ 6 mois)
+  Criticité 6 : Critique → Action immédiate + suivi médical renforcé
+
+  APPLICATION DU PLAN DE MAÎTRISE (PM)
+  ──────────────────────────────────────
+  · PM coefficient 0.0 : mesure supprimant la source (mécanisation complète)
+  · PM coefficient 0.25 : réduction forte (aide technique + réorganisation)
+  · PM coefficient 0.50 : réduction partielle (réglages poste, rotation)
+  · PM coefficient 0.75 : amélioration légère (EPI adapté, formation)
+  · PM coefficient 1.0 : mesure non encore mise en place
+  Criticité résiduelle = Criticité brute × Coefficient PM
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 5 — PHASE 3 : PISTES DE PRÉVENTION PAR INDICATEUR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PRINCIPE GÉNÉRAL (ED 6161, Phase 3)
+  ─────────────────────────────────────
+  · La recherche de pistes doit couvrir TOUS les 5 indicateurs, même si un seul
+    est coté +++. Une solution sur indicateur 1 peut dégrader l'indicateur 3
+    ou 5 si elle n'est pas pensée globalement.
+  · Deux contextes : conception (levier maximal) vs exploitation (amélioration continue)
+  · Hiérarchie obligatoire : T (technique/collectif) → H (humain/organisationnel) → O
+    (organisationnel) → EPI (individuel) — cf. Section 6
+
+  ▸ INDICATEUR 1 — EFFORTS PHYSIQUES
+    À la conception :
+    · Mécaniser en priorité les manutentions les plus dures (masse > 15 kg)
+    · Éliminer tout port de charge > 25 kg sans aide mécanique
+    · Concevoir les zones de prise/dépôt entre 0,75 m et 1,10 m
+    En exploitation :
+    · Entretenir régulièrement le matériel de manutention (roues, goupilles…)
+    · Permettre des pauses de récupération après tout effort jugé important
+    · Réduire les efforts de tirer-pousser en limitant les charges transportées
+      (référence : tableau NF X 35-109 selon fréquence et distance)
+    Points de vigilance :
+    · Surveiller Borg CR10 ≤ 3 et RPE ≤ 12 comme indicateurs de bonne condition
+    · Se méfier des dérives de manutention : variation des charges journalières,
+      qualité des contenants, port d'EPI alourdissant, aléas de fonctionnement
+    · Exosquelettes : intégrer selon démarche structurée (INRS ED 6315)
+
+  ▸ INDICATEUR 2 — DIMENSIONNEMENT
+    À la conception :
+    · Hauteurs de prise/dépôt entre 0,75 m et 1,10 m (produits les plus lourds)
+    · Prévoir possibilité de travail assis-debout aux postes statiques
+    · Espaces sous plan de travail suffisants pour les jambes
+    · Matériel ajustable selon variations anthropométriques (taille, envergure)
+    En exploitation :
+    · Utiliser les réglages disponibles et s'assurer qu'ils sont connus des opérateurs
+    · Matérialiser les zones de circulation et les respecter (stockage envahissant)
+    · S'assurer que les équipements mobiles sont adaptés aux volumes et sols
+
+  ▸ INDICATEUR 3 — CARACTÉRISTIQUES TEMPORELLES
+    À la conception :
+    · Ne pas imposer la cadence par machine sans latitude décisionnelle opérateur
+    · Prévoir des espaces de récupération adaptés à proximité des postes
+    · Envisager des périodes de récupération en nombre et durée suffisants
+    En exploitation :
+    · Permettre aux opérateurs de réguler leur activité temporellement
+    · Répartir équitablement les productions sollicitantes et non sollicitantes
+    · Analyser et tracer les aléas (pannes, défauts) pour en réduire la fréquence
+    Points de vigilance :
+    · Éviter les pics d'activité non anticipés (maintenance préventive planifiée)
+    · S'assurer que des temps de récupération sont effectivement pris
+
+  ▸ INDICATEUR 4 — ENVIRONNEMENT
+    À la conception :
+    · Réduire contraintes thermiques/vibratoires/sonores dès la conception du bâtiment
+    · Préférer protection collective (capotage, ventilation) à la protection individuelle
+    · Sols : limiter dénivelés à < 2%, pentes à < 10 m (dénivelé court)
+    En exploitation :
+    · Maintenir en état les équipements d'ambiance (chauffage, éclairage, ventilation)
+    · Renouveler le matériel vieillissant vers des machines moins vibrantes et silencieuses
+    · S'assurer que les EPI sont adaptés, acceptés et n'aggravent pas l'astreinte physique
+    Points de vigilance :
+    · Vérifier régulièrement la qualité des sols (dégradation, glissance saisonnière)
+    · Informer les salariés sur les dysfonctionnements d'ambiance de travail
+
+  ▸ INDICATEUR 5 — ORGANISATION
+    À la conception / re-conception :
+    · Répartir les activités physiquement contraignantes sur la durée du travail
+    · Garantir que les salariés peuvent réguler leur activité sans gêner la production
+    · Associer TOUS les acteurs (méthodes, maintenance, sécurité, salariés) à la conception
+    En exploitation :
+    · Anticiper les contraintes de production pour lisser les pics d'horaires
+    · Organiser l'entraide sur les activités les plus contraignantes
+    · Former les acteurs PRAP (Prévention des Risques liés à l'Activité Physique) :
+      — PRAP 2S (secteur sanitaire et social) / PRAP IBC (industrie, BTP, commerce)
+      — Acteur PRAP = salarié formé qui identifie et remonte les risques de terrain
+    Points de vigilance :
+    · Communiquer sur toute modification organisationnelle (durable ou non)
+    · S'assurer du niveau de formation des salariés en cas de changement d'activité
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 6 — HIÉRARCHIE DE PRÉVENTION T.H.O. + EPI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Niveau  Approche               Exemples concrets
+  ─────────────────────────────────────────────────────────────────────────────
+  T1      Suppression à la       Mécanisation complète (robot, convoyeur,
+          source (collectif)     monte-charge, chariot élévateur)
+  ─────────────────────────────────────────────────────────────────────────────
+  T2      Réduction technique    Aides à la manutention (lève-personne,
+          (collectif)            transpalette électrique, bras articulé,
+                                 table élévatrice, plan de travail réglable)
+  ─────────────────────────────────────────────────────────────────────────────
+  H       Mesures humaines       Rotation des postes, réduction du rythme,
+          (organisationnel)      pauses programmées, travail en binôme sur
+                                 manutentions ≥ 15 kg
+  ─────────────────────────────────────────────────────────────────────────────
+  O       Organisation           Formation PRAP (acteurs de terrain),
+                                 procédures de manutention documentées,
+                                 signalétique de charge, remontées terrain
+  ─────────────────────────────────────────────────────────────────────────────
+  EPI     Protection             Chaussures de sécurité antidérapantes,
+          individuelle           gants de manutention, vêtements chauds
+          (dernier recours)      (froid), genouillères (agenouillement)
+  ─────────────────────────────────────────────────────────────────────────────
+
+  ⚠  CEINTURES LOMBAIRES — AVERTISSEMENT
+  Ne pas prescrire les ceintures lombaires comme mesure de prévention primaire.
+  Leur efficacité préventive n'est pas démontrée scientifiquement à ce titre.
+  Elles peuvent masquer la douleur et retarder la prise en charge médicale.
+  Usage uniquement en rééducation / retour au travail, sur prescription médicale.
+
+  ⚠  EPI ET CHARGE PHYSIQUE
+  Un EPI peut AUGMENTER la charge physique :
+  · Vêtement isolant → chaleur interne accrue → astreinte cardiaque
+  · Gants → réduction de la préhension → augmentation de la force de serrage
+  → Choisir les EPI les moins contraignants ; concertation avec les salariés
+    pour l'acceptation (Article R.4313-68 + ED 6077 INRS).
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 7 — OUTILS COMPLÉMENTAIRES D'ASTREINTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ÉCHELLES DE BORG (INRS TM 33)
+  ──────────────────────────────
+  Deux échelles complémentaires pour quantifier l'effort perçu subjectivement :
+
+  CR10 (Categorial Rating 10) — astreinte LOCALE (dos, épaules, bras)
+  Valeur │ Signification          │ Action DUERP
+  ───────┼────────────────────────┼──────────────────────────────────────────
+  0–2    │ Rien à Faible          │ Situation normale
+  3      │ Modéré                 │ Seuil d'alerte → surveiller
+  4–5    │ Un peu dur à Dur       │ Signal orange → action à engager
+  > 5    │ Très dur à Maximal     │ Signal rouge → action prioritaire
+  ───────┴────────────────────────┴──────────────────────────────────────────
+  Relation physique : Force exercée (% du max) ≈ 10 × CR10
+
+  RPE (Rating of Perceived Exertion) — astreinte GLOBALE (corps entier)
+  Valeur │ Signification          │ Action DUERP
+  ───────┼────────────────────────┼──────────────────────────────────────────
+  6–11   │ Rien à Faible          │ Situation normale
+  12–13  │ Un peu dur             │ Seuil d'alerte → surveiller
+  14–15  │ Dur                    │ Signal orange → action à engager
+  > 15   │ Très dur à Maximal     │ Signal rouge → action prioritaire
+  ───────┴────────────────────────┴──────────────────────────────────────────
+  Relation physique : FC (bpm) ≈ 10 × RPE
+
+  COÛT CARDIAQUE (mesure objectivée — pour analyses approfondies)
+  ────────────────────────────────────────────────────────────────
+  · CCa (absolu) = FCmoy − FCr (FC de repos)
+  · CCr (relatif) = CCa / (FCmax − FCr)   avec FCmax = 206 − 0,6 × âge
+  · Interprétation CCa / CCr :
+    ≤ 20 bpm / ≤ 10% : Très léger → Criticité 1-2
+    20–30 bpm / 10–20% : Léger → Criticité 2
+    30–40 bpm / 20–30% : Modéré → Criticité 3
+    40–50 bpm / 30–40% : Lourd → Criticité 4
+    > 50 bpm / > 40% : Très lourd / Intense → Criticité 6
+  · FCcr ne doit jamais dépasser 85% de FCmax
+
+  LE CERCLE DES "TROP" (nomogramme de synthèse ED 6161, Figure 5)
+  ─────────────────────────────────────────────────────────────────
+  Outil visuel de synthèse qui représente 4 axes d'excès :
+
+  AXE             │ Seuils progressifs (vert → jaune → rouge)
+  ────────────────┼──────────────────────────────────────────────────────
+  FORT (poids)    │ 5 kg (+) / 15 kg (++) / 25 kg (+++)
+  VITE (actions)  │ 30/min (+) / 40/min (++) / > 40/min (+++)
+  LOIN (distance) │ < 5 m (+) / < 10 m (++) / > 10 m (+++)
+  LONGTEMPS (durée│ > 1h/j (+) / > 2h/j (++) / > 4h/j (+++)
+  avec charge)    │ Pauses : 1p/4h (+++) / ½/h (++) / 1/h (+)
+  ────────────────┴──────────────────────────────────────────────────────
+
+  Usage DUERP V1 : utiliser le cercle des "trop" pour une présentation
+  synthétique des conclusions de l'analyse charge physique dans le rapport
+  d'évaluation. Un axe en rouge = criticité ≥ 4 sur l'indicateur associé.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 8 — PHASE 4 : ÉVALUATION DES ACTIONS DE PRÉVENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La Phase 4 ED 6161 correspond au suivi du Plan de Maîtrise dans le DUERP.
+  Elle est conduite via un tableau de bord articulé autour de 4 familles :
+
+  1. ENGAGEMENT DE LA DIRECTION
+     · Inscription du risque charge physique dans le DUERP → fait (=ce module)
+     · Moyens alloués (temps, budget) pour la démarche de prévention
+     · Communication auprès de l'ensemble des salariés
+
+  2. DÉROULEMENT DE LA DÉMARCHE
+     · Participation des salariés au recueil des données (grille 5 indicateurs)
+     · Implication du service de santé au travail + éventuellement IPRP
+     · Elaboration et suivi régulier du plan d'actions par un groupe de travail
+
+  3. PARTICIPATION DES ACTEURS
+     · Information régulière des instances (CSSCT, direction) sur l'avancement
+     · Participation effective des salariés dans la recherche de solutions
+
+  4. MISE EN ŒUVRE DES SOLUTIONS
+     · Prise en compte de la prévention charge physique lors d'acquisitions neuves
+     · Formation des salariés (PRAP) réalisée et à jour
+     · Évaluation des résultats : réduction Borg CR10/RPE, réduction AT/MP,
+       amélioration absentéisme sur postes concernés
+
+  INDICATEURS DE RÉSULTATS SUIVIS À CHAQUE MISE À JOUR DU DUERP
+  ────────────────────────────────────────────────────────────────
+  · Évolution cotation 5 indicateurs (de +++ vers ++ puis +)
+  · Scores Borg CR10 et RPE avant/après action
+  · Nombre de signaux rouges résiduels
+  · Taux AT lombalgies / TMS sur UT concernées
+  · Avis du médecin du travail (inaptitudes, restrictions)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTES DÉVELOPPEMENT MODULE M05
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  DÉCISIONS MÉTHODE V1
+  ─────────────────────
+  · Méthode retenue : ED 6161 (5 indicateurs) — outil adapté PME, sans formation
+    spécialisée, applicable par l'employeur ou un référent interne formé.
+  · NF X 35-109 (manutention) : référencée pour les valeurs tirer-pousser, non
+    intégrée en formulaire — trop granulaire pour V1.
+  · Coût cardiaque (CCa/CCr) : documenté en Section 7 pour analyses approfondies,
+    non intégré dans le flow V1 (nécessite capteur FC).
+  · Cercle des "trop" : prévu comme élément visuel dans le rapport DUERP PDF (Phase 6).
+
+  ÉCRANS UI PRÉVUS (Module M05)
+  ──────────────────────────────
+  · Écran 1 : Signaux d'alerte + 4 questions de repérage (Phase 1 → présélection UT)
+  · Écrans 2A à 2E : Grilles 5 indicateurs (un écran par indicateur, items cochables)
+    avec aide contextuelle par item (valeurs numériques en tooltip)
+  · Écran 3 : Synthèse automatique 5 indicateurs → criticité calculée + justification
+  · Écran 4 : Borg CR10/RPE (saisie résultats auto-évaluation opérateurs)
+    → ajustement criticité si signal Borg déclenché
+  · Écran 5 : Plan de Maîtrise — pistes de prévention sélectionnables par indicateur
+    + coefficient PM → criticité résiduelle automatique
+
+  PASSERELLES INTER-MODULES
+  ──────────────────────────
+  · Si Indicateur 4 Vibrations = ++ ou +++ → déclencher Module M03
+  · Si Indicateur 1 ou 3 déclenche criticité ≥ 4 → croiser avec Module M04 (TMS)
+  · Si Indicateur 4 Température > 30°C/4h → signaler au Module M08 (Thermique, V2)
+
+  SOURCES
+  ────────
+  [1] INRS ED 6161 (mars 2019) — Méthode d'analyse de la charge physique de travail
+  [2] INRS TM 33 — Évaluation subjective de la charge de travail. Utilisation des
+      échelles de Borg
+  [3] NF X 35-109 — Ergonomie. Manutention manuelle de charges
+  [4] INRS ED 6317 — Mal de dos au travail. Les clés d'une prévention efficace
+  [5] INRS ED 957 — Les TMS du membre supérieur
+  [6] INRS ED 6315 — Acquisition et intégration d'un exosquelette en entreprise
+  [7] Meyer J.-P. — La fréquence cardiaque, un indice d'astreinte physique, TL 20
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FIN DU FICHIER CHARGE_PHYSIQUE_METHODE.txt — Phase 4.04
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

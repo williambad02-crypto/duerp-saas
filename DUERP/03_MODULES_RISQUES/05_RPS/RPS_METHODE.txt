@@ -1,0 +1,450 @@
+╔══════════════════════════════════════════════════════════════════════════════════════╗
+║         RPS — RISQUES PSYCHOSOCIAUX — MÉTHODE D'ÉVALUATION                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════╝
+
+  Phase    : 4.05
+  Fichier  : D_RISQUES_CHRONIQUES/05_RPS/RPS_METHODE.txt
+  Module   : M06 (RPS)
+  Sources  : Rapport Gollac (2011) + RPS-DU INRS + Modèles Karasek / Siegrist
+  Dernière mise à jour : Avril 2026
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTE PRÉLIMINAIRE — SPÉCIFICITÉ DES RPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Les RPS sont le seul risque professionnel chronique où :
+  1. Il n'existe aucune valeur limite réglementaire chiffrée
+  2. L'exposition est bidirectionnelle : le travail peut nuire mais aussi protéger
+     (le travail valorisant, l'autonomie, la reconnaissance sont des facteurs protecteurs)
+  3. La mesure est essentiellement subjective et collective — une cotation individuelle
+     n'a pas de sens ; c'est le collectif de travail qui est l'unité d'analyse
+  4. L'évaluation sans participation des salariés est sans valeur — un DUERP RPS
+     produit uniquement par la direction sans consultation est réglementairement fragile
+
+  CONSÉQUENCE SUR LA MÉTHODE DUERP V1
+  ─────────────────────────────────────
+  · Méthode retenue : RPS-DU (INRS) — outil simplifié adapté PME, basé sur les
+    6 axes du rapport Gollac, utilisable sans expert externe
+  · Modèles Karasek et Siegrist : documentés en Section 7 (Niveau 3), hors scope V1
+    (nécessitent questionnaires standardisés + analyse statistique)
+  · Le résultat du module RPS est une criticité par opération/poste + une liste
+    de facteurs de risques identifiés → Plan de Maîtrise orienté organisation
+
+  NOTE SUR L'OPÉRATION "TOUTES OPÉRATIONS"
+  ──────────────────────────────────────────
+  Les RPS sont dans la grande majorité des cas transversaux à tout le poste, voire
+  à toute l'équipe. Il est recommandé de les rattacher à l'opération "Toutes opérations"
+  plutôt qu'à une opération spécifique. Exception : certaines opérations concentrent
+  un stress spécifique (gestion de conflits clients, situations d'urgence, travail
+  isolé…) → dans ce cas, créer une opération dédiée + une "Toutes opérations" pour
+  les facteurs transversaux.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 1 — LES 6 AXES RPS (RAPPORT GOLLAC, 2011)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Le rapport Gollac (2011, "Mesurer les facteurs psychosociaux de risque au travail")
+  est la référence française officielle. Il structure les RPS en 6 axes :
+
+  AXE 1 — INTENSITÉ DU TRAVAIL ET TEMPS DE TRAVAIL
+  · Surcharge quantitative (trop de travail / pas assez de temps)
+  · Travail sous pression, objectifs irréalistes, interruptions fréquentes
+  · Horaires atypiques, prévisibilité faible des horaires, dépassements fréquents
+  · Travail en flux tendu, dépendance de la machine ou des collègues
+
+  AXE 2 — EXIGENCES ÉMOTIONNELLES
+  · Contact avec du public en souffrance ou agressif
+  · Obligation de masquer ses émotions ("travail émotionnel")
+  · Situations traumatisantes ou violences au travail
+  · Empathie contrainte (secteur santé, social, accueil)
+
+  AXE 3 — MANQUE D'AUTONOMIE ET DE MARGES DE MANŒUVRE
+  · Faible latitude décisionnelle (ne pas pouvoir organiser son travail)
+  · Travail répétitif sans variété ni possibilité d'initiative
+  · Manque de développement des compétences / absence de perspectives
+  · Sous-utilisation des compétences (ennui professionnel — bore-out)
+
+  AXE 4 — MAUVAISE QUALITÉ DES RAPPORTS SOCIAUX AU TRAVAIL
+  · Manque de soutien social du manager ou des collègues
+  · Harcèlement moral ou sexuel
+  · Reconnaissance insuffisante du travail accompli (effort sans récompense)
+  · Conflits interpersonnels, ambiance de travail dégradée
+  · Management inapproprié (autoritaire, absent, ou incohérent)
+
+  AXE 5 — CONFLITS DE VALEURS
+  · Conflit éthique : devoir faire des choses contraires à ses valeurs
+  · Qualité empêchée : ne pas pouvoir faire du bon travail par manque de moyens
+  · Conflit identitaire : rôle ou responsabilités flous, contradictoires
+
+  AXE 6 — INSÉCURITÉ DE LA SITUATION DE TRAVAIL
+  · Insécurité de l'emploi (CDD, intérim, restructuration, PSE)
+  · Insécurité économique (salaire variable, primes incertaines)
+  · Changements organisationnels fréquents et mal maîtrisés
+  · Peur du déclassement ou de l'inadaptation aux évolutions
+
+  [Ces 6 axes sont la structure de la grille RPS-DU — cf. Section 3]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 2 — PRÉSÉLECTION (3 QUESTIONS — NIVEAU OPÉRATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [Référence : STANDARD_PRESELECTION.txt — Module M06]
+
+  Q1. Des salariés de ce poste sont-ils soumis à une pression de temps
+      importante, à des objectifs difficiles à atteindre ou à des conflits
+      de rôle fréquents ?
+
+  Q2. Des salariés de ce poste sont-ils en contact régulier avec du public,
+      des patients ou des clients pouvant être sources de tensions ou
+      d'agressivité ?
+
+  Q3. Des signaux RPS ont-ils été observés sur ce poste : absentéisme élevé,
+      turn-over, plaintes de mal-être, conflits internes ou tensions
+      managériales signalées ?
+
+  RÈGLE : 0 OUI → Criticité 1 automatique, module ignoré
+           1+ OUI → Module complet déclenché (Section 3 et suivantes)
+
+  SIGNAUX D'ALERTE COMPLÉMENTAIRES
+  ──────────────────────────────────
+  SIGNAUX ROUGES (module déclenché d'office, quelle que soit la présélection) :
+  · Signalement ou procédure de harcèlement moral ou sexuel en cours ou récente
+  · Accident de travail avec composante psychosociale avérée (agression, crise)
+  · Arrêt de travail pour burn-out ou dépression sur ce poste (déclaré en AT/MP)
+  · Alerte CSE / médecin du travail sur situation RPS
+
+  SIGNAUX ORANGES (module fortement recommandé) :
+  · Absentéisme du poste supérieur de 50% à la moyenne entreprise
+  · Turn-over > 20% sur 12 mois sur ce type de poste
+  · Plaintes collectives (même informelles) sur le management
+  · Résultats négatifs récents sur baromètre social ou enquête satisfaction
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 3 — GRILLE RPS-DU (6 AXES — NIVEAU 1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La grille est remplie en concertation entre l'employeur, l'encadrement et
+  idéalement des représentants des salariés du poste concerné.
+  Chaque item est évalué : OK / ! (signal modéré) / !! (signal fort)
+
+  SYSTÈME DE SCORING
+  ───────────────────
+  OK  = situation satisfaisante sur cet item (0 point)
+  !   = situation perfectible, tension identifiée (1 point)
+  !!  = situation préoccupante, facteur de risque avéré (2 points)
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 1 — INTENSITÉ DU TRAVAIL ET TEMPS DE TRAVAIL                              │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  1.1 Les objectifs de production/résultats sont-ils          │    │     │      │
+  │      réalistes et atteignables dans le temps imparti ?       │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  1.2 Les salariés peuvent-ils faire leur travail sans être   │    │     │      │
+  │      régulièrement interrompus ou débordés ?                 │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  1.3 Les horaires de travail sont-ils prévisibles et         │    │     │      │
+  │      respectés (heures sup. exceptionnelles) ?               │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  1.4 Le rythme est-il supportable sur la durée,              │    │     │      │
+  │      sans devoir accélérer sans cesse ?                      │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 2 — EXIGENCES ÉMOTIONNELLES                                               │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  2.1 Les salariés sont-ils régulièrement confrontés à des    │    │     │      │
+  │      situations difficiles (conflits, agressivité, détresse) │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  2.2 Sont-ils obligés de cacher ou de contrôler leurs        │    │     │      │
+  │      émotions dans l'exercice de leur travail ?              │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  2.3 Sont-ils exposés à des violences verbales ou            │    │     │      │
+  │      physiques (clients, patients, public) ?                 │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 3 — AUTONOMIE ET MARGES DE MANŒUVRE                                       │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  3.1 Les salariés peuvent-ils organiser leur travail,        │    │     │      │
+  │      choisir leurs méthodes, moduler leur rythme ?           │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  3.2 Le travail offre-t-il de la variété, de l'intérêt,     │    │     │      │
+  │      des occasions de développer ses compétences ?           │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  3.3 Les salariés ont-ils de la visibilité sur leur          │    │     │      │
+  │      avenir professionnel dans l'entreprise ?                │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 4 — RAPPORTS SOCIAUX ET RELATIONS DE TRAVAIL                              │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  4.1 Le management soutient-il les salariés en difficulté,   │    │     │      │
+  │      écoute-t-il et traite-t-il équitablement ?              │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  4.2 L'entraide et la solidarité entre collègues             │    │     │      │
+  │      sont-elles effectives sur ce poste ?                    │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  4.3 Le travail des salariés est-il reconnu (par le          │    │     │      │
+  │      manager, les collègues, la hiérarchie supérieure) ?     │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  4.4 Y a-t-il absence de harcèlement moral ou sexuel ?       │    │     │      │
+  │      (répondre !! si signalement ou suspicion)               │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 5 — CONFLITS DE VALEURS                                                   │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  5.1 Les salariés disposent-ils des moyens nécessaires pour  │    │     │      │
+  │      faire un travail de qualité dont ils sont fiers ?       │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  5.2 Les missions et responsabilités de ce poste sont-elles  │    │     │      │
+  │      claires, cohérentes, sans double contrainte impossible? │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────┐
+  │  AXE 6 — INSÉCURITÉ DE LA SITUATION DE TRAVAIL                                 │
+  ├──────────────────────────────────────────────────────────────┬────┬─────┬──────┤
+  │  Item                                                        │ OK │  !  │  !! │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  6.1 Les salariés bénéficient-ils d'une stabilité de         │    │     │      │
+  │      l'emploi (CDI, ou visibilité sur la suite) ?            │    │     │      │
+  ├──────────────────────────────────────────────────────────────┼────┼─────┼──────┤
+  │  6.2 Les changements organisationnels (process, outils,      │    │     │      │
+  │      organisation, missions) sont-ils anticipés,             │    │     │      │
+  │      expliqués et accompagnés ?                              │    │     │      │
+  └──────────────────────────────────────────────────────────────┴────┴─────┴──────┘
+
+  Nombre total d'items : 17 (cotation OK/!/!!)
+  Score total possible : 0 (tout OK) à 34 (tout !!)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4 — TABLE DE COTATION → CRITICITÉ APR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Score total    │ Signal rouge ?     │ Criticité APR
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  0–3            │ Non                │ 1 — Très faible (situation saine)
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  4–7            │ Non                │ 2 — Faible (tensions ponctuelles)
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  4–7            │ Oui (signaux orange│ 3 — Modérée (action planifiée)
+                 │ Axes 1, 3 ou 6)    │
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  8–14           │ Non                │ 3 — Modérée
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  8–14           │ Oui (Axe 2 ou 4)   │ 4 — Élevée (action prioritaire)
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  ≥ 15           │ Quelconque         │ 4 — Élevée
+  ───────────────┼────────────────────┼───────────────────────────────────────
+  Item 4.4 = !!  │ —                  │ 6 — Critique (harcèlement avéré)
+  (harcèlement)  │                    │ → action immédiate + signalement
+  ───────────────┴────────────────────┴───────────────────────────────────────
+
+  RÈGLES SPÉCIALES
+  ─────────────────
+  · Item 4.4 (harcèlement) coté !! → criticité 6 automatique, quelle que soit
+    la note globale. Action immédiate obligatoire (L.1152-1).
+  · Score fort sur un seul axe (tous les items d'un axe en !!) → criticité
+    minimum 4 sur cet axe, même si score global modéré.
+  · La criticité RPS est naturellement de type CHRONIQUE (pas de cotation aigüe
+    pertinente) → cotation = Gravité × Durée d'exposition, conformément au
+    système général du DUERP.
+
+  DURÉE D'EXPOSITION POUR LA COTATION CHRONIQUE
+  ────────────────────────────────────────────────
+  · < 1 an sur le poste ou < 2h/j d'exposition au facteur → coefficient 0,5
+  · 1–3 ans ou 2–4h/j → coefficient 1,0
+  · > 3 ans ou > 4h/j (travail entièrement exposé) → coefficient 1,5
+  [Appliquer au score de criticité brute → criticité chronique finale]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 5 — DONNÉES OBJECTIVES COMPLÉMENTAIRES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  La grille RPS-DU est qualitative. Elle est renforcée par des indicateurs
+  objectifs disponibles dans l'entreprise. Ces données ajustent la criticité :
+
+  Indicateur                    │ Valeur de référence   │ Impact criticité
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  Taux d'absentéisme poste      │ > 2× moyenne site     │ + 1 niveau criticité
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  Turn-over poste               │ > 20% / an            │ + 1 niveau criticité
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  Plaintes formelles RPS        │ ≥ 1 sur 12 mois       │ Criticité minimum 4
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  AT avec composante RPS        │ ≥ 1 sur 24 mois       │ Criticité minimum 3
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  Visite de reprise post-burn-  │ ≥ 1 sur 24 mois       │ Criticité minimum 4
+  out ou dépression             │                       │
+  ──────────────────────────────┼───────────────────────┼─────────────────────────
+  Alerte médecin du travail     │ Présente              │ Criticité minimum 4
+  ──────────────────────────────┴───────────────────────┴─────────────────────────
+
+  [Ces données sont demandées à l'employeur lors de la saisie DUERP — champs
+  optionnels mais fortement recommandés car ils objectivent l'évaluation]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 6 — PLAN DE MAÎTRISE RPS (HIÉRARCHIE T.H.O.)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PRIMAIRE — Agir sur les facteurs organisationnels (source)
+  ────────────────────────────────────────────────────────────
+  Axe 1 — Charge de travail et temps :
+  · Réviser les objectifs de production avec les opérateurs concernés
+  · Mettre en place des indicateurs de charge partagés et ajustables
+  · Planifier les horaires avec anticipation, limiter les heures supplémentaires
+  · Identifier et supprimer les interruptions évitables
+
+  Axe 2 — Exigences émotionnelles :
+  · Former les salariés à la gestion des conflits / agressivité clients
+  · Organiser des debriefings après situations difficiles (non-obligatoire mais
+    fortement recommandé pour les secteurs santé/social/sécurité)
+  · Mettre en place des binômes ou des relais sur les postes exposés
+  · Proposer un soutien psychologique (numéro d'assistance, médecin du travail)
+
+  Axe 3 — Autonomie :
+  · Revoir l'organisation du travail pour laisser des marges de manœuvre
+  · Diversifier les tâches et proposer des évolutions de compétences
+  · Associer les salariés aux décisions qui les concernent
+
+  Axe 4 — Rapports sociaux :
+  · Former les managers à un management soutenant (retours, écoute, équité)
+  · Mettre en place ou rappeler la procédure de signalement harcèlement
+  · Créer des espaces d'échange réguliers entre équipes
+
+  Axe 5 — Conflits de valeurs :
+  · Clarifier les fiches de poste, les missions et les critères de qualité
+  · Donner aux salariés les moyens de faire un travail de qualité dont ils
+    sont satisfaits (ressources, matériels, temps)
+
+  Axe 6 — Insécurité :
+  · Communiquer en avance et clairement sur les changements organisationnels
+  · Accompagner les transformations (formation, temps d'adaptation)
+  · Donner de la visibilité sur l'emploi et les évolutions
+
+  SECONDAIRE — Renforcer les ressources individuelles et collectives
+  ────────────────────────────────────────────────────────────────────
+  · Formation gestion du stress, techniques de récupération
+  · Programme de soutien psychologique (PSE, numéro vert)
+  · Espaces de discussion sur le travail (groupes de pairs)
+  [Ces actions ne remplacent JAMAIS les mesures primaires — elles sont
+  complémentaires. Un programme de gestion du stress sans action sur
+  l'organisation est insuffisant réglementairement et inefficace à terme.]
+
+  TERTIAIRE — Traiter les salariés en difficulté
+  ────────────────────────────────────────────────
+  · Procédure de signalement interne claire et connue des salariés
+  · Maintien du lien pendant les arrêts de travail (si le salarié le souhaite)
+  · Visite de pré-reprise organisée avec médecin du travail
+  · Aménagement du poste au retour (temps partiel thérapeutique, missions adaptées)
+
+  ⚠  AVERTISSEMENT — PRÉVENTION INDIVIDUELLE SEULE INSUFFISANTE
+  Des actions uniquement centrées sur l'individu (sophrologie, méditation,
+  gestion du stress) sans agir sur l'organisation sont réglementairement
+  insuffisantes (obligation de prévention primaire L.4121-2) et peuvent être
+  perçues comme une stigmatisation des salariés en difficulté.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 7 — NIVEAU 2 : APPROFONDIR L'ANALYSE (HORS SCOPE V1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Si criticité ≥ 4 après le Niveau 1 (grille RPS-DU), un accompagnement
+  externe est recommandé. Outils de Niveau 2 (documentés, non implémentés en V1) :
+
+  MODÈLE DE KARASEK (Demande-Contrôle-Soutien — JDC)
+  ─────────────────────────────────────────────────────
+  · 3 dimensions : Demande psychologique / Latitude décisionnelle / Soutien social
+  · Questionnaire de 26 items (SUMER, Karasek 1979)
+  · Profil à risque : forte demande + faible latitude = "job strain" → risque cardiovasculaire
+  · + faible soutien = "iso-strain" → risque aggravé
+  · Limites : ne mesure pas les conflits de valeur, insécurité, exigences émotionnelles
+
+  MODÈLE DE SIEGRIST (Effort-Récompense — ERI)
+  ──────────────────────────────────────────────
+  · 2 dimensions : Efforts (extrinsèques + surinvestissement) / Récompenses (salaire,
+    reconnaissance, sécurité, perspectives)
+  · Questionnaire de 23 items
+  · Déséquilibre effort/récompense → risque cardiovasculaire + burn-out
+  · Complémentaire à Karasek (mesure la dimension de la reconnaissance)
+
+  QUESTIONNAIRE SUMER (DARES)
+  ────────────────────────────
+  · Enquête nationale française sur les expositions aux risques professionnels
+  · Contient les items Karasek + items chimiques, biologiques, physiques
+  · Permet des comparaisons avec les données nationales sectorielles
+
+  CONDITIONS D'EMPLOI (Niveau 2)
+  ────────────────────────────────
+  · IPRP (Intervenant en Prévention des Risques Professionnels) externe
+  · Service de santé au travail interentreprises (SSTI) — médecin du travail
+    peut réaliser une investigation approfondie avec les salariés
+  · Expertise CSE (L.2315-94) si risque grave constaté
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NOTES DÉVELOPPEMENT MODULE M06
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  DÉCISIONS MÉTHODE V1
+  ─────────────────────
+  · Méthode V1 = Grille RPS-DU INRS (17 items, 6 axes Gollac) — adapté PME,
+    ne nécessite pas d'expert, conduit par l'employeur en concertation.
+  · Karasek, Siegrist, SUMER : documentés Section 7, hors scope V1.
+  · Burn-out : pas de tableau MP dédié en France → prise en charge via système
+    complémentaire CRRMP uniquement. L'outil signale mais ne qualifie pas.
+  · Criticité RPS = chronique uniquement (pas de cotation risque aigu pertinente
+    sauf item 4.4 harcèlement → criticité 6 → traitement urgent).
+
+  ÉCRANS UI PRÉVUS (Module M06)
+  ──────────────────────────────
+  · Écran 0 : 3 questions présélection (M05 standard)
+  · Écran 1 : Introduction RPS — rappel de l'importance de la concertation
+    + consigne : "cette grille doit être remplie avec les représentants des
+    salariés ou au moins un échantillon de salariés du poste"
+  · Écrans 2A à 2F : Grille 6 axes (un écran par axe, items OK/!/!!)
+    avec aide contextuelle (?) par item (exemples concrets de situations)
+  · Écran 3 : Données objectives complémentaires (absentéisme, turn-over,
+    plaintes, AT — champs optionnels)
+  · Écran 4 : Synthèse automatique → score total + criticité + axes dominants
+  · Écran 5 : Plan de Maîtrise — actions sélectionnables par axe (primaires /
+    secondaires / tertiaires) avec message d'alerte si uniquement secondaires
+
+  PARTICULARITÉ UX
+  ─────────────────
+  · Afficher un avertissement si l'utilisateur remplit la grille seul sans
+    concertation : "Pour un résultat fiable, cette évaluation devrait être
+    conduite avec les salariés ou leurs représentants. Valider quand même ?"
+  · Item 4.4 (harcèlement = !!) → déclencher un pop-up d'information sur
+    les obligations légales et les ressources disponibles (INRS, médecin du travail)
+
+  SOURCES
+  ────────
+  [1] Rapport Gollac (2011) — Mesurer les facteurs psychosociaux de risque au travail
+  [2] INRS — RPS-DU : Outil d'évaluation des risques psychosociaux pour les PME
+  [3] INRS — Dossier RPS complet : www.inrs.fr/risques/psychosociaux
+  [4] ANI du 2 juillet 2008 sur le stress au travail (étendu avril 2009)
+  [5] Karasek R.A. (1979) — Job demands, job decision latitude and mental strain
+  [6] Siegrist J. (1996) — Adverse health effects of high-effort/low-reward conditions
+  [7] DARES — Enquête SUMER 2017 (données exposition RPS France)
+  [8] Code du travail — L.4121-1/2, L.1152-1, L.2315-94
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FIN DU FICHIER RPS_METHODE.txt — Phase 4.05
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
