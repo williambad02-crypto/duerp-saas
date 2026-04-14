@@ -8,7 +8,8 @@ export interface QuestionPreselection {
   texte: string
 }
 
-export const QUESTIONS_PRESELECTION: Record<CodeModule, QuestionPreselection[]> = {
+// La preselection ne s'applique qu'aux modules normes (pas a 'APR')
+export const QUESTIONS_PRESELECTION: Record<Exclude<CodeModule, 'APR'>, QuestionPreselection[]> = {
   M01_BRUIT: [
     {
       id: 1,

@@ -6,7 +6,7 @@ import { ModuleBruit } from '@/components/evaluation/module-bruit'
 import { ModuleComingSoon } from '@/components/evaluation/module-coming-soon'
 import { CriticiteBadge } from '@/components/evaluation/criticite-badge'
 import { MODULE_PAR_CODE, MODULES_RISQUES } from '@/lib/constants/modules'
-import { QUESTIONS_PRESELECTION } from '@/lib/constants/preselection'
+import { QUESTIONS_PRESELECTION, QuestionPreselection } from '@/lib/constants/preselection'
 import { calculerCriticiteBruit } from '@/lib/constants/bruit'
 import { CodeModule } from '@/types'
 
@@ -17,8 +17,8 @@ interface Props {
 export default async function ModuleEvaluationPage({ params }: Props) {
   const { id: posteId, opId: operationId, module: moduleCode } = await params
 
-  // Valider le code module
-  const codeModule = moduleCode as CodeModule
+  // Valider le code module (ce page n'est jamais 'APR' — APR n'a pas de module dedie)
+  const codeModule = moduleCode as Exclude<CodeModule, 'APR'>
   const moduleInfo = MODULE_PAR_CODE[codeModule]
   if (!moduleInfo) notFound()
 
@@ -185,7 +185,7 @@ export default async function ModuleEvaluationPage({ params }: Props) {
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h4 className="text-sm font-medium text-gray-900 mb-3">Réponses enregistrées</h4>
             <div className="space-y-2">
-              {questions.map((q) => {
+              {questions.map((q: QuestionPreselection) => {
                 const reponse =
                   q.id === 1
                     ? preselection.question_1

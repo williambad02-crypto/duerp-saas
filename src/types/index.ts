@@ -7,6 +7,7 @@ export type NiveauCriticite = 'vert' | 'jaune' | 'orange' | 'rouge'
 export type TypeRisque = 'aigu' | 'chronique'
 
 export type CodeModule =
+  | 'APR'               // Analyse Préliminaire des Risques — cotation standard G×P ou G×DE
   | 'M01_BRUIT'
   | 'M02_VIBRATIONS'
   | 'M03_TMS'
@@ -68,10 +69,20 @@ export interface Evaluation {
   code_module: CodeModule
   type_risque: TypeRisque
   statut: StatutEvaluation
+  // Identification APR
+  numero_risque_ed840?: number    // 1-20 (fiche ED840)
+  identifiant_auto?: string       // ex: UT01-R003
+  // Chaîne de l'accident (colonnes APR)
+  danger?: string
+  situation_dangereuse?: string
+  evenement_dangereux?: string    // aigus uniquement
+  dommage?: string
+  siege_lesions?: string
   // Cotation brute (risque aigu : G×P)
   gravite?: number // 1-5
   probabilite?: number // 1-4
-  criticite_brute?: number // G × P
+  duree_exposition?: number // 1-4 (chronique APR standard)
+  criticite_brute?: number // G × P ou G × DE
   // Données spécifiques au module (JSON flexible)
   donnees_module?: Record<string, unknown>
   created_at: string
