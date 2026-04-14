@@ -148,3 +148,70 @@
     @apply font-sans;
   }
 }
+
+/* ── Animations SafeAnalyse. ─────────────────────────────────────────────────── */
+
+@keyframes sa-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sa-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes sa-fade-left {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sa-fade-right {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* État initial des éléments animés */
+.sa-animate {
+  opacity: 0;
+}
+
+/* État visible : déclenché par IntersectionObserver */
+.sa-animate.sa-visible.sa-fade-up {
+  animation: sa-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.sa-animate.sa-visible.sa-fade-in {
+  animation: sa-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.sa-animate.sa-visible.sa-fade-left {
+  animation: sa-fade-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.sa-animate.sa-visible.sa-fade-right {
+  animation: sa-fade-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Délais en cascade */
+.sa-animate.sa-visible.animation-delay-100 { animation-delay: 100ms; }
+.sa-animate.sa-visible.animation-delay-200 { animation-delay: 200ms; }
+.sa-animate.sa-visible.animation-delay-300 { animation-delay: 300ms; }
+.sa-animate.sa-visible.animation-delay-400 { animation-delay: 400ms; }
+.sa-animate.sa-visible.animation-delay-500 { animation-delay: 500ms; }
+
+/* Animation hero — lancée immédiatement */
+@keyframes hero-title {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-sub {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-badge {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-hero-badge { animation: hero-badge 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+.animate-hero-title { animation: hero-title 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+.animate-hero-sub   { animation: hero-sub   0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+.animate-hero-cta   { animation: hero-sub   0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both; }
