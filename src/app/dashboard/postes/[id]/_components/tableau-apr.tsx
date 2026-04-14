@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useCallback, useRef, useTransition, useEffect } from 'react'
+import { useState, useCallback, useRef, useTransition, useEffect, useMemo } from 'react'
+import { createPortal } from 'react-dom'
+import { Maximize2, Minimize2 } from 'lucide-react'
 import {
   DndContext,
   DragEndEvent,
@@ -68,18 +70,26 @@ const COLONNES_TAB = [
   'mesures_techniques', 'coefficient_pm',
 ]
 
-// ─── Helpers visuels ─────────────────────────────────────────────────────────
+// ─── Styles communs ───────────────────────────────────────────────────────────
 
-function getBadgeCriticite(score: number | null) {
-  if (!score) return null
-  const n = getNiveauCriticite(score)
-  const classes: Record<string, string> = {
-    vert:   'bg-green-100 text-green-800 ring-green-200',
-    jaune:  'bg-yellow-100 text-yellow-800 ring-yellow-200',
-    orange: 'bg-orange-100 text-orange-800 ring-orange-200',
-    rouge:  'bg-red-100 text-red-800 ring-red-200',
-  }
-  return { score, classe: classes[n.niveau] ?? classes.rouge }
+// Classe de base pour les <th>
+const TH = 'bg-gray-100 border-b-2 border-b-gray-300 border-r border-r-gray-200 px-3 py-3 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em]'
+
+// Classe de base pour les <td> non éditables
+const TD = 'px-3 py-2.5 text-xs border-r border-b border-gray-200 text-gray-900'
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getGroupBg(op: OperationUI, groupIndex: number): string {
+  if (op.est_transversale) return 'bg-amber-50'
+  return groupIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+}
+
+function getClasseCriticite(score: number): string {
+  if (score <= 4) return 'bg-green-50 text-green-800 border border-green-200'
+  if (score <= 9) return 'bg-yellow-50 text-yellow-800 border border-yellow-200'
+  if (score <= 14) return 'bg-orange-100 text-orange-800 border border-orange-200'
+  return 'bg-red-100 text-red-800 border border-red-200'
 }
 
 // ─── CelluleTexte ────────────────────────────────────────────────────────────
@@ -88,10 +98,12 @@ function CelluleTexte({
   ligneId, colonne, valeur, placeholder = '—',
   isActive, onActivate, onSave, onTab,
   minWidth = 'min-w-[140px]',
+  maxWidth,
+  tdClassName = '',
 }: {
   ligneId: string; colonne: string; valeur: string | null; placeholder?: string
   isActive: boolean; onActivate: () => void; onSave: (v: string | null) => Promise<void>
-  onTab?: () => void; minWidth?: string
+  onTab?: () => void; minWidth?: string; maxWidth?: string; tdClassName?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState(valeur ?? '')
@@ -111,9 +123,11 @@ function CelluleTexte({
     }
   }
 
+  const sizeClass = `${minWidth}${maxWidth ? ` ${maxWidth}` : ''}`
+
   if (isActive) {
     return (
-      <td className={`px-2 py-1 ${minWidth}`}>
+      <td className={`px-2 py-1 ${sizeClass} border-r border-b border-gray-200 bg-white ${tdClassName}`}>
         <input
           ref={ref}
           value={draft}
@@ -124,7 +138,7 @@ function CelluleTexte({
             if (e.key === 'Escape') { setDraft(valeur ?? ''); onTab?.() }
             if (e.key === 'Tab') { e.preventDefault(); handleCommit().then(() => onTab?.()) }
           }}
-          className="w-full text-xs px-2 py-1 border border-brand-navy rounded bg-brand-off text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/10"
+          className="w-full text-xs px-2 py-1 border border-blue-500 rounded bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
         />
       </td>
     )
@@ -132,10 +146,11 @@ function CelluleTexte({
 
   return (
     <td
-      className={`px-2 py-1 text-xs text-brand-navy cursor-pointer hover:bg-brand-cream-light group ${minWidth}`}
+      className={`${TD} cursor-pointer hover:bg-gray-50 ${sizeClass} overflow-hidden ${tdClassName}`}
       onClick={onActivate}
+      title={valeur ?? undefined}
     >
-      <span className={!valeur ? 'text-brand-bronze/40 italic' : ''}>
+      <span className={`block truncate ${!valeur ? 'text-gray-400 italic' : ''}`}>
         {valeur || placeholder}
       </span>
     </td>
@@ -146,13 +161,15 @@ function CelluleTexte({
 
 function CelluleSelect({
   ligneId, colonne, valeur, options, isActive, onActivate, onSave, onTab,
-  renderLabel, minWidth = 'min-w-[60px]', disabled = false,
+  renderLabel, minWidth = 'min-w-[60px]', disabled = false, tdClassName = '',
+  center = false,
 }: {
   ligneId: string; colonne: string; valeur: number | string | null
   options: { valeur: number | string; label: string }[]
   isActive: boolean; onActivate: () => void
   onSave: (v: number | string | null) => Promise<void>; onTab?: () => void
   renderLabel?: (v: number | string | null) => string; minWidth?: string; disabled?: boolean
+  tdClassName?: string; center?: boolean
 }) {
   const ref = useRef<HTMLSelectElement>(null)
 
@@ -170,7 +187,7 @@ function CelluleSelect({
 
   if (isActive && !disabled) {
     return (
-      <td className={`px-1 py-1 ${minWidth}`}>
+      <td className={`px-1 py-1 ${minWidth} border-r border-b border-gray-200 bg-white ${tdClassName}`}>
         <select
           ref={ref}
           defaultValue={String(valeur ?? '')}
@@ -180,7 +197,7 @@ function CelluleSelect({
             if (e.key === 'Escape') onTab?.()
             if (e.key === 'Tab') { e.preventDefault(); onTab?.() }
           }}
-          className="w-full text-xs border border-brand-navy rounded bg-brand-off text-brand-navy focus:outline-none focus:ring-2 focus:ring-brand-navy/10 py-1"
+          className="w-full text-xs border border-blue-500 rounded bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-100 py-1"
         >
           <option value="">—</option>
           {options.map(o => (
@@ -193,12 +210,181 @@ function CelluleSelect({
 
   return (
     <td
-      className={`px-2 py-1 text-xs cursor-pointer hover:bg-brand-cream-light ${minWidth} ${disabled ? 'opacity-50 cursor-default' : ''}`}
+      className={`${TD} ${minWidth} ${center ? 'text-center' : ''} ${disabled ? 'opacity-50 cursor-default' : 'cursor-pointer hover:bg-gray-50'} ${tdClassName}`}
       onClick={disabled ? undefined : onActivate}
     >
-      <span className={!valeur && valeur !== 0 ? 'text-brand-bronze/40' : 'text-brand-navy'}>
+      <span className={!valeur && valeur !== 0 ? 'text-gray-400' : ''}>
         {label}
       </span>
+    </td>
+  )
+}
+
+// ─── CelluleCombobox (Risque ED840 avec recherche) ───────────────────────────
+
+interface ComboboxOption {
+  valeur: number
+  label: string  // intitulé seul (sans le numéro)
+  badge: 'AIGU' | 'CHRONIQUE' | 'LES_DEUX'
+}
+
+function CelluleCombobox({
+  ligneId, colonne, valeur, options, isActive, onActivate, onSave, onTab,
+  minWidth = 'min-w-[240px]', tdClassName = '',
+}: {
+  ligneId: string; colonne: string; valeur: number | null
+  options: ComboboxOption[]
+  isActive: boolean; onActivate: () => void
+  onSave: (v: number | null) => Promise<void>; onTab?: () => void
+  minWidth?: string; tdClassName?: string
+}) {
+  const cellRef = useRef<HTMLTableCellElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [recherche, setRecherche] = useState('')
+  const [cursorIdx, setCursorIdx] = useState(0)
+  const [dropPos, setDropPos] = useState({ top: 0, left: 0, width: 360 })
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  useEffect(() => {
+    if (isActive && cellRef.current) {
+      const rect = cellRef.current.getBoundingClientRect()
+      setDropPos({
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: Math.max(rect.width, 360),
+      })
+      setRecherche('')
+      setCursorIdx(0)
+      const t = setTimeout(() => searchRef.current?.focus(), 30)
+      return () => clearTimeout(t)
+    }
+  }, [isActive])
+
+  // Fermer si scroll pendant l'ouverture
+  useEffect(() => {
+    if (!isActive) return
+    const close = () => onTab?.()
+    window.addEventListener('scroll', close, { capture: true, passive: true })
+    return () => window.removeEventListener('scroll', close, { capture: true })
+  }, [isActive, onTab])
+
+  const optionsFiltrees = useMemo(() => {
+    if (!recherche) return options
+    const q = recherche.toLowerCase()
+    return options.filter(o =>
+      String(o.valeur).includes(q) || o.label.toLowerCase().includes(q)
+    )
+  }, [options, recherche])
+
+  // Scroll l'item actif dans la liste
+  useEffect(() => {
+    itemRefs.current[cursorIdx]?.scrollIntoView({ block: 'nearest' })
+  }, [cursorIdx])
+
+  const handleSelect = async (val: number) => {
+    await onSave(val)
+    onTab?.()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setCursorIdx(i => Math.min(i + 1, optionsFiltrees.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setCursorIdx(i => Math.max(i - 1, 0))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const opt = optionsFiltrees[cursorIdx]
+      if (opt) handleSelect(opt.valeur)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      onTab?.()
+    } else if (e.key === 'Tab') {
+      e.preventDefault()
+      const opt = optionsFiltrees[cursorIdx]
+      if (opt) handleSelect(opt.valeur)
+      else onTab?.()
+    }
+  }
+
+  const risqueActif = options.find(o => o.valeur === valeur)
+  const displayLabel = risqueActif ? `${valeur}. ${risqueActif.label}` : '—'
+
+  const badgeColors: Record<string, string> = {
+    AIGU: 'bg-orange-100 text-orange-700',
+    CHRONIQUE: 'bg-blue-100 text-blue-700',
+    LES_DEUX: 'bg-gray-100 text-gray-600',
+  }
+  const badgeLabels: Record<string, string> = {
+    AIGU: 'A', CHRONIQUE: 'C', LES_DEUX: 'A+C',
+  }
+
+  return (
+    <td
+      ref={cellRef}
+      className={`${minWidth} max-w-[320px] ${TD} cursor-pointer ${isActive ? 'bg-blue-50' : 'hover:bg-gray-50'} overflow-hidden ${tdClassName}`}
+      onClick={!isActive ? onActivate : undefined}
+      title={!isActive ? displayLabel : undefined}
+    >
+      <span className={`block truncate ${!valeur ? 'text-gray-400 italic' : ''}`}>
+        {displayLabel}
+      </span>
+
+      {isActive && mounted && createPortal(
+        <>
+          {/* Backdrop */}
+          <div className="fixed inset-0 z-[9998]" onClick={onTab} />
+          {/* Dropdown */}
+          <div
+            className="fixed z-[9999] bg-white border-2 border-blue-500 rounded-xl shadow-2xl overflow-hidden"
+            style={{ top: dropPos.top, left: dropPos.left, width: Math.min(dropPos.width, window.innerWidth - dropPos.left - 16) }}
+          >
+            {/* Champ de recherche */}
+            <div className="p-2 border-b border-gray-100">
+              <div className="flex items-center gap-2 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg">
+                <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  ref={searchRef}
+                  value={recherche}
+                  onChange={e => { setRecherche(e.target.value); setCursorIdx(0) }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Rechercher un risque ED840…"
+                  className="flex-1 text-xs bg-transparent outline-none text-gray-900 placeholder:text-gray-400"
+                />
+              </div>
+            </div>
+            {/* Liste filtrée */}
+            <div className="max-h-64 overflow-y-auto">
+              {optionsFiltrees.length === 0 && (
+                <div className="px-3 py-4 text-center text-xs text-gray-400">Aucun résultat</div>
+              )}
+              {optionsFiltrees.map((opt, idx) => (
+                <button
+                  key={opt.valeur}
+                  ref={el => { itemRefs.current[idx] = el }}
+                  onClick={() => handleSelect(opt.valeur)}
+                  className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
+                    idx === cursorIdx ? 'bg-blue-50' : 'hover:bg-gray-50'
+                  } ${opt.valeur === valeur ? 'font-semibold' : ''}`}
+                >
+                  <span className="text-gray-400 font-mono text-[11px] w-5 shrink-0 text-right">{opt.valeur}.</span>
+                  <span className="flex-1 text-gray-800 truncate">{opt.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${badgeColors[opt.badge]}`}>
+                    {badgeLabels[opt.badge]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>,
+        document.body
+      )}
     </td>
   )
 }
@@ -206,12 +392,17 @@ function CelluleSelect({
 // ─── BadgeCriticite ──────────────────────────────────────────────────────────
 
 function BadgeCriticite({ score }: { score: number | null }) {
-  const badge = getBadgeCriticite(score)
-  if (!badge) return <td className="px-2 py-1 text-xs text-brand-bronze/30 text-center min-w-[64px]">—</td>
+  if (!score) {
+    return (
+      <td className={`${TD} text-center min-w-[90px]`}>
+        <span className="text-gray-300">—</span>
+      </td>
+    )
+  }
   return (
-    <td className="px-2 py-1 text-center min-w-[64px]">
-      <span className={`inline-flex items-center justify-center w-8 h-6 rounded text-xs font-bold ring-1 ${badge.classe}`}>
-        {badge.score}
+    <td className={`${TD} text-center min-w-[90px]`}>
+      <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-semibold tabular-nums min-w-[32px] ${getClasseCriticite(score)}`}>
+        {score}
       </span>
     </td>
   )
@@ -221,13 +412,13 @@ function BadgeCriticite({ score }: { score: number | null }) {
 
 function LigneRisque({
   risque, posteId, celluleActive, onActivateCell, onSaveCell,
-  onDelete, onMove, autresOperations, isEven,
+  onDelete, onMove, autresOperations, groupBg,
 }: {
   risque: RisqueUI; posteId: string; celluleActive: CelluleActive
   onActivateCell: (ligneId: string, colonne: string) => void
   onSaveCell: (ligneId: string, colonne: string, valeur: unknown) => Promise<void>
   onDelete: () => void; onMove: (operationId: string) => Promise<void>
-  autresOperations: OperationUI[]; isEven: boolean
+  autresOperations: OperationUI[]; groupBg: string
 }) {
   const [menuOuvert, setMenuOuvert] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -261,11 +452,9 @@ function LigneRisque({
     const idx = COLONNES_TAB.indexOf(col)
     if (idx === -1 || idx === COLONNES_TAB.length - 1) return
     const next = COLONNES_TAB[idx + 1]
-    // 'second' dépend du type_risque
     if (next === 'second') {
       onActivateCell(risque.id, risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition')
     } else if (next === 'evenement_dangereux' && risque.type_risque !== 'aigu') {
-      // Skip evenement_dangereux for chronic
       onActivateCell(risque.id, 'dommage')
     } else {
       onActivateCell(risque.id, next)
@@ -277,19 +466,22 @@ function LigneRisque({
     ? RISQUES_ED840.find(r => r.numero === risque.numero_risque_ed840) : null
   const typeAuto = risqueED840?.type === 'AIGU' ? 'aigu'
     : risqueED840?.type === 'CHRONIQUE' ? 'chronique'
-    : null // LES_DEUX → user choisit
+    : null
 
-  const rowBg = isEven ? 'bg-brand-off' : 'bg-brand-cream-light'
+  // Classe de fond sticky — doit être solide (pas de transparence) pour que sticky fonctionne
+  const stickyBg = groupBg === 'bg-amber-50' ? 'bg-amber-50'
+    : groupBg === 'bg-gray-50' ? 'bg-gray-50'
+    : 'bg-white'
 
   return (
     <tr
       ref={setNodeRef}
       style={style}
-      className={`${rowBg} border-b border-brand-sand/40 hover:bg-brand-cream transition-colors`}
+      className={`${groupBg} border-0`}
     >
-      {/* Handle drag */}
+      {/* Handle drag — sticky col 1 */}
       <td
-        className="px-2 py-2 w-8 cursor-grab active:cursor-grabbing text-brand-bronze/30 hover:text-brand-bronze transition-colors"
+        className={`sticky left-0 z-[11] ${stickyBg} border-r border-b border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors`}
         {...attributes}
         {...listeners}
       >
@@ -300,35 +492,36 @@ function LigneRisque({
         </svg>
       </td>
 
-      {/* Réf */}
-      <td className="px-2 py-1 text-xs text-brand-bronze/60 font-mono whitespace-nowrap w-20">
+      {/* Réf — sticky col 2 */}
+      <td className={`sticky left-[32px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-20 px-3 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap`}>
         {risque.identifiant_auto ?? '—'}
       </td>
 
-      {/* Danger */}
+      {/* Danger — sticky col 3 + ombre de séparation */}
       <CelluleTexte
-        ligneId={risque.id} colonne="danger" valeur={risque.danger} placeholder="Danger..."
+        ligneId={risque.id} colonne="danger" valeur={risque.danger} placeholder="Danger…"
         isActive={isCell('danger')} onActivate={() => activate('danger')}
         onSave={v => onSaveCell(risque.id, 'danger', v)}
-        onTab={() => nextCol('danger')} minWidth="min-w-[160px]"
+        onTab={() => nextCol('danger')}
+        minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
+        tdClassName={`sticky left-[112px] z-[11] ${stickyBg} shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}
       />
 
       {/* Situation dangereuse */}
       <CelluleTexte
-        ligneId={risque.id} colonne="situation_dangereuse" valeur={risque.situation_dangereuse} placeholder="Situation..."
+        ligneId={risque.id} colonne="situation_dangereuse" valeur={risque.situation_dangereuse} placeholder="Situation…"
         isActive={isCell('situation_dangereuse')} onActivate={() => activate('situation_dangereuse')}
         onSave={v => onSaveCell(risque.id, 'situation_dangereuse', v)}
-        onTab={() => nextCol('situation_dangereuse')} minWidth="min-w-[160px]"
+        onTab={() => nextCol('situation_dangereuse')} minWidth="min-w-[200px]" maxWidth="max-w-[280px]"
       />
 
-      {/* Risque ED840 — dropdown */}
-      <CelluleSelect
+      {/* Risque ED840 — combobox avec recherche */}
+      <CelluleCombobox
         ligneId={risque.id} colonne="numero_risque_ed840" valeur={risque.numero_risque_ed840}
-        options={RISQUES_ED840.map(r => ({ valeur: r.numero, label: `${r.numero}. ${r.intitule}` }))}
+        options={RISQUES_ED840.map(r => ({ valeur: r.numero, label: r.intitule, badge: r.type }))}
         isActive={isCell('numero_risque_ed840')} onActivate={() => activate('numero_risque_ed840')}
         onSave={async v => {
           await onSaveCell(risque.id, 'numero_risque_ed840', v ? Number(v) : null)
-          // Auto-type si risque non mixte
           const r = RISQUES_ED840.find(r => r.numero === Number(v))
           if (r?.type !== 'LES_DEUX') {
             const t = r?.type === 'AIGU' ? 'aigu' : 'chronique'
@@ -336,14 +529,10 @@ function LigneRisque({
           }
         }}
         onTab={() => nextCol('numero_risque_ed840')}
-        renderLabel={v => {
-          const r = RISQUES_ED840.find(r => r.numero === v)
-          return r ? `${r.numero}. ${r.intitule.substring(0, 28)}…` : '—'
-        }}
-        minWidth="min-w-[180px]"
+        minWidth="min-w-[240px]"
       />
 
-      {/* Type aigu / chronique — seulement éditable si LES_DEUX */}
+      {/* Type aigu / chronique */}
       <CelluleSelect
         ligneId={risque.id} colonne="type_risque" valeur={risque.type_risque}
         options={[{ valeur: 'aigu', label: 'Aigu' }, { valeur: 'chronique', label: 'Chronique' }]}
@@ -351,36 +540,40 @@ function LigneRisque({
         onSave={v => onSaveCell(risque.id, 'type_risque', v)}
         onTab={() => nextCol('type_risque')}
         disabled={typeAuto !== null}
-        minWidth="min-w-[80px]"
-        renderLabel={v => v === 'aigu' ? 'Aigu' : v === 'chronique' ? 'Chronique' : '—'}
+        minWidth="min-w-[90px]" center
+        renderLabel={v => {
+          if (v === 'aigu') return 'Aigu'
+          if (v === 'chronique') return 'Chronique'
+          return '—'
+        }}
       />
 
       {/* Événement dangereux — visible si aigu */}
       {risque.type_risque === 'aigu' ? (
         <CelluleTexte
-          ligneId={risque.id} colonne="evenement_dangereux" valeur={risque.evenement_dangereux} placeholder="Événement..."
+          ligneId={risque.id} colonne="evenement_dangereux" valeur={risque.evenement_dangereux} placeholder="Événement…"
           isActive={isCell('evenement_dangereux')} onActivate={() => activate('evenement_dangereux')}
           onSave={v => onSaveCell(risque.id, 'evenement_dangereux', v)}
-          onTab={() => nextCol('evenement_dangereux')} minWidth="min-w-[140px]"
+          onTab={() => nextCol('evenement_dangereux')} minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
         />
       ) : (
-        <td className="px-2 py-1 text-xs text-brand-bronze/20 min-w-[140px]">—</td>
+        <td className={`${TD} min-w-[180px] text-gray-300`}>—</td>
       )}
 
       {/* Dommage */}
       <CelluleTexte
-        ligneId={risque.id} colonne="dommage" valeur={risque.dommage} placeholder="Dommage..."
+        ligneId={risque.id} colonne="dommage" valeur={risque.dommage} placeholder="Dommage…"
         isActive={isCell('dommage')} onActivate={() => activate('dommage')}
         onSave={v => onSaveCell(risque.id, 'dommage', v)}
-        onTab={() => nextCol('dommage')} minWidth="min-w-[140px]"
+        onTab={() => nextCol('dommage')} minWidth="min-w-[150px]" maxWidth="max-w-[220px]"
       />
 
       {/* Siège des lésions */}
       <CelluleTexte
-        ligneId={risque.id} colonne="siege_lesions" valeur={risque.siege_lesions} placeholder="Siège..."
+        ligneId={risque.id} colonne="siege_lesions" valeur={risque.siege_lesions} placeholder="Siège…"
         isActive={isCell('siege_lesions')} onActivate={() => activate('siege_lesions')}
         onSave={v => onSaveCell(risque.id, 'siege_lesions', v)}
-        onTab={() => nextCol('siege_lesions')} minWidth="min-w-[120px]"
+        onTab={() => nextCol('siege_lesions')} minWidth="min-w-[140px]" maxWidth="max-w-[200px]"
       />
 
       {/* G — Gravité */}
@@ -391,7 +584,7 @@ function LigneRisque({
         onSave={v => onSaveCell(risque.id, 'gravite', v ? Number(v) : null)}
         onTab={() => nextCol('gravite')}
         renderLabel={v => v ? String(v) : '—'}
-        minWidth="min-w-[52px]"
+        minWidth="min-w-[56px]" center
       />
 
       {/* P (aigu) ou DE (chronique) */}
@@ -416,18 +609,18 @@ function LigneRisque({
         )}
         onTab={() => nextCol('second')}
         renderLabel={v => v ? String(v) : '—'}
-        minWidth="min-w-[52px]"
+        minWidth="min-w-[56px]" center
       />
 
-      {/* Criticité brute — auto */}
+      {/* Criticité brute — calculée auto */}
       <BadgeCriticite score={risque.criticite_brute} />
 
       {/* T.H.O./EPI */}
       <CelluleTexte
-        ligneId={risque.id} colonne="mesures_techniques" valeur={risque.mesures_techniques} placeholder="Mesures..."
+        ligneId={risque.id} colonne="mesures_techniques" valeur={risque.mesures_techniques} placeholder="Mesures…"
         isActive={isCell('mesures_techniques')} onActivate={() => activate('mesures_techniques')}
         onSave={v => onSaveCell(risque.id, 'mesures_techniques', v)}
-        onTab={() => nextCol('mesures_techniques')} minWidth="min-w-[140px]"
+        onTab={() => nextCol('mesures_techniques')} minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
       />
 
       {/* PM */}
@@ -436,20 +629,20 @@ function LigneRisque({
         options={COEFFICIENTS_PM.map(c => ({ valeur: c.valeur, label: `×${c.valeur} — ${c.label}` }))}
         isActive={isCell('coefficient_pm')} onActivate={() => activate('coefficient_pm')}
         onSave={v => onSaveCell(risque.id, 'coefficient_pm', v !== null ? Number(v) : 1)}
-        onTab={() => onActivateCell('', '')} // fin de ligne
+        onTab={() => onActivateCell('', '')}
         renderLabel={v => v !== null ? `×${v}` : '×1'}
-        minWidth="min-w-[60px]"
+        minWidth="min-w-[72px]" center
       />
 
-      {/* Criticité résiduelle — auto */}
+      {/* Criticité résiduelle — calculée auto */}
       <BadgeCriticite score={risque.criticite_residuelle} />
 
       {/* Menu ⋮ */}
-      <td className="px-1 py-1 w-10">
+      <td className={`${TD} w-10 px-1`}>
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOuvert(!menuOuvert)}
-            className="w-7 h-7 flex items-center justify-center text-brand-bronze/50 hover:text-brand-navy hover:bg-brand-cream rounded transition-colors"
+            className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded transition-colors"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
@@ -457,27 +650,26 @@ function LigneRisque({
           </button>
 
           {menuOuvert && (
-            <div className="absolute right-0 top-8 z-20 w-52 bg-brand-off border border-brand-sand rounded-lg shadow-lg overflow-hidden">
-              {/* Déplacer vers */}
+            <div className="absolute right-0 top-8 z-20 w-52 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
               {autresOperations.length > 0 && (
-                <div className="border-b border-brand-sand">
-                  <p className="px-3 py-1.5 text-[10px] font-semibold text-brand-bronze uppercase tracking-wide">
+                <div className="border-b border-gray-100">
+                  <p className="px-3 py-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">
                     Déplacer vers
                   </p>
                   {autresOperations.map(op => (
                     <button
                       key={op.id}
                       onClick={() => { onMove(op.id); setMenuOuvert(false) }}
-                      className="w-full text-left px-3 py-1.5 text-xs text-brand-navy hover:bg-brand-cream transition-colors flex items-center gap-2"
+                      className="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
                     >
                       {op.est_transversale ? (
-                        <span className="w-4 h-4 text-brand-gold">
-                          <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" /></svg>
-                        </span>
+                        <svg className="w-3.5 h-3.5 text-amber-500 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
+                        </svg>
                       ) : (
-                        <span className="w-4 h-4 text-brand-bronze/40">
-                          <svg viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" /></svg>
-                        </span>
+                        <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                        </svg>
                       )}
                       <span className="truncate">{op.nom}</span>
                     </button>
@@ -506,7 +698,7 @@ function LigneRisque({
 function GroupeOperation({
   operation, posteId, celluleActive, onActivateCell, onSaveCell,
   onAddRisque, onDeleteRisque, onMoveRisque, onRenameOperation, onDeleteOperation,
-  autresOperations,
+  autresOperations, groupIndex,
 }: {
   operation: OperationUI; posteId: string; celluleActive: CelluleActive
   onActivateCell: (l: string, c: string) => void
@@ -517,6 +709,7 @@ function GroupeOperation({
   onRenameOperation: (id: string, nom: string) => Promise<void>
   onDeleteOperation: (id: string, nom: string, nb: number) => void
   autresOperations: OperationUI[]
+  groupIndex: number
 }) {
   const [renaming, setRenaming] = useState(false)
   const [nomDraft, setNomDraft] = useState(operation.nom)
@@ -536,32 +729,33 @@ function GroupeOperation({
     setRenaming(false)
   }
 
+  const groupBg = getGroupBg(operation, groupIndex)
+
+  // Fond de l'en-tête de groupe — légèrement plus contrasté
   const headerBg = operation.est_transversale
-    ? 'bg-brand-navy border-l-4 border-brand-gold-light'
-    : 'bg-brand-navy'
+    ? 'bg-amber-100/60 border-b border-amber-200'
+    : groupBg === 'bg-gray-50'
+      ? 'bg-gray-100 border-b border-gray-200'
+      : 'bg-gray-50 border-b border-gray-200'
 
   return (
     <>
       {/* En-tête de groupe */}
-      <tr className={`${headerBg} select-none`}>
-        <td colSpan={16} className="px-4 py-2">
+      <tr className="select-none">
+        <td colSpan={16} className={`${headerBg} px-4 py-2.5 border-b border-gray-300`}>
           <div className="flex items-center gap-3">
-            {/* Icône opération */}
+            {/* Icône */}
             {operation.est_transversale ? (
-              <span className="text-brand-gold shrink-0">
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
-                </svg>
-              </span>
+              <svg className="w-4 h-4 text-amber-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
+              </svg>
             ) : (
-              <span className="text-brand-cream/40 shrink-0">
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                </svg>
-              </span>
+              <svg className="w-4 h-4 text-gray-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+              </svg>
             )}
 
-            {/* Nom — renommable si non transversal */}
+            {/* Nom */}
             {renaming ? (
               <input
                 ref={renameRef}
@@ -572,30 +766,30 @@ function GroupeOperation({
                   if (e.key === 'Enter') handleRenameCommit()
                   if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
                 }}
-                className="text-sm font-semibold bg-brand-navy-light text-brand-cream border border-brand-cream/30 rounded px-2 py-0.5 focus:outline-none w-64"
+                className="text-sm font-semibold bg-white text-gray-800 border border-blue-400 rounded px-2 py-0.5 focus:outline-none w-64"
               />
             ) : (
-              <span className="text-sm font-semibold text-brand-cream flex-1">
+              <span className={`text-sm font-semibold flex-1 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
                 {operation.nom}
               </span>
             )}
 
             {operation.est_transversale && (
-              <span className="text-[10px] text-brand-gold-light/70 italic">
+              <span className="text-[11px] text-amber-600/80 italic">
                 Risques transversaux au poste
               </span>
             )}
 
-            <span className="text-xs text-brand-cream/40 ml-auto">
+            <span className="text-xs text-gray-400 ml-auto">
               {operation.risques.length} risque{operation.risques.length !== 1 ? 's' : ''}
             </span>
 
-            {/* Actions — sauf pour transversale */}
+            {/* Actions — sauf transversale */}
             {!operation.est_transversale && (
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setRenaming(true)}
-                  className="text-brand-cream/50 hover:text-brand-cream transition-colors p-1 rounded hover:bg-brand-cream/10"
+                  className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded hover:bg-gray-200"
                   title="Renommer"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -604,7 +798,7 @@ function GroupeOperation({
                 </button>
                 <button
                   onClick={() => onDeleteOperation(operation.id, operation.nom, operation.risques.length)}
-                  className="text-red-400/60 hover:text-red-400 transition-colors p-1 rounded hover:bg-red-400/10"
+                  className="text-red-400/60 hover:text-red-500 transition-colors p-1 rounded hover:bg-red-50"
                   title="Supprimer"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -623,13 +817,13 @@ function GroupeOperation({
         strategy={verticalListSortingStrategy}
       >
         {operation.risques.length === 0 && (
-          <tr>
-            <td colSpan={16} className="px-6 py-3 text-xs text-brand-bronze/50 italic bg-brand-off/50">
-              Aucun risque identifié pour cette opération — cliquez sur &quot;+ Ajouter un risque&quot; ci-dessous.
+          <tr className={groupBg}>
+            <td colSpan={16} className="px-6 py-3 text-xs text-gray-400 italic border-b border-gray-200">
+              Aucun risque identifié — cliquez sur &quot;+ Ajouter un risque&quot; ci-dessous.
             </td>
           </tr>
         )}
-        {operation.risques.map((risque, idx) => (
+        {operation.risques.map((risque) => (
           <LigneRisque
             key={risque.id}
             risque={risque}
@@ -640,17 +834,17 @@ function GroupeOperation({
             onDelete={() => onDeleteRisque(risque.id)}
             onMove={opId => onMoveRisque(risque.id, opId)}
             autresOperations={autresOperations}
-            isEven={idx % 2 === 0}
+            groupBg={groupBg}
           />
         ))}
       </SortableContext>
 
-      {/* Ligne + ajouter risque */}
-      <tr className="bg-brand-cream border-b border-brand-sand">
-        <td colSpan={16} className="px-4 py-2">
+      {/* Ligne + Ajouter un risque */}
+      <tr className={groupBg}>
+        <td colSpan={16} className="px-4 py-2 border-b border-gray-300">
           {ajoutEnCours ? (
-            <div className="flex items-center gap-2 text-xs text-brand-bronze">
-              <svg className="w-3.5 h-3.5 animate-spin text-brand-gold" fill="none" viewBox="0 0 24 24">
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <svg className="w-3.5 h-3.5 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
@@ -663,9 +857,9 @@ function GroupeOperation({
                 await onAddRisque(operation.id)
                 setAjoutEnCours(false)
               }}
-              className="flex items-center gap-2 text-xs text-brand-bronze hover:text-brand-navy transition-colors"
+              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors"
             >
-              <span className="w-5 h-5 rounded border border-brand-sand flex items-center justify-center text-base leading-none">+</span>
+              <span className="w-5 h-5 rounded border border-gray-300 bg-white flex items-center justify-center text-gray-400 text-base leading-none">+</span>
               Ajouter un risque à <em className="not-italic font-medium">{operation.nom}</em>
             </button>
           )}
@@ -685,12 +879,12 @@ function ModaleConfirm({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-brand-navy/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-brand-off border border-brand-sand rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
-        <h3 className="font-semibold text-brand-navy mb-2">{titre}</h3>
-        <p className="text-sm text-brand-bronze mb-6">{description}</p>
+      <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={onCancel} />
+      <div className="relative bg-white border border-gray-200 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
+        <h3 className="font-semibold text-gray-900 mb-2">{titre}</h3>
+        <p className="text-sm text-gray-600 mb-6">{description}</p>
         <div className="flex items-center justify-end gap-3">
-          <button onClick={onCancel} className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-4 py-2">
+          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">
             Annuler
           </button>
           <button
@@ -698,7 +892,7 @@ function ModaleConfirm({
             className={`text-sm font-semibold px-4 py-2 rounded-lg transition-colors ${
               confirmVariant === 'red'
                 ? 'bg-red-600 hover:bg-red-700 text-white'
-                : 'bg-brand-navy hover:bg-brand-navy/90 text-brand-cream'
+                : 'bg-gray-900 hover:bg-gray-800 text-white'
             }`}
           >
             {confirmLabel}
@@ -716,21 +910,21 @@ function ModaleSuppressionOperation({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-brand-navy/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-brand-off border border-brand-sand rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
-        <h3 className="font-semibold text-brand-navy mb-2">Supprimer &quot;{nom}&quot; ?</h3>
+      <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={onCancel} />
+      <div className="relative bg-white border border-gray-200 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
+        <h3 className="font-semibold text-gray-900 mb-2">Supprimer &quot;{nom}&quot; ?</h3>
         {nbRisques > 0 ? (
           <>
-            <p className="text-sm text-brand-bronze mb-4">
+            <p className="text-sm text-gray-600 mb-4">
               Cette opération contient <strong>{nbRisques} risque{nbRisques > 1 ? 's' : ''}</strong>. Que souhaitez-vous faire ?
             </p>
             <div className="space-y-2 mb-4">
               <button
                 onClick={onDeplacer}
-                className="w-full text-left text-sm bg-brand-gold-pale border border-brand-sand rounded-xl px-4 py-3 hover:border-brand-navy transition-colors"
+                className="w-full text-left text-sm bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors"
               >
-                <p className="font-medium text-brand-navy">Déplacer vers &quot;Toutes opérations&quot;</p>
-                <p className="text-xs text-brand-bronze mt-0.5">Les risques sont conservés et rattachés au poste entier.</p>
+                <p className="font-medium text-amber-900">Déplacer vers &quot;Toutes opérations&quot;</p>
+                <p className="text-xs text-amber-700 mt-0.5">Les risques sont conservés et rattachés au poste entier.</p>
               </button>
               <button
                 onClick={onCascade}
@@ -742,9 +936,9 @@ function ModaleSuppressionOperation({
             </div>
           </>
         ) : (
-          <p className="text-sm text-brand-bronze mb-6">Cette opération est vide. Supprimer ?</p>
+          <p className="text-sm text-gray-600 mb-6">Cette opération est vide. Supprimer ?</p>
         )}
-        <button onClick={onCancel} className="text-sm text-brand-bronze hover:text-brand-navy transition-colors">
+        <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Annuler
         </button>
       </div>
@@ -768,10 +962,34 @@ export function TableauAPR({
   const [modale, setModale] = useState<ModaleEtat>(null)
   const [isPending, startTransition] = useTransition()
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [pleinEcran, setPleinEcran] = useState(false)
+  const [savedRecently, setSavedRecently] = useState(false)
+  const prevPendingRef = useRef(false)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   )
+
+  // Touche Escape pour quitter le plein écran
+  useEffect(() => {
+    if (!pleinEcran) return
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPleinEcran(false)
+    }
+    window.addEventListener('keydown', fn)
+    return () => window.removeEventListener('keydown', fn)
+  }, [pleinEcran])
+
+  // Indicateur "sauvegardé" — s'affiche 1.5s après la fin d'une transition
+  useEffect(() => {
+    if (prevPendingRef.current && !isPending) {
+      setSavedRecently(true)
+      const timer = setTimeout(() => setSavedRecently(false), 1500)
+      prevPendingRef.current = false
+      return () => clearTimeout(timer)
+    }
+    prevPendingRef.current = isPending
+  }, [isPending])
 
   // ── Helpers d'état ──────────────────────────────────────────────────────────
 
@@ -792,7 +1010,6 @@ export function TableauAPR({
   // ── Handlers ────────────────────────────────────────────────────────────────
 
   const handleSaveCell = useCallback(async (ligneId: string, colonne: string, valeur: unknown) => {
-    // Mise à jour optimiste
     if (colonne === 'gravite' || colonne === 'probabilite' || colonne === 'duree_exposition' || colonne === 'type_risque') {
       const risque = operations.flatMap(op => op.risques).find(r => r.id === ligneId)
       if (risque) {
@@ -924,7 +1141,7 @@ export function TableauAPR({
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string)
-    setCelluleActive(null) // Fermer l'édition pendant le drag
+    setCelluleActive(null)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -938,7 +1155,6 @@ export function TableauAPR({
     if (!activeOp) return
 
     if (overOp && activeOp.id === overOp.id) {
-      // Réordonner dans la même opération
       setOperations(prev => prev.map(op => {
         if (op.id !== activeOp.id) return op
         const oldIdx = op.risques.findIndex(r => r.id === active.id)
@@ -946,137 +1162,186 @@ export function TableauAPR({
         return { ...op, risques: arrayMove(op.risques, oldIdx, newIdx) }
       }))
     } else if (overOp && activeOp.id !== overOp.id) {
-      // Déplacer vers une autre opération
       handleMoveRisque(active.id as string, overOp.id)
     }
   }
 
-  // Risque actif pour DragOverlay
   const risqueActif = activeId
     ? operations.flatMap(op => op.risques).find(r => r.id === activeId)
     : null
 
-  // Tri opérations : transversale en tête
   const operationsTri = [...operations].sort((a, b) => {
     if (a.est_transversale && !b.est_transversale) return -1
     if (!a.est_transversale && b.est_transversale) return 1
     return a.ordre - b.ordre
   })
 
-  return (
-    <>
-      <div className="overflow-x-auto rounded-xl border border-brand-sand shadow-sm bg-brand-off">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <table className="w-full text-sm border-collapse" style={{ minWidth: '1500px' }}>
+  // ── Toolbar ─────────────────────────────────────────────────────────────────
 
-            {/* En-tête de colonnes */}
-            <thead className="sticky top-0 z-10">
-              <tr className="bg-brand-cream-light border-b-2 border-brand-sand">
-                <th className="w-8 px-2 py-2.5" />
-                <th className="w-20 px-2 py-2.5 text-left text-xs font-semibold text-brand-navy/60">Réf.</th>
-                <th className="min-w-[160px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Danger</th>
-                <th className="min-w-[160px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Situation dangereuse</th>
-                <th className="min-w-[180px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Risque (ED840)</th>
-                <th className="min-w-[80px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Type</th>
-                <th className="min-w-[140px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Événement dangereux</th>
-                <th className="min-w-[140px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Dommage</th>
-                <th className="min-w-[120px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">Siège lésions</th>
-                <th className="min-w-[52px] px-2 py-2.5 text-center text-xs font-semibold text-brand-navy">G</th>
-                <th className="min-w-[52px] px-2 py-2.5 text-center text-xs font-semibold text-brand-navy">P/DE</th>
-                <th className="min-w-[64px] px-2 py-2.5 text-center text-xs font-semibold text-brand-navy">C. brute</th>
-                <th className="min-w-[140px] px-2 py-2.5 text-left text-xs font-semibold text-brand-navy">T.H.O./EPI</th>
-                <th className="min-w-[60px] px-2 py-2.5 text-center text-xs font-semibold text-brand-navy">PM</th>
-                <th className="min-w-[64px] px-2 py-2.5 text-center text-xs font-semibold text-brand-navy">C. résid.</th>
-                <th className="w-10 px-1 py-2.5" />
-              </tr>
-            </thead>
-
-            <tbody>
-              {operationsTri.map(op => (
-                <GroupeOperation
-                  key={op.id}
-                  operation={op}
-                  posteId={posteId}
-                  celluleActive={celluleActive}
-                  onActivateCell={(l, c) => setCelluleActive(l ? { ligneId: l, colonne: c } : null)}
-                  onSaveCell={handleSaveCell}
-                  onAddRisque={handleAddRisque}
-                  onDeleteRisque={id => setModale({ type: 'risque', id })}
-                  onMoveRisque={handleMoveRisque}
-                  onRenameOperation={handleRenameOperation}
-                  onDeleteOperation={(id, nom, nb) => setModale({ type: 'operation', id, nom, nbRisques: nb })}
-                  autresOperations={operations.filter(o => o.id !== op.id)}
-                />
-              ))}
-
-              {/* Ligne + Ajouter une opération */}
-              <tr className="bg-brand-cream border-t-2 border-brand-sand">
-                <td colSpan={16} className="px-4 py-2.5">
-                  {ajoutOpOuvert ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        autoFocus
-                        value={nomNouvelleOp}
-                        onChange={e => setNomNouvelleOp(e.target.value)}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter') handleAddOperation()
-                          if (e.key === 'Escape') { setAjoutOpOuvert(false); setNomNouvelleOp('') }
-                        }}
-                        placeholder="Nom de la nouvelle opération…"
-                        className="flex-1 max-w-xs text-sm px-3 py-1.5 border border-brand-navy rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-navy/10 bg-brand-off text-brand-navy"
-                      />
-                      <button
-                        onClick={handleAddOperation}
-                        className="text-sm font-medium bg-brand-navy text-brand-cream px-4 py-1.5 rounded-lg hover:bg-brand-navy/90 transition-colors"
-                      >
-                        Créer
-                      </button>
-                      <button
-                        onClick={() => { setAjoutOpOuvert(false); setNomNouvelleOp('') }}
-                        className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-2"
-                      >
-                        Annuler
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setAjoutOpOuvert(true)}
-                      className="flex items-center gap-2 text-sm text-brand-bronze hover:text-brand-navy transition-colors"
-                    >
-                      <span className="w-5 h-5 rounded border border-brand-sand bg-brand-off flex items-center justify-center text-base leading-none text-brand-bronze">+</span>
-                      Ajouter une opération
-                    </button>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* DragOverlay — aperçu de la ligne draggée */}
-          <DragOverlay>
-            {risqueActif ? (
-              <div className="bg-brand-cream border border-brand-navy/30 rounded px-4 py-2 text-xs text-brand-navy shadow-lg opacity-90 flex items-center gap-3">
-                <span className="font-mono text-brand-bronze/60">{risqueActif.identifiant_auto}</span>
-                <span className="font-medium">{risqueActif.danger ?? '(risque sans danger)'}</span>
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
+  const toolbar = (
+    <div className="flex items-center justify-between gap-4 px-1">
+      {/* Gauche : Ajouter une opération */}
+      <div className="flex items-center gap-2">
+        {ajoutOpOuvert ? (
+          <>
+            <input
+              autoFocus
+              value={nomNouvelleOp}
+              onChange={e => setNomNouvelleOp(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') handleAddOperation()
+                if (e.key === 'Escape') { setAjoutOpOuvert(false); setNomNouvelleOp('') }
+              }}
+              placeholder="Nom de la nouvelle opération…"
+              className="text-sm px-3 py-1.5 border border-brand-navy rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-navy/10 bg-brand-off text-brand-navy w-64"
+            />
+            <button
+              onClick={handleAddOperation}
+              className="text-sm font-medium bg-brand-navy text-brand-cream px-4 py-1.5 rounded-lg hover:bg-brand-navy/90 transition-colors"
+            >
+              Créer
+            </button>
+            <button
+              onClick={() => { setAjoutOpOuvert(false); setNomNouvelleOp('') }}
+              className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-2"
+            >
+              Annuler
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => setAjoutOpOuvert(true)}
+            className="flex items-center gap-2 text-sm font-medium bg-brand-navy text-brand-cream px-4 py-2 rounded-lg hover:bg-brand-navy/90 transition-colors"
+          >
+            <span className="text-lg leading-none">+</span>
+            Ajouter une opération
+          </button>
+        )}
       </div>
 
-      {/* Indicateur de sauvegarde */}
-      {isPending && (
-        <div className="fixed bottom-4 right-4 z-50 bg-brand-navy text-brand-cream text-xs px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-          </svg>
-          Sauvegarde…
+      {/* Droite : indicateur de sauvegarde + plein écran */}
+      <div className="flex items-center gap-3">
+        <div className="h-5 flex items-center">
+          {isPending && (
+            <span className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              Sauvegarde…
+            </span>
+          )}
+          {!isPending && savedRecently && (
+            <span className="flex items-center gap-1.5 text-xs text-green-600">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+              Sauvegardé
+            </span>
+          )}
+        </div>
+
+        <button
+          onClick={() => setPleinEcran(v => !v)}
+          className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+          aria-label={pleinEcran ? 'Quitter le plein écran' : 'Plein écran'}
+          title={pleinEcran ? 'Quitter le plein écran (Échap)' : 'Plein écran'}
+        >
+          {pleinEcran ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+        </button>
+      </div>
+    </div>
+  )
+
+  // ── Contenu du tableau ───────────────────────────────────────────────────────
+
+  const tableauContent = (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <table className="w-full border-separate border-spacing-0" style={{ minWidth: '1900px' }}>
+
+        {/* En-tête sticky */}
+        <thead className="sticky top-0 z-20">
+          <tr>
+            {/* Handle — sticky col 1 */}
+            <th className={`${TH} sticky left-0 z-30 w-8`} />
+            {/* Réf — sticky col 2 */}
+            <th className={`${TH} sticky left-[32px] z-30 w-20 text-left`}>Réf.</th>
+            {/* Danger — sticky col 3 + ombre */}
+            <th className={`${TH} sticky left-[112px] z-30 min-w-[180px] text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}>
+              Danger
+            </th>
+            <th className={`${TH} min-w-[200px] text-left`}>Situation dangereuse</th>
+            <th className={`${TH} min-w-[240px] text-left`}>Risque (ED840)</th>
+            <th className={`${TH} min-w-[90px] text-center`}>Type</th>
+            <th className={`${TH} min-w-[180px] text-left`}>Événement dangereux</th>
+            <th className={`${TH} min-w-[150px] text-left`}>Dommage</th>
+            <th className={`${TH} min-w-[140px] text-left`}>Siège lésions</th>
+            <th className={`${TH} w-14 text-center`}>G</th>
+            <th className={`${TH} w-14 text-center`}>P/DE</th>
+            <th className={`${TH} min-w-[90px] text-center`}>C. brute</th>
+            <th className={`${TH} min-w-[180px] text-left`}>T.H.O./EPI</th>
+            <th className={`${TH} w-20 text-center`}>PM</th>
+            <th className={`${TH} min-w-[100px] text-center`}>C. résid.</th>
+            <th className={`${TH} w-10 border-r-0`} />
+          </tr>
+        </thead>
+
+        <tbody>
+          {operationsTri.map((op, groupIdx) => (
+            <GroupeOperation
+              key={op.id}
+              operation={op}
+              posteId={posteId}
+              celluleActive={celluleActive}
+              onActivateCell={(l, c) => setCelluleActive(l ? { ligneId: l, colonne: c } : null)}
+              onSaveCell={handleSaveCell}
+              onAddRisque={handleAddRisque}
+              onDeleteRisque={id => setModale({ type: 'risque', id })}
+              onMoveRisque={handleMoveRisque}
+              onRenameOperation={handleRenameOperation}
+              onDeleteOperation={(id, nom, nb) => setModale({ type: 'operation', id, nom, nbRisques: nb })}
+              autresOperations={operations.filter(o => o.id !== op.id)}
+              groupIndex={groupIdx}
+            />
+          ))}
+        </tbody>
+      </table>
+
+      {/* DragOverlay */}
+      <DragOverlay>
+        {risqueActif ? (
+          <div className="bg-white border border-blue-400 rounded-lg px-4 py-2 text-xs text-gray-800 shadow-xl opacity-95 flex items-center gap-3">
+            <span className="font-mono text-gray-400 text-[11px]">{risqueActif.identifiant_auto}</span>
+            <span className="font-medium">{risqueActif.danger ?? '(risque sans danger)'}</span>
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
+  )
+
+  return (
+    <>
+      {/* Mode normal */}
+      {!pleinEcran && (
+        <div className="space-y-3">
+          {toolbar}
+          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+            {tableauContent}
+          </div>
+        </div>
+      )}
+
+      {/* Mode plein écran */}
+      {pleinEcran && (
+        <div className="fixed inset-0 z-50 bg-white flex flex-col overflow-hidden">
+          <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 shrink-0">
+            {toolbar}
+          </div>
+          <div className="flex-1 overflow-x-auto overflow-y-auto">
+            {tableauContent}
+          </div>
         </div>
       )}
 

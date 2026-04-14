@@ -96,13 +96,6 @@ export default async function PosteDetailPage({ params }: Props) {
     }
   })
 
-  // Stats
-  const nbOperations = operationsUI.filter(op => !op.est_transversale).length
-  const nbRisques = operationsUI.reduce((sum, op) => sum + op.risques.length, 0)
-  const nbRisquesComplets = operationsUI
-    .flatMap(op => op.risques)
-    .filter(r => r.criticite_brute !== null).length
-
   return (
     <div className="space-y-6">
 
@@ -123,38 +116,12 @@ export default async function PosteDetailPage({ params }: Props) {
             {poste.description && (
               <p className="mt-1 text-sm text-brand-bronze">{poste.description}</p>
             )}
-            <div className="flex items-center gap-4 mt-2 text-xs text-brand-bronze/60">
-              <span>{nbOperations} opération{nbOperations !== 1 ? 's' : ''}</span>
-              <span>·</span>
-              <span>{nbRisques} risque{nbRisques !== 1 ? 's' : ''} identifié{nbRisques !== 1 ? 's' : ''}</span>
-              {nbRisques > 0 && (
-                <>
-                  <span>·</span>
-                  <span className={nbRisquesComplets === nbRisques ? 'text-green-600' : 'text-brand-gold'}>
-                    {nbRisquesComplets}/{nbRisques} cotés
-                  </span>
-                </>
-              )}
-            </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <EditerPosteModal poste={{ id: poste.id, nom: poste.nom, description: poste.description ?? '' }} />
             <SupprimerPosteButton posteId={poste.id} nomPoste={poste.nom} />
           </div>
         </div>
-      </div>
-
-      {/* Info légende */}
-      <div className="flex items-start gap-3 text-xs text-brand-bronze/70 bg-brand-gold-pale border border-brand-sand rounded-lg px-4 py-2.5">
-        <svg className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-        </svg>
-        <span>
-          <strong className="text-brand-navy">Cliquez sur une cellule</strong> pour l&apos;éditer directement.
-          <strong className="text-brand-navy"> Tab</strong> pour passer à la suivante.
-          Les criticités se recalculent automatiquement.
-          Glissez les lignes (⋮⋮) pour les réordonner.
-        </span>
       </div>
 
       {/* Tableau APR inline */}

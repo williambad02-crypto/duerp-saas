@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { PanelLeft } from 'lucide-react'
 import { logout } from '@/app/auth/actions'
 import { Button } from '@/components/ui/button'
 import { Sidebar } from './sidebar'
@@ -10,34 +11,50 @@ import type { AbonnementProps } from '@/lib/abonnement'
 interface HeaderProps {
   nomEntreprise?: string
   abonnement?: Pick<AbonnementProps, 'statut' | 'joursRestantsTrial'>
+  onToggleSidebar?: () => void
+  sidebarCollapsed?: boolean
 }
 
-export function Header({ nomEntreprise, abonnement }: HeaderProps) {
+export function Header({ nomEntreprise, abonnement, onToggleSidebar, sidebarCollapsed }: HeaderProps) {
   const [menuOuvert, setMenuOuvert] = useState(false)
 
   return (
     <>
       <header className="bg-brand-off border-b border-brand-sand px-4 py-3 flex items-center justify-between lg:px-6">
-        {/* Bouton hamburger — mobile/tablette */}
-        <button
-          onClick={() => setMenuOuvert(true)}
-          className="lg:hidden text-brand-bronze hover:text-brand-navy focus:outline-none"
-          aria-label="Ouvrir le menu"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Bouton hamburger — mobile/tablette */}
+          <button
+            onClick={() => setMenuOuvert(true)}
+            className="lg:hidden text-brand-bronze hover:text-brand-navy focus:outline-none"
+            aria-label="Ouvrir le menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
 
-        {/* Titre — visible sur mobile */}
-        <span className="lg:hidden text-sm font-semibold text-brand-navy">
-          {nomEntreprise ?? 'SafeAnalyse.'}
-        </span>
+          {/* Bouton toggle sidebar — desktop uniquement */}
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg text-brand-bronze hover:text-brand-navy hover:bg-brand-cream transition-colors"
+              aria-label={sidebarCollapsed ? 'Ouvrir la sidebar' : 'Réduire la sidebar'}
+              title={sidebarCollapsed ? 'Ouvrir (⌘B)' : 'Réduire (⌘B)'}
+            >
+              <PanelLeft className="w-4 h-4" />
+            </button>
+          )}
 
-        {/* Spacer desktop avec nom entreprise */}
-        <div className="hidden lg:flex items-center gap-2 text-sm text-brand-bronze">
-          <span>Bonjour,</span>
-          <span className="font-medium text-brand-navy">{nomEntreprise}</span>
+          {/* Titre — visible sur mobile */}
+          <span className="lg:hidden text-sm font-semibold text-brand-navy">
+            {nomEntreprise ?? 'SafeAnalyse.'}
+          </span>
+
+          {/* Nom entreprise — desktop */}
+          <div className="hidden lg:flex items-center gap-2 text-sm text-brand-bronze">
+            <span>Bonjour,</span>
+            <span className="font-medium text-brand-navy">{nomEntreprise}</span>
+          </div>
         </div>
 
         {/* Badge abonnement (desktop) + déconnexion */}
@@ -58,7 +75,7 @@ export function Header({ nomEntreprise, abonnement }: HeaderProps) {
         </div>
       </header>
 
-      {/* Overlay mobile */}
+      {/* Overlay sidebar mobile */}
       {menuOuvert && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div

@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
-import { Sidebar } from '@/components/dashboard/sidebar'
-import { Header } from '@/components/dashboard/header'
+import { DashboardShell } from '@/components/dashboard/dashboard-shell'
 import { PaywallBanner } from '@/components/dashboard/paywall-banner'
 import { getInfoAbonnement, serializeAbonnement } from '@/lib/abonnement'
 
@@ -39,39 +38,30 @@ export default async function DashboardLayout({
   const aboProp = serializeAbonnement(infoAbonnement)
 
   return (
-    <div className="flex h-screen bg-brand-cream-light overflow-hidden">
-      {/* Sidebar desktop */}
-      <aside className="hidden lg:flex lg:flex-shrink-0 lg:w-64">
-        <Sidebar nomEntreprise={nomEntreprise} abonnement={aboProp} />
-      </aside>
+    <DashboardShell nomEntreprise={nomEntreprise} abonnement={aboProp}>
+      <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        {/* Bandeau paywall si nécessaire */}
+        {aboProp.bandeau && (
+          <PaywallBanner
+            bandeau={aboProp.bandeau}
+            joursRestantsTrial={aboProp.joursRestantsTrial}
+          />
+        )}
 
-      {/* Contenu principal */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <Header nomEntreprise={nomEntreprise} abonnement={aboProp} />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {/* Bandeau paywall si nécessaire */}
-          {aboProp.bandeau && (
-            <PaywallBanner
-              bandeau={aboProp.bandeau}
-              joursRestantsTrial={aboProp.joursRestantsTrial}
-            />
-          )}
+        {children}
 
-          {children}
-
-          <footer className="mt-12 border-t border-brand-sand pt-4 pb-2">
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-brand-bronze/50">
-              <a href="/mentions-legales" className="hover:text-brand-navy transition-colors">Mentions légales</a>
-              <span aria-hidden>·</span>
-              <a href="/cgu" className="hover:text-brand-navy transition-colors">CGU</a>
-              <span aria-hidden>·</span>
-              <a href="/confidentialite" className="hover:text-brand-navy transition-colors">Confidentialité</a>
-              <span aria-hidden>·</span>
-              <a href="/contact" className="hover:text-brand-navy transition-colors">Contact</a>
-            </nav>
-          </footer>
-        </main>
-      </div>
-    </div>
+        <footer className="mt-12 border-t border-brand-sand pt-4 pb-2">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-xs text-brand-bronze/50">
+            <a href="/mentions-legales" className="hover:text-brand-navy transition-colors">Mentions légales</a>
+            <span aria-hidden>·</span>
+            <a href="/cgu" className="hover:text-brand-navy transition-colors">CGU</a>
+            <span aria-hidden>·</span>
+            <a href="/confidentialite" className="hover:text-brand-navy transition-colors">Confidentialité</a>
+            <span aria-hidden>·</span>
+            <a href="/contact" className="hover:text-brand-navy transition-colors">Contact</a>
+          </nav>
+        </footer>
+      </main>
+    </DashboardShell>
   )
 }

@@ -55,13 +55,61 @@ interface SidebarProps {
   nomEntreprise?: string
   onClose?: () => void
   abonnement?: Pick<AbonnementProps, 'statut' | 'joursRestantsTrial'>
+  collapsed?: boolean
 }
 
-export function Sidebar({ nomEntreprise, onClose, abonnement }: SidebarProps) {
+export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false }: SidebarProps) {
   const pathname = usePathname()
 
+  // ── Mode collapsé (64px, icônes seules) ──────────────────────────────────────
+  if (collapsed) {
+    return (
+      <div className="flex flex-col h-full w-16 bg-brand-navy items-center">
+        {/* Logo symbole */}
+        <div className="py-4 border-b border-brand-navy-light w-full flex justify-center">
+          <Logo variant="symbol" theme="white" height={28} />
+        </div>
+
+        {/* Icônes de navigation */}
+        <nav className="flex-1 py-3 w-full flex flex-col items-center gap-1">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            return (
+              <div key={item.href} className="relative group w-full flex justify-center">
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'flex items-center justify-center w-10 h-10 rounded-lg transition-colors',
+                    isActive
+                      ? 'bg-brand-navy-light text-brand-gold-light'
+                      : 'text-brand-off/50 hover:bg-brand-navy-light hover:text-brand-off'
+                  )}
+                  aria-label={item.label}
+                >
+                  {item.icon}
+                </Link>
+                {/* Tooltip au hover */}
+                <span
+                  className="absolute left-full ml-3 top-1/2 -translate-y-1/2 bg-brand-navy-light text-brand-cream text-xs px-2.5 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-[60] shadow-lg border border-white/10"
+                >
+                  {item.label}
+                </span>
+              </div>
+            )
+          })}
+        </nav>
+
+        {/* Pied minimal */}
+        <div className="py-3 border-t border-brand-navy-light w-full flex justify-center">
+          <span className="text-[9px] text-brand-cream/20 font-mono">v1</span>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Mode normal (256px, labels complets) ─────────────────────────────────────
   return (
-    <div className="flex flex-col h-full bg-brand-navy">
+    <div className="flex flex-col h-full w-full bg-brand-navy">
       {/* Logo */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-brand-navy-light">
         <Logo variant="full" theme="white" height={28} />
