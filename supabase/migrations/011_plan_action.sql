@@ -64,6 +64,8 @@ CREATE INDEX IF NOT EXISTS idx_actions_plan_evaluation_id
   ON actions_plan(evaluation_id);
 CREATE INDEX IF NOT EXISTS idx_actions_plan_contact_id
   ON actions_plan(contact_id);
+CREATE INDEX IF NOT EXISTS idx_actions_plan_statut
+  ON actions_plan(statut);
 
 ALTER TABLE actions_plan ENABLE ROW LEVEL SECURITY;
 
@@ -85,6 +87,15 @@ CREATE POLICY "actions_plan: user voit ses actions"
       JOIN postes p ON p.id = op.poste_id
       JOIN entreprises ent ON ent.id = p.entreprise_id
       WHERE ent.user_id = auth.uid()
+    )
+    AND (
+      contact_id IS NULL
+      OR contact_id IN (
+        SELECT id FROM contacts_entreprise
+        WHERE entreprise_id IN (
+          SELECT id FROM entreprises WHERE user_id = auth.uid()
+        )
+      )
     )
   );
 
