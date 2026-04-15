@@ -1,6 +1,7 @@
 import { CookieBanner } from '@/components/landing/cookie-banner'
 import { MarketingNav } from '@/components/marketing/nav'
 import { MarketingFooter } from '@/components/marketing/footer'
+import { BackToTop } from '@/components/marketing/back-to-top'
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <main className="flex-1 pt-20">{children}</main>
       <MarketingFooter />
       <CookieBanner />
+      <BackToTop />
     </div>
   )
 }
