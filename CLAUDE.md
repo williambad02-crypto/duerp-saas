@@ -215,8 +215,8 @@ src/app/
 
 - [x] PHASE_VITRINE_V3_A : Fondations (palette enrichie, nav hover, hero Apple-style)
 - [x] PHASE_VITRINE_V3_B : Pages contenu (/outil, /reglementation, /a-propos, /faq, /temoignages, /contact)
-- [ ] PHASE_VITRINE_V3_C : Pages pricing (/tarifs Pack Industrie/Premium + /comparatif)
-- [ ] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)
+- [x] PHASE_VITRINE_V3_C : Pages pricing (/tarifs Pack Industrie/Premium + /comparatif)
+- [x] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)
 
 ### Phase 4 — Backlog post-lancement
 

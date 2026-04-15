@@ -19,13 +19,13 @@ async function getEntrepriseId() {
     .single()
 
   if (!entreprise) redirect('/dashboard/onboarding')
-  return { supabase, entrepriseId: entreprise.id }
+  return { supabase, entrepriseId: entreprise.id, userId: user.id }
 }
 
 // ─── POSTES ────────────────────────────────────────────────────────────────────
 
 export async function creerPoste(formData: FormData) {
-  const { supabase, entrepriseId } = await getEntrepriseId()
+  const { supabase, entrepriseId, userId } = await getEntrepriseId()
 
   const validation = posteSchema.safeParse({
     nom: formData.get('nom'),
@@ -40,6 +40,25 @@ export async function creerPoste(formData: FormData) {
     .from('postes')
     .select('id')
     .eq('entreprise_id', entrepriseId)
+
+  // ── Vérification quota Pack Industrie ─────────────────────────────────────
+  const { data: abo } = await supabase
+    .from('abonnements')
+    .select('plan_type, legacy_plan')
+    .eq('user_id', userId)
+    .single()
+
+  const planType  = (abo?.plan_type ?? 'industrie') as string
+  const isLegacy  = abo?.legacy_plan ?? false
+  const nbPostes  = postes?.length ?? 0
+
+  // Les clients legacy (ancien plan 39€) ont un accès équivalent Premium
+  if (!isLegacy && planType === 'industrie' && nbPostes >= 5) {
+    return {
+      erreur: 'Limite du Pack Industrie atteinte (5 postes). Passez au Pack Premium pour des postes illimités.',
+      limiteAtteinte: true,
+    }
+  }
 
   const { error } = await supabase.from('postes').insert({
     entreprise_id: entrepriseId,

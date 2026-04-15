@@ -8,11 +8,11 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { stripe } from '@/lib/stripe'
+import { stripe, getPlanFromPriceId, PlanType } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+export const dynamic  = 'force-dynamic'
 
 // Utilitaire : récupère la fin de période depuis les items de l'abonnement
 function getPeriodEnd(sub: Stripe.Subscription): string | null {
@@ -24,7 +24,6 @@ function getPeriodEnd(sub: Stripe.Subscription): string | null {
 
 // Utilitaire : récupère le subscription_id depuis une Invoice (API v22)
 function getSubIdFromInvoice(invoice: Stripe.Invoice): string | null {
-  // API v22 : parent.subscription_details.subscription
   const parent = invoice.parent as unknown as {
     subscription_details?: { subscription?: string | Stripe.Subscription }
   } | null
@@ -47,6 +46,16 @@ function mapStripeStatut(status: Stripe.Subscription.Status): string {
   }
 }
 
+// Déduit le plan depuis la metadata Stripe ou, en fallback, depuis le price_id
+function resolvePlanType(
+  meta: Record<string, string | undefined> | null,
+  priceId: string
+): PlanType {
+  const fromMeta = meta?.plan
+  if (fromMeta === 'premium' || fromMeta === 'industrie') return fromMeta
+  return getPlanFromPriceId(priceId)
+}
+
 async function handleEvent(event: Stripe.Event) {
   const supabase = createAdminClient()
 
@@ -67,64 +76,76 @@ async function handleEvent(event: Stripe.Event) {
       }
 
       const sub = await stripe.subscriptions.retrieve(subId)
-      const userId = (sub as unknown as { metadata?: { user_id?: string } }).metadata?.user_id
+      const meta = (sub as unknown as { metadata?: Record<string, string> }).metadata ?? null
+      const userId = meta?.user_id
 
       if (!userId) {
         console.error('[webhook] checkout.session.completed: user_id absent de la metadata', subId)
         break
       }
 
-      const periode = (sub as unknown as { metadata?: { periode?: string } }).metadata?.periode ?? 'mensuel'
+      const periode  = meta?.periode ?? 'mensuel'
+      const priceId  = sub.items.data[0]?.price.id ?? ''
+      const planType = resolvePlanType(meta, priceId)
 
       await supabase.from('abonnements').upsert({
-        user_id: userId,
-        stripe_customer_id: typeof session.customer === 'string' ? session.customer : null,
+        user_id:                userId,
+        stripe_customer_id:     typeof session.customer === 'string' ? session.customer : null,
         stripe_subscription_id: sub.id,
-        stripe_price_id: sub.items.data[0]?.price.id ?? null,
-        plan: 'essentiel',
+        stripe_price_id:        priceId,
+        plan:                   'essentiel',   // colonne legacy, inchangée
+        plan_type:              planType,
         periode,
-        statut: mapStripeStatut(sub.status),
-        trial_ends_at: sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null,
-        current_period_end: getPeriodEnd(sub),
+        statut:                 mapStripeStatut(sub.status),
+        trial_ends_at:          sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null,
+        current_period_end:     getPeriodEnd(sub),
+        legacy_plan:            false,
       }, { onConflict: 'user_id' })
 
-      console.info(`[webhook] checkout.session.completed: user ${userId} abonné (${periode})`)
+      console.info(`[webhook] checkout.session.completed: user ${userId} → plan_type ${planType} (${periode})`)
       break
     }
 
-    // ── Abonnement modifié ────────────────────────────────────────────────
+    // ── Abonnement modifié (upgrade/downgrade/renouvellement) ─────────────
     case 'customer.subscription.updated': {
-      const sub = event.data.object as Stripe.Subscription
-      const userId = (sub as unknown as { metadata?: { user_id?: string } }).metadata?.user_id
+      const sub    = event.data.object as Stripe.Subscription
+      const meta   = (sub as unknown as { metadata?: Record<string, string> }).metadata ?? null
+      const userId = meta?.user_id
+
       if (!userId) {
         console.error('[webhook] subscription.updated: user_id absent', sub.id)
         break
       }
 
-      const statut = mapStripeStatut(sub.status)
+      const priceId  = sub.items.data[0]?.price.id ?? ''
+      const planType = resolvePlanType(meta, priceId)
+      const statut   = mapStripeStatut(sub.status)
+
       await supabase.from('abonnements').update({
         statut,
-        stripe_price_id: sub.items.data[0]?.price.id ?? null,
-        trial_ends_at: sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null,
+        plan_type:         planType,
+        stripe_price_id:   priceId,
+        trial_ends_at:     sub.trial_end ? new Date(sub.trial_end * 1000).toISOString() : null,
         current_period_end: getPeriodEnd(sub),
       }).eq('user_id', userId)
 
-      console.info(`[webhook] subscription.updated: user ${userId} → statut ${statut}`)
+      console.info(`[webhook] subscription.updated: user ${userId} → plan_type ${planType} statut ${statut}`)
       break
     }
 
     // ── Facture payée → renouvellement ────────────────────────────────────
     case 'invoice.paid': {
       const invoice = event.data.object as Stripe.Invoice
-      const subId = getSubIdFromInvoice(invoice)
+      const subId   = getSubIdFromInvoice(invoice)
       if (!subId) break
 
-      const sub = await stripe.subscriptions.retrieve(subId)
-      const userId = (sub as unknown as { metadata?: { user_id?: string } }).metadata?.user_id
+      const sub    = await stripe.subscriptions.retrieve(subId)
+      const meta   = (sub as unknown as { metadata?: Record<string, string> }).metadata ?? null
+      const userId = meta?.user_id
       if (!userId) break
 
       await supabase.from('abonnements').update({
-        statut: 'active',
+        statut:            'active',
         current_period_end: getPeriodEnd(sub),
       }).eq('user_id', userId)
 
@@ -135,11 +156,12 @@ async function handleEvent(event: Stripe.Event) {
     // ── Paiement échoué ───────────────────────────────────────────────────
     case 'invoice.payment_failed': {
       const invoice = event.data.object as Stripe.Invoice
-      const subId = getSubIdFromInvoice(invoice)
+      const subId   = getSubIdFromInvoice(invoice)
       if (!subId) break
 
-      const sub = await stripe.subscriptions.retrieve(subId)
-      const userId = (sub as unknown as { metadata?: { user_id?: string } }).metadata?.user_id
+      const sub    = await stripe.subscriptions.retrieve(subId)
+      const meta   = (sub as unknown as { metadata?: Record<string, string> }).metadata ?? null
+      const userId = meta?.user_id
       if (!userId) break
 
       await supabase.from('abonnements').update({ statut: 'past_due' }).eq('user_id', userId)
@@ -149,15 +171,17 @@ async function handleEvent(event: Stripe.Event) {
 
     // ── Abonnement annulé ─────────────────────────────────────────────────
     case 'customer.subscription.deleted': {
-      const sub = event.data.object as Stripe.Subscription
-      const userId = (sub as unknown as { metadata?: { user_id?: string } }).metadata?.user_id
+      const sub    = event.data.object as Stripe.Subscription
+      const meta   = (sub as unknown as { metadata?: Record<string, string> }).metadata ?? null
+      const userId = meta?.user_id
+
       if (!userId) {
         console.error('[webhook] subscription.deleted: user_id absent', sub.id)
         break
       }
 
       await supabase.from('abonnements').update({
-        statut: 'canceled',
+        statut:            'canceled',
         current_period_end: null,
       }).eq('user_id', userId)
 
@@ -171,7 +195,7 @@ async function handleEvent(event: Stripe.Event) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.text()
+  const body      = await req.text()
   const signature = req.headers.get('stripe-signature')
 
   if (!signature) {

@@ -2,44 +2,65 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { buttonVariants } from '@/components/ui/button'
+import { Check } from 'lucide-react'
 
 interface PricingToggleProps {
   isLoggedIn: boolean
 }
 
+const FEATURES_INDUSTRIE = [
+  "Jusqu'à 5 postes de travail",
+  "Jusqu'à 20 opérations",
+  "Les 20 risques ED 840 couverts",
+  "Module Bruit (M01) inclus",
+  "Export PDF DUERP conforme",
+  "Conservation 40 ans automatique",
+  "Support email sous 24h ouvrées",
+]
+
+const FEATURES_PREMIUM = [
+  "Postes et opérations illimités",
+  "Tous les modules (M01 + M02-M05 dès sortie)",
+  "Audit semestriel visio 1h inclus",
+  "Export PDF DUERP conforme",
+  "Conservation 40 ans automatique",
+  "Support prioritaire (4h ouvrées)",
+  "Onboarding personnalisé (visio 30 min)",
+]
+
 export function PricingToggle({ isLoggedIn }: PricingToggleProps) {
   const [periode, setPeriode] = useState<'mensuel' | 'annuel'>('annuel')
-  const [enCours, setEnCours] = useState(false)
+  const [enCours, setEnCours] = useState<string | null>(null)
   const [erreur, setErreur] = useState<string | null>(null)
 
-  async function handleSubscribe() {
-    if (!isLoggedIn) return // le bouton redirige vers signup si non connecté
+  async function handleSubscribe(plan: 'industrie' | 'premium') {
+    if (!isLoggedIn) return
 
-    setEnCours(true)
+    setEnCours(plan)
     setErreur(null)
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ periode }),
+        body: JSON.stringify({ plan, periode }),
       })
       const body = await res.json()
       if (!res.ok) {
-        setErreur(body.erreur ?? "Erreur lors de la création de la session.")
+        setErreur(body.erreur ?? 'Erreur lors de la création de la session.')
         return
       }
       window.location.href = body.url
     } catch {
-      setErreur("Impossible de contacter le serveur.")
+      setErreur('Impossible de contacter le serveur.')
     } finally {
-      setEnCours(false)
+      setEnCours(null)
     }
   }
 
-  const prix = periode === 'mensuel'
-    ? { montant: '39€', unite: '/mois', sous: 'Sans engagement — résiliable à tout moment' }
-    : { montant: '390€', unite: '/an', sous: 'Soit 32,50€/mois — vous économisez 78€' }
+  const prix = {
+    industrie: periode === 'mensuel' ? { montant: '99', unite: '/mois', sous: 'Sans engagement' } : { montant: '990', unite: '/an', sous: 'Soit 82,50€/mois — 2 mois offerts' },
+    premium:   periode === 'mensuel' ? { montant: '149', unite: '/mois', sous: 'Sans engagement' } : { montant: '1490', unite: '/an', sous: 'Soit 124€/mois — 2 mois offerts' },
+  }
 
   return (
     <div className="flex flex-col items-center gap-8">
@@ -50,7 +71,7 @@ export function PricingToggle({ isLoggedIn }: PricingToggleProps) {
           <button
             key={p}
             onClick={() => setPeriode(p)}
-            className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all ${
               periode === p
                 ? 'bg-white text-gray-900 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700'
@@ -58,93 +79,108 @@ export function PricingToggle({ isLoggedIn }: PricingToggleProps) {
           >
             {p === 'mensuel' ? 'Mensuel' : 'Annuel'}
             {p === 'annuel' && (
-              <span className="absolute -top-2 -right-1 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none whitespace-nowrap">
-                -17%
+              <span className="absolute -top-2 -right-1 bg-brand-gold text-brand-off text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none whitespace-nowrap">
+                2 mois offerts
               </span>
             )}
           </button>
         ))}
       </div>
 
-      {/* Card plan */}
-      <div className="w-full max-w-md bg-white rounded-2xl border-2 border-blue-700 shadow-lg p-8">
-        <div className="text-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-1">Plan Essentiel</h2>
-          <p className="text-sm text-gray-500">Tout ce qu&apos;il vous faut pour votre DUERP</p>
-        </div>
+      {/* Grille 2 plans */}
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <div className="text-center mb-6">
-          <div className="flex items-baseline justify-center gap-1">
-            <span className="text-5xl font-extrabold text-gray-900">{prix.montant}</span>
-            <span className="text-gray-400 text-lg">{prix.unite}</span>
+        {/* Pack Industrie */}
+        <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-sm p-8 flex flex-col">
+          <div className="mb-6">
+            <p className="text-xs font-bold text-brand-bronze uppercase tracking-wider mb-2">Pack Industrie</p>
+            <p className="text-sm text-gray-500 mb-4">PME 1-50 salariés</p>
+            <div className="flex items-baseline gap-1">
+              <span className="text-5xl font-extrabold text-gray-900">{prix.industrie.montant}€</span>
+              <span className="text-gray-400">{prix.industrie.unite}</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">{prix.industrie.sous}</p>
           </div>
-          <p className="text-sm text-gray-500 mt-1">{prix.sous}</p>
-          {periode === 'annuel' && (
-            <p className="text-xs text-gray-400 mt-1">
-              <s>468€</s> → 390€ — 1 mois offert
-            </p>
+          <ul className="space-y-3 mb-8 flex-1">
+            {FEATURES_INDUSTRIE.map((f) => (
+              <li key={f} className="flex items-start gap-2.5 text-sm text-gray-700">
+                <Check className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                {f}
+              </li>
+            ))}
+          </ul>
+          {isLoggedIn ? (
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => handleSubscribe('industrie')}
+                disabled={enCours !== null}
+                className="w-full rounded-xl border-2 border-brand-navy text-brand-navy hover:bg-brand-navy/5 disabled:opacity-60 font-bold px-5 py-3 text-sm transition"
+              >
+                {enCours === 'industrie' ? 'Chargement…' : "Choisir Pack Industrie"}
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/auth/signup?plan=industrie"
+              className="block text-center rounded-xl border-2 border-brand-navy text-brand-navy hover:bg-brand-navy/5 font-bold px-5 py-3 text-sm transition"
+            >
+              Essai gratuit 14 jours →
+            </Link>
           )}
         </div>
 
-        {/* Features */}
-        <ul className="space-y-3 mb-8">
-          {[
-            "Postes et opérations illimités",
-            "Tous les modules de risques",
-            "Export PDF DUERP officiel",
-            "Historique des versions (40 ans)",
-            "Support par email",
-          ].map((f) => (
-            <li key={f} className="flex items-center gap-2.5 text-sm text-gray-700">
-              <svg className="w-5 h-5 text-green-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              {f}
-            </li>
-          ))}
-        </ul>
-
-        {/* CTA */}
-        {isLoggedIn ? (
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={handleSubscribe}
-              disabled={enCours}
-              className="w-full rounded-lg bg-blue-700 hover:bg-blue-800 disabled:opacity-60 text-white font-bold px-5 py-3 text-sm transition"
-            >
-              {enCours ? 'Chargement…' : "S'abonner maintenant"}
-            </button>
-            {erreur && <p className="text-xs text-red-600 text-center">{erreur}</p>}
+        {/* Pack Premium */}
+        <div className="relative bg-brand-navy rounded-2xl shadow-lg p-8 flex flex-col">
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-off text-xs font-bold px-4 py-1 rounded-full whitespace-nowrap">
+            RECOMMANDÉ
           </div>
-        ) : (
-          <Link
-            href="/auth/signup"
-            className={buttonVariants({ className: 'w-full font-bold' })}
-          >
-            Essai gratuit 14 jours →
-          </Link>
-        )}
+          <div className="mb-6">
+            <p className="text-xs font-bold text-brand-gold uppercase tracking-wider mb-2">Pack Premium</p>
+            <p className="text-sm text-brand-cream/60 mb-4">PME 50-250 salariés</p>
+            <div className="flex items-baseline gap-1">
+              <span className="text-5xl font-extrabold text-white">{prix.premium.montant}€</span>
+              <span className="text-brand-cream/60">{prix.premium.unite}</span>
+            </div>
+            <p className="text-xs text-brand-cream/50 mt-1">{prix.premium.sous}</p>
+          </div>
+          <ul className="space-y-3 mb-8 flex-1">
+            {FEATURES_PREMIUM.map((f) => (
+              <li key={f} className="flex items-start gap-2.5 text-sm text-brand-cream/80">
+                <Check className="w-4 h-4 text-brand-gold shrink-0 mt-0.5" />
+                {f}
+              </li>
+            ))}
+          </ul>
+          {isLoggedIn ? (
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => handleSubscribe('premium')}
+                disabled={enCours !== null}
+                className="w-full rounded-xl bg-brand-gold hover:bg-brand-gold-light disabled:opacity-60 text-brand-off font-bold px-5 py-3 text-sm transition"
+              >
+                {enCours === 'premium' ? 'Chargement…' : "Choisir Pack Premium"}
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/auth/signup?plan=premium"
+              className="block text-center rounded-xl bg-brand-gold hover:bg-brand-gold-light text-brand-off font-bold px-5 py-3 text-sm transition"
+            >
+              Essai gratuit 14 jours →
+            </Link>
+          )}
+        </div>
 
-        <p className="text-center text-xs text-gray-400 mt-4">
-          {isLoggedIn
-            ? "Paiement sécurisé par Stripe"
-            : "Aucune carte bancaire requise pour l'essai"}
-        </p>
       </div>
 
-      {/* Mode découverte */}
-      <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-xl p-5 text-center">
-        <p className="text-sm font-medium text-gray-700 mb-1">Mode découverte — Gratuit</p>
-        <p className="text-xs text-gray-500 mb-3">
-          1 poste, 2 opérations. Évaluations visibles, export PDF non inclus.
-        </p>
-        <Link
-          href={isLoggedIn ? "/dashboard" : "/auth/signup"}
-          className="text-xs text-blue-600 hover:underline font-medium"
-        >
-          {isLoggedIn ? "Retour au dashboard →" : "Créer un compte gratuit →"}
-        </Link>
-      </div>
+      {erreur && (
+        <p className="text-sm text-red-600 text-center">{erreur}</p>
+      )}
+
+      {/* Note sécurité */}
+      <p className="text-xs text-gray-400 text-center">
+        {isLoggedIn ? 'Paiement sécurisé par Stripe · Annulable à tout moment' : 'Aucune carte bancaire requise pour l\'essai · Paiement Stripe sécurisé'}
+      </p>
 
     </div>
   )
