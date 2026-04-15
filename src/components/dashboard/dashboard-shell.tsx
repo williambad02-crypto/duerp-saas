@@ -68,24 +68,23 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
         style={{
           width: collapsed ? 64 : 256,
           flexShrink: 0,
-          transition: 'width 250ms cubic-bezier(0.32,0.72,0,1)',
+          transition: 'width 220ms cubic-bezier(0.4,0,0.2,1)',
           position: 'relative',
           zIndex: isFloating ? 40 : 'auto',
+          willChange: 'width',
         }}
         className="hidden lg:flex overflow-visible"
       >
-        {/* Panneau réel — peut dépasser la largeur de l'aside quand en hover-float */}
+        {/* Panneau réel — toujours en relative, overflow via aside */}
         <div
           style={{
-            width: isFloating ? 256 : undefined,
-            position: isFloating ? 'absolute' : 'relative',
-            top: isFloating ? 0 : undefined,
-            left: isFloating ? 0 : undefined,
-            height: isFloating ? '100%' : '100%',
-            transition: 'width 250ms cubic-bezier(0.32,0.72,0,1)',
-            boxShadow: isFloating ? '4px 0 24px rgba(0,0,0,0.18)' : undefined,
+            width: '100%',
+            height: '100%',
+            position: 'relative',
+            transition: 'box-shadow 250ms ease',
+            boxShadow: isFloating ? '4px 0 24px rgba(0,0,0,0.18)' : 'none',
           }}
-          className="flex overflow-hidden w-full"
+          className="flex overflow-hidden"
         >
           <Sidebar
             nomEntreprise={nomEntreprise}
