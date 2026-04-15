@@ -222,6 +222,7 @@ src/app/
 - [x] PHASE_UX_TABLEAU_C : Resize colonnes + super-headers zones + modules normés intégrés (présélection) + sidebar delays fluides
 - [x] PHASE_MODULE_BRUIT : Module bruit normé ED 6035 complet — table `evaluations_bruit`, méthode sommaire + simplifiée (points ED 6035), EPI, mesures collectives, report criticité dans APR, page overview `/dashboard/modules/bruit`, formulaire `/dashboard/modules/bruit/[evalId]`, sidebar item
 - [x] PHASE_PLAN_ACTION : Plan d'action risques aigus — table actions_plan + contacts_entreprise + rappels email Resend + Vercel Cron
+- [x] PHASE_UX_C : UX améliorations — tableau plan-action pyramide rowspan + couleurs hiérarchiques + plein écran + resize colonnes + Bell icon + dropdown createPortal + bannière essai uniquement /dashboard + APR readOnly + sélecteur colonnes masquables + bouton "Ajouter un poste" + sidebar animations fluides
 
 ### Phase 4 — Backlog post-lancement
 
