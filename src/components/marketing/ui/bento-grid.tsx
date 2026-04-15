@@ -57,7 +57,8 @@ export function BentoCard({
         className={cn(
           'group relative h-full rounded-2xl border border-[var(--color-brand-sand)] bg-[var(--color-brand-off)]',
           'p-6 md:p-7 transition-all duration-300',
-          'hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-18px_rgba(3,25,72,0.25)]',
+          'hover:-translate-y-0.5 hover:border-[var(--color-brand-accent-dark)]/30',
+          'hover:shadow-[0_18px_44px_-18px_rgba(3,105,161,0.28)]',
           className,
         )}
       >

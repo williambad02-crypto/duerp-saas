@@ -19,8 +19,9 @@ export function MarketingNav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOuvert, setMenuOuvert] = useState(false)
 
-  // Sur la landing, le hero est sombre : logo + liens en blanc avant scroll.
-  const heroIsDark = pathname === '/'
+  // Sur les pages à hero sombre (navy deep), logo + liens en blanc avant scroll.
+  const DARK_HERO_PATHS = ['/', '/outil']
+  const heroIsDark = DARK_HERO_PATHS.includes(pathname)
   const onDarkHero = heroIsDark && !scrolled
 
   useEffect(() => {
