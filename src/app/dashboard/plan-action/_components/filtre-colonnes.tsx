@@ -53,7 +53,7 @@ const COLONNES_LABELS: Record<ColonneId, string> = {
   facilite: 'Facilité',
   responsable: 'Responsable',
   echeance: 'Échéance',
-  rappels: '🔔 Rappels',
+  rappels: 'Rappels',
   criticite_cible: 'C. cible',
 }
 
