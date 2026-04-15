@@ -812,14 +812,18 @@ function CelluleModuleNorme({
 
   if (risque.module_status === 'creuser') {
     if (moduleInfo.statut === 'actif') {
+      // M01_BRUIT → page dédiée /modules/bruit/[evalId]
+      const href = moduleInfo.code === 'M01_BRUIT'
+        ? `/dashboard/modules/bruit/${risque.id}`
+        : `/dashboard/postes/${posteId}/operations/${risque.operation_id}/risques/${moduleInfo.code}`
       return (
         <div className="flex items-center justify-center gap-1.5 flex-wrap">
           <Link
-            href={`/dashboard/postes/${posteId}/operations/${risque.operation_id}/risques/${moduleInfo.code}`}
+            href={href}
             className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-600 text-white rounded text-[11px] font-semibold hover:bg-blue-700 transition-colors"
           >
             <ExternalLink className="w-3 h-3" />
-            Ouvrir {moduleInfo.nom}
+            Méthode normée {moduleInfo.nom}
           </Link>
           <button
             onClick={() => startReset(async () => { await actions.resetPreselectionModule(risque.id, posteId) })}

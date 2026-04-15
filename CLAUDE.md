@@ -168,6 +168,8 @@ src/app/
 ├── auth/                 # Auth (login, signup) — pas de layout marketing/dashboard
 └── dashboard/            # Outil SaaS authentifié — sidebar collapsible + header
     ├── postes/[id]/      # Page détail poste avec tableau APR éditable inline
+    ├── modules/bruit/    # Vue globale évaluations bruit (toutes opérations)
+    ├── modules/bruit/[evalId]/  # Formulaire évaluation normée bruit (ED 6035)
     └── ...
 ```
 
@@ -218,9 +220,11 @@ src/app/
 - [x] PHASE_VITRINE_V3_C : Pages pricing (/tarifs Pack Industrie/Premium + /comparatif)
 - [x] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)
 - [x] PHASE_UX_TABLEAU_C : Resize colonnes + super-headers zones + modules normés intégrés (présélection) + sidebar delays fluides
+- [x] PHASE_MODULE_BRUIT : Module bruit normé ED 6035 complet — table `evaluations_bruit`, méthode sommaire + simplifiée (points ED 6035), EPI, mesures collectives, report criticité dans APR, page overview `/dashboard/modules/bruit`, formulaire `/dashboard/modules/bruit/[evalId]`, sidebar item
 
 ### Phase 4 — Backlog post-lancement
 
+- [ ] Appliquer migrations 009 + 010 dans Supabase Dashboard (avant utilisation module bruit)
 - [ ] Modules M02-M05 (Vibrations, TMS, Charge physique, RPS)
 - [ ] Multi-utilisateurs (rôles)
 - [ ] Stockage PDF Supabase Storage

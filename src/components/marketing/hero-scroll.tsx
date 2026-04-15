@@ -24,7 +24,7 @@ export function HeroSection() {
         style={{ y: bgY, opacity: bgOpacity }}
       >
         <Image
-          src="/marketing/hero-bg-industrial.svg"
+          src="/marketing/hero-bg-industrial.jpg"
           alt=""
           fill
           className="object-cover"
@@ -124,14 +124,14 @@ const etapes = [
     titre: 'Vous n\'avez pas le temps.',
     description:
       'Faire un DUERP entre deux clients, ça finit toujours en bas de la pile. Et pourtant, l\'inspection peut se présenter n\'importe quand.',
-    image: '/marketing/step-01-no-time.svg',
+    image: '/marketing/step-01-no-time.jpg',
   },
   {
     num: '02',
     titre: 'Les outils existants sont des usines à gaz.',
     description:
       'Tableurs interminables, logiciels INRS pensés pour des ergonomes diplômés. Résultat : on commence, on abandonne, on recommence.',
-    image: '/marketing/step-02-spreadsheet.svg',
+    image: '/marketing/step-02-spreadsheet.jpg',
   },
   {
     num: '03',

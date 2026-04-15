@@ -36,7 +36,6 @@ export default async function PosteDetailPage({ params }: Props) {
           danger, situation_dangereuse, evenement_dangereux,
           dommage, siege_lesions, gravite, probabilite, duree_exposition,
           criticite_brute, ordre, code_module,
-          module_status, preselection_responses,
           plans_maitrise (
             coefficient_pm, criticite_residuelle, mesures_techniques,
             mesures_humaines, mesures_organisationnelles, mesures_epi
@@ -85,8 +84,9 @@ export default async function PosteDetailPage({ params }: Props) {
           criticite_residuelle: pm?.criticite_residuelle ?? null,
           mesures_techniques: pm?.mesures_techniques ?? null,
           ordre: (ev.ordre as number) ?? 0,
-          module_status: (ev.module_status as 'non_initie' | 'maitrise' | 'creuser' | null) ?? null,
-          preselection_responses: (ev.preselection_responses as boolean[] | null) ?? null,
+          // module_status et preselection_responses activés après migration 009
+          module_status: null,
+          preselection_responses: null,
         }
       })
 
