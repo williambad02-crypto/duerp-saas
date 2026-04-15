@@ -101,11 +101,14 @@ function ResizeHandle({
 }) {
   const startX = useRef(0)
   const startW = useRef(0)
+  const currentWidthRef = useRef(colWidths[colId] ?? 120)
+  // Sync the ref on every render so it's always current
+  currentWidthRef.current = colWidths[colId] ?? 120
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     startX.current = e.clientX
-    startW.current = colWidths[colId] ?? 120
+    startW.current = currentWidthRef.current  // read from ref, not colWidths
 
     function onMove(ev: MouseEvent) {
       const delta = ev.clientX - startX.current
@@ -122,7 +125,7 @@ function ResizeHandle({
     }
     document.addEventListener('mousemove', onMove)
     document.addEventListener('mouseup', onUp)
-  }, [colId, colWidths, setColWidths])
+  }, [colId, setColWidths])  // colWidths removed from deps
 
   return (
     <span
@@ -207,9 +210,9 @@ export function TableauPlanAction({ evaluations, contacts }: Props) {
   }
 
   // ── KPIs ────────────────────────────────────────────────────────────────────
-  const kpiAFaire = rows.filter(r => (r.action?.statut ?? 'a_faire') === 'a_faire').length
-  const kpiEnCours = rows.filter(r => r.action?.statut === 'en_cours').length
-  const kpiTermine = rows.filter(r => r.action?.statut === 'termine').length
+  const kpiAFaire = filtered.filter(r => (r.action?.statut ?? 'a_faire') === 'a_faire').length
+  const kpiEnCours = filtered.filter(r => r.action?.statut === 'en_cours').length
+  const kpiTermine = filtered.filter(r => r.action?.statut === 'termine').length
 
   // ── Groupement hiérarchique ─────────────────────────────────────────────────
   const groupes = groupParPosteEtOperation(filtered)
