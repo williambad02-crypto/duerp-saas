@@ -267,7 +267,7 @@ export default async function HomePage() {
                   <div className="relative">
                     <div className="w-52 h-52 rounded-3xl overflow-hidden border-2 border-brand-sand shadow-[0_8px_30px_rgba(3,25,72,0.1)]">
                       <Image
-                        src="/marketing/william-portrait.svg"
+                        src="/marketing/william-portrait-large.jpeg"
                         alt="William Maréchal — fondateur SafeAnalyse."
                         width={208}
                         height={208}

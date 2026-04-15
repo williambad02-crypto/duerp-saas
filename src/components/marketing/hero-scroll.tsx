@@ -138,14 +138,14 @@ const etapes = [
     titre: 'Un cabinet HSE coûte cher.',
     description:
       '1 500 € pour un audit one-shot, et l\'année prochaine on recommence à zéro. Sans rien comprendre à ce qui a été fait.',
-    image: '/marketing/step-03-cabinet.svg',
+    image: '/marketing/step-03-cabinet.jpg',
   },
   {
     num: '04',
     titre: 'SafeAnalyse. fait le pont.',
     description:
       'Un outil simple guidé par un pro HSE, avec accompagnement local sur site quand vous en avez besoin. Le DUERP enfin fait — et compris.',
-    image: '/marketing/step-04-safeanalyse.svg',
+    image: '/marketing/step-04-safeanalyse.jpg',
   },
 ]
 
