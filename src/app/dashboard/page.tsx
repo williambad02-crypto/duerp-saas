@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MODULE_PAR_CODE } from '@/lib/constants/modules'
 import { CodeModule } from '@/types'
 import { GenererPDFButton } from '@/components/dashboard/generer-pdf-button'
-import { getInfoAbonnement } from '@/lib/abonnement'
+import { getInfoAbonnement, serializeAbonnement } from '@/lib/abonnement'
+import { PaywallBanner } from '@/components/dashboard/paywall-banner'
 
 function getCouleurScore(score: number, module: CodeModule): 'vert' | 'jaune' | 'orange' | 'rouge' {
   if (module === 'M01_BRUIT') {
@@ -83,6 +84,7 @@ export default async function DashboardPage() {
     getInfoAbonnement(user.id),
   ])
 
+  const abonnement = serializeAbonnement(infoAbonnement)
   const nbPostes = postes?.length ?? 0
   const nbOperations = operations?.length ?? 0
 
@@ -159,6 +161,14 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {/* Bannière essai/paywall — uniquement sur cette page */}
+      {abonnement.bandeau && (
+        <PaywallBanner
+          bandeau={abonnement.bandeau}
+          joursRestantsTrial={abonnement.joursRestantsTrial}
+        />
+      )}
+
       {/* En-tête */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>

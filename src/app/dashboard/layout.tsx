@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { DashboardShell } from '@/components/dashboard/dashboard-shell'
-import { PaywallBanner } from '@/components/dashboard/paywall-banner'
 import { getInfoAbonnement, serializeAbonnement } from '@/lib/abonnement'
 
 export default async function DashboardLayout({
@@ -41,14 +40,6 @@ export default async function DashboardLayout({
     <DashboardShell nomEntreprise={nomEntreprise} abonnement={aboProp}>
       <main className="flex-1 overflow-y-auto p-4 lg:p-6 flex flex-col">
         <div className="flex-1">
-          {/* Bandeau paywall si nécessaire */}
-          {aboProp.bandeau && (
-            <PaywallBanner
-              bandeau={aboProp.bandeau}
-              joursRestantsTrial={aboProp.joursRestantsTrial}
-            />
-          )}
-
           {children}
         </div>
 
