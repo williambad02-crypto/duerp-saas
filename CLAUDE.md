@@ -223,6 +223,28 @@ src/app/
 - [x] PHASE_MODULE_BRUIT : Module bruit normé ED 6035 complet — table `evaluations_bruit`, méthode sommaire + simplifiée (points ED 6035), EPI, mesures collectives, report criticité dans APR, page overview `/dashboard/modules/bruit`, formulaire `/dashboard/modules/bruit/[evalId]`, sidebar item
 - [x] PHASE_PLAN_ACTION : Plan d'action risques aigus — table actions_plan + contacts_entreprise + rappels email Resend + Vercel Cron
 - [x] PHASE_UX_C : UX améliorations — tableau plan-action pyramide rowspan + couleurs hiérarchiques + plein écran + resize colonnes + Bell icon + dropdown createPortal + bannière essai uniquement /dashboard + APR readOnly + sélecteur colonnes masquables + bouton "Ajouter un poste" + sidebar animations fluides
+- [x] **PHASE_VITRINE_REFONTE** (avril 2026) : refonte complète de toute la vitrine avec un kit 8 composants visuels premium (TextReveal, HeroReveal, SectionReveal, BentoGrid, StatCounter, CardTilt, GrainOverlay, MarqueeStrip). 9 pages marketing refaites avec pattern strict :
+  - **Hero navy-deep full-screen** (`min-h-screen`, `-mt-20`, flex items-center) avec titre mot par mot animé et **un mot en or** (`text-brand-gold-light`)
+  - **Alternance stricte dark/light** entre sections (navy-deep ↔ cream-light, jamais deux crèmes variantes adjacentes)
+  - **SectionReveal** partout (remplace AnimateOnScroll), reflet bleu accent-dark subtil au hover des BentoCards
+  - **Cartes premium** : cadre dégradé or sur navy (`p-[1.5px] bg-gradient-to-br from-brand-gold...`) + blurs radiaux pour les sections "héro" internes (consulting, citation, CTA final)
+  - Pages refaites : `/`, `/outil`, `/tarifs`, `/a-propos`, `/temoignages`, `/contact`, `/faq`, `/comparatif`, `/reglementation`. `/pricing` → redirect vers `/tarifs`. Pages légales (`/cgu`, `/mentions-legales`, `/confidentialite`) laissées en l'état.
+  - **Nav** : tableau `DARK_HERO_PATHS` pour basculer le logo + liens en cream blanc quand on est sur une page avec hero sombre (passe en navy dès scroll > 20px).
+  - **Composants spécifiques créés** :
+    - `BretagneOutline` SVG sticky au hero landing (contour fait main, à remplacer par `public/marketing/bretagne.svg` topographique si déposé)
+    - `SecteursCarousel` auto-play 10s pause-sans-reset au hover + drag + trackpad horizontal, indicateur 3 pastilles avec timer de remplissage doré (landing)
+    - `ParcoursTimeline` horizontale animée (ligne dégradée qui se remplit, nœuds navy + badges numérotés or) — /outil
+    - `RisquesMethodes` flip cards portrait 4/5 (clic → rotation 3D verso ED 840), toggle Aigu/Chronique avec pill layoutId + slide complet gauche/droite au switch — /outil
+    - `TarifsComparatif` tableau 3 offres avec header sticky `top-16` — /tarifs
+    - `ComparatifTable` tableau 4 colonnes (SafeAnalyse/Cabinet/Seirich/Template) avec colonne SafeAnalyse highlight or — /comparatif
+    - `TemoignagesGrid` 6 faux avis (Marc/Sophie/Thomas/Nathalie/Julien/Emma) avec CardTilt ±2° et 5 étoiles or — /temoignages
+    - `BackToTop` bouton flottant navy apparaît après 600px scroll (intégré au layout marketing)
+    - `hero-*-title.tsx` composants par page (un par page : outil/tarifs/apropos/temoignages/contact/faq/comparatif/reglementation)
+  - **Décisions contenu actées** :
+    - Classification ED 840 côté user : Bruit → Chronique, Chimique → Aigu, Thermique → Chronique (plus de MIXTE affiché)
+    - Portrait William landing passé à 288/320px, badge "Diplômé BUT HSE" (pas DUT)
+    - Offre consulting : **700€/jour au lieu de 2 000€, valable jusqu'à fin 2026** (mentionnée sur /tarifs + /contact + /a-propos via lien)
+    - /reglementation : retrait des 9 principes, MAJ, contenu DUERP — ajout section "Veille réglementaire" (outil prend en charge)
 
 ### Phase 4 — Backlog post-lancement
 
