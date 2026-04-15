@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { AnimateOnScroll } from '@/components/marketing/animate-on-scroll'
+import { SectionReveal } from '@/components/marketing/ui'
+import { HeroFaqTitle } from '@/components/marketing/hero-faq-title'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
-import { ArrowRight, HelpCircle } from 'lucide-react'
+import { ArrowRight, ShieldAlert, Wand2, Wallet } from 'lucide-react'
 
 export const metadata = {
   title: 'FAQ — SafeAnalyse.',
@@ -179,96 +180,80 @@ const faqOffre: AccordionItem[] = [
   },
 ]
 
+const categories = [
+  { icon: ShieldAlert, num: '01', titre: 'Sur le DUERP', items: faqDuerp, defaultOpen: 'duerp-1' },
+  { icon: Wand2, num: '02', titre: 'Sur SafeAnalyse.', items: faqOutil, defaultOpen: undefined },
+  { icon: Wallet, num: '03', titre: "Sur l'offre", items: faqOffre, defaultOpen: undefined },
+]
+
 export default function FaqPage() {
   return (
     <div className="bg-brand-cream-light">
 
-      {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="bg-brand-cream py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-hero-badge inline-flex items-center gap-2 bg-brand-gold-pale border border-brand-sand rounded-full px-4 py-1.5 text-sm text-brand-bronze mb-6 font-medium">
-            <HelpCircle className="w-4 h-4" />
-            Questions fréquentes
-          </div>
-          <h1 className="animate-hero-title text-4xl sm:text-5xl font-extrabold text-brand-navy leading-tight mb-5">
-            Tout ce que vous voulez savoir
-          </h1>
-          <p className="animate-hero-sub text-lg text-brand-bronze max-w-xl mx-auto leading-relaxed">
-            Sur le DUERP, sur SafeAnalyse., sur nos offres. Si vous ne trouvez pas la
-            réponse ici,{' '}
-            <Link href="/contact" className="text-brand-navy underline underline-offset-2 hover:text-brand-accent transition-colors">
+      {/* ── Hero — navy deep full-screen ─────────────────────────────── */}
+      <section className="relative -mt-20 bg-brand-navy-deep min-h-screen flex items-center overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-brand-navy-deep via-brand-navy-deep to-brand-navy-deep/95" />
+        <div aria-hidden className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-brand-gold/10 blur-3xl pointer-events-none" />
+        <div aria-hidden className="absolute -bottom-20 -left-16 w-80 h-80 rounded-full bg-brand-accent/10 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <HeroFaqTitle />
+          <p className="animate-hero-sub text-lg text-brand-cream/70 max-w-xl mx-auto leading-relaxed">
+            Sur le DUERP, sur SafeAnalyse., sur nos offres. Si vous ne trouvez pas la réponse ici,{' '}
+            <Link href="/contact" className="text-brand-gold-light underline decoration-brand-gold/40 hover:decoration-brand-gold transition-colors">
               posez-nous la question directement
-            </Link>
-            .
+            </Link>.
           </p>
         </div>
       </section>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+      {/* ── FAQ — 3 catégories cream-light ──────────────────────────── */}
+      <section className="py-24 bg-brand-cream-light">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+          {categories.map((cat) => {
+            const Icon = cat.icon
+            return (
+              <SectionReveal key={cat.num} variant="fade-up">
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-brand-navy text-brand-gold-light shrink-0">
+                      <Icon className="w-5 h-5" />
+                    </span>
+                    <div>
+                      <div className="text-[10px] font-extrabold uppercase tracking-widest text-brand-gold">Catégorie {cat.num}</div>
+                      <h2 className="text-xl md:text-2xl font-bold text-brand-navy">{cat.titre}</h2>
+                    </div>
+                  </div>
+                  <div className="bg-brand-off border border-brand-sand rounded-2xl px-6 shadow-[0_10px_30px_-18px_rgba(3,25,72,0.15)]">
+                    <Accordion items={cat.items} defaultOpen={cat.defaultOpen} />
+                  </div>
+                </div>
+              </SectionReveal>
+            )
+          })}
+        </div>
+      </section>
 
-        {/* ── Catégorie 1 : Sur le DUERP ─────────────────────────────── */}
-        <AnimateOnScroll animation="fade-up">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-8 rounded-lg bg-brand-navy text-brand-cream flex items-center justify-center text-xs font-bold shrink-0">
-                01
-              </span>
-              <h2 className="text-xl font-bold text-brand-navy">Sur le DUERP</h2>
-            </div>
-            <div className="bg-brand-off border border-brand-sand rounded-2xl px-6">
-              <Accordion items={faqDuerp} defaultOpen="duerp-1" />
-            </div>
-          </div>
-        </AnimateOnScroll>
-
-        {/* ── Catégorie 2 : Sur SafeAnalyse. ─────────────────────────── */}
-        <AnimateOnScroll animation="fade-up">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-8 rounded-lg bg-brand-navy text-brand-cream flex items-center justify-center text-xs font-bold shrink-0">
-                02
-              </span>
-              <h2 className="text-xl font-bold text-brand-navy">Sur SafeAnalyse.</h2>
-            </div>
-            <div className="bg-brand-off border border-brand-sand rounded-2xl px-6">
-              <Accordion items={faqOutil} />
-            </div>
-          </div>
-        </AnimateOnScroll>
-
-        {/* ── Catégorie 3 : Sur l'offre ───────────────────────────────── */}
-        <AnimateOnScroll animation="fade-up">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-8 rounded-lg bg-brand-navy text-brand-cream flex items-center justify-center text-xs font-bold shrink-0">
-                03
-              </span>
-              <h2 className="text-xl font-bold text-brand-navy">Sur l&apos;offre</h2>
-            </div>
-            <div className="bg-brand-off border border-brand-sand rounded-2xl px-6">
-              <Accordion items={faqOffre} />
-            </div>
-          </div>
-        </AnimateOnScroll>
-
-        {/* ── Autre question ? ────────────────────────────────────────── */}
-        <AnimateOnScroll animation="fade-up">
-          <div className="bg-brand-gold-pale border border-brand-sand rounded-2xl p-8 text-center">
-            <h3 className="font-bold text-brand-navy mb-2">Vous ne trouvez pas votre réponse ?</h3>
-            <p className="text-brand-ink-soft text-sm mb-5">
+      {/* ── CTA final — navy deep ────────────────────────────────────── */}
+      <section className="py-24 bg-brand-navy-deep text-center">
+        <div className="max-w-xl mx-auto px-4">
+          <SectionReveal variant="fade-up">
+            <h2 className="text-3xl sm:text-4xl font-bold text-brand-cream mb-4">
+              Vous ne trouvez <span className="text-brand-gold-light">pas</span> votre réponse ?
+            </h2>
+            <p className="text-brand-cream/60 mb-8 leading-relaxed">
               Je lis tous les messages personnellement et réponds sous 24 heures ouvrées.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-brand-navy text-brand-cream hover:bg-brand-navy-light font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-brand-gold-light text-brand-navy-deep hover:bg-brand-gold font-semibold px-8 py-3.5 rounded-xl transition-all hover:shadow-[0_10px_30px_-6px_rgba(184,134,11,0.6)]"
             >
               Poser ma question
               <ArrowRight className="w-4 h-4" />
             </Link>
-          </div>
-        </AnimateOnScroll>
-
-      </div>
+          </SectionReveal>
+        </div>
+      </section>
 
     </div>
   )
