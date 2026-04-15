@@ -66,7 +66,42 @@ Une évaluation peut avoir plusieurs actions (1:N). Pas de UNIQUE sur `evaluatio
 
 - En-tête : titre + sous-titre + **4 badges KPI** (À faire / En cours / Terminé / Export PDF)
 - 2 onglets : **🔴 Priorités** (toutes actions triées par criticité résiduelle desc) et **🏭 Par poste** (groupées par poste)
-- Barre de filtres : dropdown "Tous les postes" / dropdown "Tous les statuts" / checkbox "Afficher risques maîtrisés (verts)"
+- Barre de filtres + gestion des colonnes (voir sections dédiées ci-dessous)
+
+### Barre de filtres
+
+Filtres actifs en temps réel (côté client, pas de rechargement serveur) :
+
+| Filtre | Type | Options |
+|---|---|---|
+| Poste | Dropdown | "Tous les postes" + liste des postes de l'entreprise |
+| Statut | Dropdown | "Tous les statuts" / À faire / En cours / Terminé |
+| Type PGP | Dropdown | "Tous les types" / Technique / Organisationnelle / Formation+EPI |
+| Facilité | Dropdown | "Toutes" / Facile / Moyen / Complexe |
+| Risques maîtrisés | Checkbox | "Afficher les risques verts (C. résid. ≤ 4)" — masqués par défaut |
+
+Les filtres actifs sont cumulatifs (AND). L'état des filtres est conservé en mémoire le temps de la session (pas de localStorage nécessaire).
+
+### Gestion de la visibilité des colonnes
+
+Bouton **"Colonnes ▾"** à droite de la barre de filtres → ouvre un popover avec une liste de checkboxes, une par colonne masquable :
+
+| Colonne | Masquable | Visible par défaut |
+|---|---|---|
+| Poste · Opération | Non (clé de lecture) | Oui |
+| Danger | Non | Oui |
+| C. résid. | Non | Oui |
+| Mesures existantes | Oui | Non (masquée par défaut — colonne large peu utilisée) |
+| Description | Non | Oui |
+| Type PGP | Oui | Oui |
+| Facilité | Oui | Oui |
+| Responsable | Oui | Oui |
+| Échéance | Oui | Oui |
+| Statut | Non | Oui |
+| 🔔 Rappels | Oui | Oui |
+| C. cible | Oui | Oui |
+
+L'état de visibilité est sauvegardé dans `localStorage` (clé `plan-action-columns`) pour persister entre les sessions.
 
 ### Tableau inline (onglet Priorités)
 
