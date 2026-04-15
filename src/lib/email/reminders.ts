@@ -1,7 +1,12 @@
 // src/lib/email/reminders.ts
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Instanciation paresseuse — évite l'erreur build quand RESEND_API_KEY n'est pas défini
+function getResend(): Resend {
+  const key = process.env.RESEND_API_KEY
+  if (!key) throw new Error('RESEND_API_KEY manquante')
+  return new Resend(key)
+}
 
 export type TypeRappel = 'j_moins_7' | 'jour_j' | 'mensuel'
 
@@ -66,6 +71,7 @@ function corps(p: ParamsRappel): string {
 }
 
 export async function envoyerRappel(params: ParamsRappel): Promise<void> {
+  const resend = getResend()
   await resend.emails.send({
     from: 'SafeAnalyse. <onboarding@resend.dev>',
     to: params.destinataire.email,

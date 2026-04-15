@@ -221,6 +221,7 @@ src/app/
 - [x] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)
 - [x] PHASE_UX_TABLEAU_C : Resize colonnes + super-headers zones + modules normés intégrés (présélection) + sidebar delays fluides
 - [x] PHASE_MODULE_BRUIT : Module bruit normé ED 6035 complet — table `evaluations_bruit`, méthode sommaire + simplifiée (points ED 6035), EPI, mesures collectives, report criticité dans APR, page overview `/dashboard/modules/bruit`, formulaire `/dashboard/modules/bruit/[evalId]`, sidebar item
+- [x] PHASE_PLAN_ACTION : Plan d'action risques aigus — table actions_plan + contacts_entreprise + rappels email Resend + Vercel Cron
 
 ### Phase 4 — Backlog post-lancement
 
@@ -232,6 +233,8 @@ src/app/
 - [ ] Modules M06-M09
 - [ ] Système de parrainage clients
 - [ ] Partenariat experts-comptables (canal de distribution)
+- [ ] Intégrer risques chroniques dans le Plan d'action
+- [ ] Export PDF du Plan d'action
 
 ---
 
