@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { SectionReveal, BentoGrid, BentoCard } from '@/components/marketing/ui'
+import { SectionReveal } from '@/components/marketing/ui'
 import { HeroReglementationTitle } from '@/components/marketing/hero-reglementation-title'
-import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import {
   ArrowRight,
   AlertTriangle,
@@ -11,7 +10,9 @@ import {
   Scale,
   Check,
   BookOpen,
-  Calendar,
+  Radar,
+  FileCheck2,
+  Bell,
 } from 'lucide-react'
 
 export const metadata = {
@@ -20,40 +21,12 @@ export const metadata = {
     "Tout ce que vous devez savoir sur le Document Unique obligatoire : textes de loi, fréquence de mise à jour, contenu requis, sanctions en cas d'absence.",
 }
 
-const principesAccordion: AccordionItem[] = [
-  { id: 'p1', question: '1. Éviter les risques', reponse: <>Supprimer le danger ou l&apos;exposition au danger. <strong>Exemple agro&nbsp;:</strong> remplacer un produit de nettoyage irritant par une formule neutre, éliminer le besoin de port de charge en automatisant une ligne de conditionnement.</> },
-  { id: 'p2', question: '2. Évaluer les risques qui ne peuvent pas être évités', reponse: <>Apprécier la gravité et la probabilité des risques résiduels — c&apos;est l&apos;objet central du DUERP. Sans évaluation, impossible de prioriser les actions.</> },
-  { id: 'p3', question: '3. Combattre les risques à la source', reponse: <>Agir sur le procédé ou l&apos;environnement plutôt que sur le salarié. <strong>Exemple agro&nbsp;:</strong> installer des protections acoustiques sur une machine bruyante plutôt que distribuer des bouchons d&apos;oreille.</> },
-  { id: 'p4', question: "4. Adapter le travail à l'Homme", reponse: <>Conception ergonomique des postes, choix d&apos;équipements adaptés. Réduit significativement les TMS en production alimentaire.</> },
-  { id: 'p5', question: "5. Tenir compte de l'évolution technique", reponse: <>Intégrer les nouvelles technologies et connaissances. Les solutions de manutention mécanique ou d&apos;exosquelettes entrent dans ce cadre.</> },
-  { id: 'p6', question: '6. Remplacer le dangereux par le moins dangereux', reponse: <>Substitution des produits ou procédés dangereux. <strong>Exemple agro&nbsp;:</strong> remplacer un solvant CMR par un produit non classifié.</> },
-  { id: 'p7', question: '7. Planifier la prévention', reponse: <>Ensemble cohérent intégrant technique, organisation, conditions de travail et relations sociales. Le programme annuel de prévention (obligatoire ≥ 50 salariés) matérialise cette planification.</> },
-  { id: 'p8', question: '8. Donner la priorité aux protections collectives', reponse: <>Les EPC priment sur les EPI. Une cabine d&apos;isolation phonique vaut mieux que des casques individuels — même si les EPI restent nécessaires quand les EPC ne suffisent pas.</> },
-  { id: 'p9', question: '9. Donner les instructions appropriées aux travailleurs', reponse: <>Former et informer les salariés sur les risques identifiés et les mesures de prévention. La signature du plan de maîtrise par les opérateurs concernés est une bonne pratique.</> },
-]
-
 const textesRef = [
   { ref: 'L4121-1 Code du travail', titre: 'Obligation de prévention', desc: "L'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs." },
   { ref: 'L4121-3 Code du travail', titre: 'Évaluation et transcription des risques', desc: "L'employeur évalue les risques pour la santé et la sécurité des travailleurs, y compris dans le choix des procédés, équipements, substances chimiques." },
   { ref: 'R4121-1 Code du travail', titre: 'Document Unique', desc: "L'employeur transcrit et met à jour dans un document unique les résultats de l'évaluation des risques." },
   { ref: 'R4121-4 Code du travail', titre: 'Conservation 40 ans', desc: "Chaque version du document unique, accompagnée des mises à jour, est conservée par l'employeur pendant 40 ans à compter de son élaboration." },
   { ref: 'Loi n° 2021-1018 du 2 août 2021', titre: 'Renforcement de la prévention en santé au travail', desc: "Durcissement des obligations, formalisation du programme annuel de prévention pour les entreprises ≥ 50 salariés." },
-]
-
-const maj = [
-  { icon: Calendar, titre: 'Au moins 1 fois par an', desc: "Mise à jour annuelle obligatoire, même sans changement significatif." },
-  { icon: RefreshCw, titre: 'Lors de toute modification', desc: "Aménagement de poste, nouvel équipement, changement d'organisation." },
-  { icon: AlertTriangle, titre: 'Suite à un accident', desc: 'Tout accident du travail ou maladie pro doit entraîner une révision des risques.' },
-]
-
-const contenuDuerp = [
-  'Inventaire des risques par unité de travail',
-  'Cotation de chaque risque (G × P ou G × DE)',
-  'Mesures de prévention existantes (plan de maîtrise)',
-  'Mesures à mettre en place (actions planifiées)',
-  "Priorités d'action identifiées et datées",
-  "Date d'élaboration et de chaque mise à jour",
-  'Programme annuel de prévention (≥ 50 salariés)',
 ]
 
 export default function ReglementationPage() {
@@ -157,18 +130,17 @@ export default function ReglementationPage() {
         </div>
       </section>
 
-      {/* ── 4. Textes de référence + Mise à jour — cream-light ──────── */}
+      {/* ── 4. Textes de référence — cream-light ────────────────────── */}
       <section className="py-24 bg-brand-cream-light">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionReveal variant="fade-up">
+            <div className="text-center mb-10">
+              <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">Sources légales</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3">Les textes de référence</h2>
+            </div>
+          </SectionReveal>
 
-          <div>
-            <SectionReveal variant="fade-up">
-              <div className="text-center mb-10">
-                <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">Sources légales</span>
-                <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3">Les textes de référence</h2>
-              </div>
-            </SectionReveal>
-
+          <SectionReveal variant="fade-up" delay={0.1}>
             <div className="bg-brand-off border border-brand-sand rounded-2xl p-8 md:p-10 shadow-[0_10px_30px_-18px_rgba(3,25,72,0.15)]">
               <div className="space-y-6">
                 {textesRef.map((t, i) => (
@@ -182,39 +154,7 @@ export default function ReglementationPage() {
                 ))}
               </div>
             </div>
-          </div>
-
-          <div>
-            <SectionReveal variant="fade-up">
-              <div className="text-center mb-10">
-                <h2 className="text-2xl sm:text-3xl font-bold text-brand-navy">Quand mettre à jour votre DUERP ?</h2>
-              </div>
-            </SectionReveal>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {maj.map((item, i) => {
-                const Icon = item.icon
-                const danger = i === 2
-                return (
-                  <SectionReveal key={item.titre} variant="fade-up" delay={i * 0.08}>
-                    <div className={`rounded-2xl p-6 h-full border ${
-                      danger ? 'bg-red-50/70 border-red-200' : 'bg-brand-off border-brand-sand'
-                    } transition-all hover:-translate-y-0.5 ${
-                      danger ? 'hover:shadow-[0_14px_30px_-16px_rgba(220,38,38,0.3)]' : 'hover:shadow-[0_14px_30px_-16px_rgba(3,105,161,0.2)]'
-                    }`}>
-                      <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3 ${
-                        danger ? 'bg-red-100 text-red-600' : 'bg-brand-gold-pale text-brand-gold'
-                      }`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <p className={`font-semibold text-sm mb-2 ${danger ? 'text-red-900' : 'text-brand-navy'}`}>{item.titre}</p>
-                      <p className={`text-xs leading-relaxed ${danger ? 'text-red-800/80' : 'text-brand-ink-soft'}`}>{item.desc}</p>
-                    </div>
-                  </SectionReveal>
-                )
-              })}
-            </div>
-          </div>
+          </SectionReveal>
         </div>
       </section>
 
@@ -275,52 +215,65 @@ export default function ReglementationPage() {
         </div>
       </section>
 
-      {/* ── 6. 9 principes — accordéon cream-light ─────────────────── */}
+      {/* ── 6. Veille réglementaire intégrée — cream-light ──────────── */}
       <section className="py-24 bg-brand-cream-light">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionReveal variant="fade-up">
             <div className="text-center mb-10">
-              <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">Art. L4121-2</span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3">Les 9 principes généraux de prévention</h2>
-              <p className="mt-3 text-brand-bronze max-w-xl mx-auto">
-                Illustrés avec des exemples agroalimentaires tirés du terrain.
+              <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">
+                Au-delà du résumé
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3">
+                La veille réglementaire, <span className="text-brand-gold">on s&apos;en charge</span>.
+              </h2>
+              <p className="mt-4 text-brand-bronze max-w-2xl mx-auto leading-relaxed">
+                Cette page est un résumé pédagogique des textes en vigueur. Les textes évoluent — décrets,
+                directives, nouvelles normes. SafeAnalyse. intègre une <strong className="text-brand-navy">veille réglementaire continue</strong> dans l&apos;outil,
+                pour que vous n&apos;ayez plus à vous en préoccuper.
               </p>
             </div>
           </SectionReveal>
 
           <SectionReveal variant="fade-up" delay={0.1}>
-            <div className="bg-brand-off border border-brand-sand rounded-2xl px-6 shadow-[0_10px_30px_-18px_rgba(3,25,72,0.15)]">
-              <Accordion items={principesAccordion} defaultOpen="p1" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: Radar,
+                  titre: 'Veille continue',
+                  desc: 'Nouveaux décrets, arrêtés, directives UE, évolutions des normes INRS — le moteur de veille surveille pour vous.',
+                },
+                {
+                  icon: Bell,
+                  titre: 'Page dédiée dans l\'outil',
+                  desc: "Un onglet \u00ab\u00a0Veille\u00a0\u00bb dans votre dashboard : toutes les évolutions impactant votre secteur, avec leur effet concret sur votre DUERP.",
+                },
+                {
+                  icon: FileCheck2,
+                  titre: 'Conformité garantie',
+                  desc: 'Tout ce que l\u2019outil produit est aligné sur le cadre réglementaire en vigueur. Si la loi change, vos modèles s\u2019adaptent.',
+                },
+              ].map((item, i) => {
+                const Icon = item.icon
+                return (
+                  <SectionReveal key={item.titre} variant="fade-up" delay={i * 0.08}>
+                    <div className="bg-brand-off border border-brand-sand rounded-2xl p-6 h-full hover:border-brand-accent-dark/30 hover:shadow-[0_18px_44px_-18px_rgba(3,105,161,0.25)] transition-all">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand-gold-pale text-brand-gold mb-4">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <h3 className="font-bold text-brand-navy mb-2">{item.titre}</h3>
+                      <p className="text-sm text-brand-ink-soft leading-relaxed">{item.desc}</p>
+                    </div>
+                  </SectionReveal>
+                )
+              })}
             </div>
           </SectionReveal>
         </div>
       </section>
 
-      {/* ── 7. Contenu DUERP + Comment SafeAnalyse. aide + CTA — navy deep ─ */}
+      {/* ── 7. CTA final — navy deep premium ────────────────────────── */}
       <section className="py-24 bg-brand-navy-deep">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-
-          {/* Contenu obligatoire */}
-          <div>
-            <SectionReveal variant="fade-up">
-              <div className="text-center mb-8">
-                <span className="text-brand-gold-light text-xs font-bold uppercase tracking-widest">Contenu requis</span>
-                <h2 className="text-3xl sm:text-4xl font-bold text-brand-cream mt-3">Ce que doit contenir votre DUERP</h2>
-              </div>
-            </SectionReveal>
-            <SectionReveal variant="fade-up" delay={0.1}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto">
-                {contenuDuerp.map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-sm text-brand-cream/85 bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3">
-                    <Check className="w-4 h-4 text-brand-gold-light shrink-0 mt-0.5" strokeWidth={3} />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </SectionReveal>
-          </div>
-
-          {/* Comment SafeAnalyse. aide */}
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionReveal variant="fade-up">
             <div className="relative rounded-3xl p-[1.5px] bg-gradient-to-br from-brand-gold via-brand-gold-light to-brand-gold/40 shadow-[0_30px_80px_-25px_rgba(184,134,11,0.35)]">
               <div className="relative bg-brand-navy rounded-[calc(1.5rem-1px)] p-8 md:p-12 overflow-hidden">
@@ -334,22 +287,8 @@ export default function ReglementationPage() {
                     Mettez-vous en conformité <span className="text-brand-gold-light">dès aujourd&apos;hui</span>.
                   </h2>
                   <p className="text-brand-cream/65 max-w-xl mx-auto mb-8 leading-relaxed">
-                    SafeAnalyse. vous guide étape par étape vers un DUERP conforme, horodaté, conservé 40 ans automatiquement.
+                    SafeAnalyse. vous guide étape par étape vers un DUERP conforme, horodaté et conservé 40 ans automatiquement.
                   </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10 text-left">
-                    {[
-                      { titre: 'Identifier', desc: 'Wizard qui vous guide à travers les 20 risques ED 840.' },
-                      { titre: 'Évaluer', desc: 'Grilles de cotation INRS intégrées — aucun calcul manuel.' },
-                      { titre: 'Documenter', desc: 'PDF conforme, horodaté, versioning 40 ans auto.' },
-                    ].map((item) => (
-                      <div key={item.titre} className="bg-white/[0.05] border border-white/10 rounded-xl p-4">
-                        <div className="w-1.5 h-1.5 rounded-full bg-brand-gold-light mb-2" />
-                        <p className="font-semibold text-brand-cream text-sm mb-1">{item.titre}</p>
-                        <p className="text-xs text-brand-cream/60 leading-relaxed">{item.desc}</p>
-                      </div>
-                    ))}
-                  </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Link
