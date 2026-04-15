@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { BretagneOutline } from './bretagne-outline'
 
 // ── Section 1 : Hero plein écran ────────────────────────────────────────────
 
@@ -35,6 +36,17 @@ export function HeroSection() {
       {/* Dégradé overlay pour lisibilité */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-brand-navy-deep/60 via-transparent to-brand-navy-deep/80" />
 
+      {/* Contour Bretagne — sticky : reste fixe pendant le scroll du hero,
+          puis masqué par la section suivante quand elle monte par-dessus. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-full z-[1]">
+        <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+          <BretagneOutline
+            className="w-[min(95vw,1200px)] text-brand-gold-light/30"
+            withDot
+          />
+        </div>
+      </div>
+
       {/* Contenu hero */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <motion.div
@@ -42,16 +54,6 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Badge géographique */}
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-block px-3 py-1.5 bg-brand-gold-pale/15 border border-brand-gold/30 text-brand-gold-light text-xs font-semibold uppercase tracking-wider rounded-full mb-7"
-          >
-            Spécialiste DUERP — Morbihan &amp; Bretagne sud
-          </motion.span>
-
           {/* Titre principal */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -185,26 +187,31 @@ export function StorySection() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2">
 
-          {/* Colonne gauche — image sticky */}
-          <div className="hidden lg:flex sticky top-20 h-[calc(100vh-5rem)] items-center justify-center p-16">
-            <div className="relative w-80 h-80">
+          {/* Colonne gauche — image sticky, full bleed intégrée */}
+          <div className="hidden lg:block sticky top-20 h-[calc(100vh-5rem)] overflow-hidden">
+            <div className="relative w-full h-full">
               {etapes.map((etape, i) => (
                 <div
                   key={i}
                   className={cn(
-                    'absolute inset-0 transition-all duration-700 flex items-center justify-center',
+                    'absolute inset-0 transition-all duration-700',
                     etapeActive === i
-                      ? 'opacity-100 translate-y-0 scale-100'
-                      : 'opacity-0 translate-y-4 scale-95'
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-[1.03]',
                   )}
                 >
                   <Image
                     src={etape.image}
                     alt={etape.titre}
-                    width={300}
-                    height={300}
-                    className="w-full h-full object-contain"
+                    fill
+                    sizes="50vw"
+                    className="object-cover"
+                    priority={i === 0}
                   />
+                  {/* Fusion avec la page : dégradé crème en bas et sur le bord droit */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-brand-cream/60" />
+                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-brand-cream" />
+                  <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-t from-transparent to-brand-cream" />
                 </div>
               ))}
             </div>
@@ -222,14 +229,14 @@ export function StorySection() {
                 )}
               >
                 <div className="max-w-lg py-16">
-                  {/* Image mobile — visible seulement sur mobile */}
-                  <div className="lg:hidden mb-8 flex justify-center">
+                  {/* Image mobile — pleine largeur */}
+                  <div className="lg:hidden -mx-6 sm:-mx-10 mb-8 relative aspect-[4/3] overflow-hidden rounded-2xl">
                     <Image
                       src={etape.image}
                       alt={etape.titre}
-                      width={220}
-                      height={220}
-                      className="object-contain"
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
                     />
                   </div>
 

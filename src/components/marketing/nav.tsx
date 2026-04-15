@@ -19,6 +19,10 @@ export function MarketingNav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOuvert, setMenuOuvert] = useState(false)
 
+  // Sur la landing, le hero est sombre : logo + liens en blanc avant scroll.
+  const heroIsDark = pathname === '/'
+  const onDarkHero = heroIsDark && !scrolled
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -50,7 +54,7 @@ export function MarketingNav() {
           <Link href="/" className="flex items-center shrink-0">
             <Logo
               variant="full"
-              theme="default"
+              theme={onDarkHero ? 'white' : 'default'}
               height={scrolled ? 26 : 30}
               className="transition-all duration-300"
             />
@@ -66,9 +70,13 @@ export function MarketingNav() {
                   href={item.href}
                   className={cn(
                     'relative px-3.5 py-2 text-sm font-medium transition-colors rounded-md',
-                    isActive
-                      ? 'text-brand-navy font-semibold'
-                      : 'text-brand-ink-soft hover:text-brand-navy'
+                    onDarkHero
+                      ? isActive
+                        ? 'text-brand-cream font-semibold'
+                        : 'text-brand-cream/80 hover:text-brand-cream'
+                      : isActive
+                        ? 'text-brand-navy font-semibold'
+                        : 'text-brand-ink-soft hover:text-brand-navy'
                   )}
                 >
                   {item.label}
@@ -84,7 +92,12 @@ export function MarketingNav() {
           <div className="hidden lg:flex items-center gap-3">
             <Link
               href="/auth/login"
-              className="text-sm font-medium text-brand-bronze hover:text-brand-navy transition-colors"
+              className={cn(
+                'text-sm font-medium transition-colors',
+                onDarkHero
+                  ? 'text-brand-cream/80 hover:text-brand-cream'
+                  : 'text-brand-bronze hover:text-brand-navy',
+              )}
             >
               Se connecter
             </Link>
@@ -99,25 +112,31 @@ export function MarketingNav() {
           {/* Hamburger mobile */}
           <button
             onClick={() => setMenuOuvert(!menuOuvert)}
-            className="lg:hidden flex flex-col items-center justify-center w-10 h-10 gap-1.5 rounded-lg hover:bg-brand-sand/40 transition-colors"
+            className={cn(
+              'lg:hidden flex flex-col items-center justify-center w-10 h-10 gap-1.5 rounded-lg transition-colors',
+              onDarkHero ? 'hover:bg-white/10' : 'hover:bg-brand-sand/40',
+            )}
             aria-label={menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={menuOuvert}
           >
             <span
               className={cn(
-                'block w-5 h-0.5 bg-brand-navy rounded-full transition-all duration-300',
+                'block w-5 h-0.5 rounded-full transition-all duration-300',
+                onDarkHero ? 'bg-brand-cream' : 'bg-brand-navy',
                 menuOuvert && 'rotate-45 translate-y-2'
               )}
             />
             <span
               className={cn(
-                'block w-5 h-0.5 bg-brand-navy rounded-full transition-all duration-300',
+                'block w-5 h-0.5 rounded-full transition-all duration-300',
+                onDarkHero ? 'bg-brand-cream' : 'bg-brand-navy',
                 menuOuvert && 'opacity-0 scale-x-0'
               )}
             />
             <span
               className={cn(
-                'block w-5 h-0.5 bg-brand-navy rounded-full transition-all duration-300',
+                'block w-5 h-0.5 rounded-full transition-all duration-300',
+                onDarkHero ? 'bg-brand-cream' : 'bg-brand-navy',
                 menuOuvert && '-rotate-45 -translate-y-2'
               )}
             />
