@@ -62,7 +62,6 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
       danger,
       criticite_brute,
       type_risque,
-      mesures_existantes,
       operations (
         nom,
         postes (
@@ -70,7 +69,11 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
         )
       ),
       plans_maitrise (
-        criticite_residuelle
+        criticite_residuelle,
+        mesures_techniques,
+        mesures_humaines,
+        mesures_organisationnelles,
+        mesures_epi
       ),
       actions_plan (
         id,
@@ -103,7 +106,12 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
       type_risque: ev.type_risque,
       poste_nom: ev.operations?.postes?.nom ?? '',
       operation_nom: ev.operations?.nom ?? '',
-      mesures_existantes: ev.mesures_existantes ?? null,
+      mesures_existantes: [
+        ev.plans_maitrise?.[0]?.mesures_techniques,
+        ev.plans_maitrise?.[0]?.mesures_humaines,
+        ev.plans_maitrise?.[0]?.mesures_organisationnelles,
+        ev.plans_maitrise?.[0]?.mesures_epi,
+      ].filter(Boolean).join(' · ') || null,
       criticite_residuelle: ev.plans_maitrise?.[0]?.criticite_residuelle ?? null,
       action: action
         ? {
