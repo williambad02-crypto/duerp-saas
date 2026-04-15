@@ -275,3 +275,75 @@ export async function supprimerRisque(evaluationId: string, posteId: string) {
   revalidatePath(`/dashboard/postes/${posteId}`)
   return { succes: true }
 }
+
+// ─── Module normé ────────────────────────────────────────────────────────────
+
+export async function enregistrerPreselectionModule(
+  evaluationId: string,
+  posteId: string,
+  reponses: boolean[]
+) {
+  const { supabase } = await getClient()
+
+  const nbOui = reponses.filter(Boolean).length
+  const moduleStatus = nbOui === 0 ? 'maitrise' : 'creuser'
+
+  const updatePayload: Record<string, unknown> = {
+    preselection_responses: reponses,
+    module_status: moduleStatus,
+    module_completed_at: new Date().toISOString(),
+  }
+
+  // Si maîtrisé → criticite_brute = 1 (risque présent mais maîtrisé)
+  if (moduleStatus === 'maitrise') {
+    updatePayload['criticite_brute'] = 1
+    updatePayload['gravite'] = 1
+
+    const { data: pm } = await supabase
+      .from('plans_maitrise')
+      .select('coefficient_pm')
+      .eq('evaluation_id', evaluationId)
+      .single()
+    if (pm) {
+      await supabase
+        .from('plans_maitrise')
+        .update({ criticite_residuelle: 1 * pm.coefficient_pm })
+        .eq('evaluation_id', evaluationId)
+    }
+  }
+
+  const { error } = await supabase
+    .from('evaluations')
+    .update(updatePayload)
+    .eq('id', evaluationId)
+
+  if (error) return { erreur: "Erreur lors de l'enregistrement." }
+
+  revalidatePath(`/dashboard/postes/${posteId}`)
+  return { succes: true, moduleStatus }
+}
+
+export async function resetPreselectionModule(evaluationId: string, posteId: string) {
+  const { supabase } = await getClient()
+
+  const { error } = await supabase
+    .from('evaluations')
+    .update({
+      module_status: null,
+      preselection_responses: null,
+      module_completed_at: null,
+      criticite_brute: null,
+      gravite: null,
+    })
+    .eq('id', evaluationId)
+
+  if (error) return { erreur: "Erreur lors de la remise à zéro." }
+
+  await supabase
+    .from('plans_maitrise')
+    .update({ criticite_residuelle: null })
+    .eq('evaluation_id', evaluationId)
+
+  revalidatePath(`/dashboard/postes/${posteId}`)
+  return { succes: true }
+}

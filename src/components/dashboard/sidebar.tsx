@@ -163,7 +163,7 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
               <span className={isActive ? 'text-brand-gold-light' : 'text-brand-off/50'}>
                 {item.icon}
               </span>
-              {item.label}
+              <span className="animate-sidebar-label">{item.label}</span>
             </Link>
           )
         })}

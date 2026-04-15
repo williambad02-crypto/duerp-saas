@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef, useTransition, useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import { Maximize2, Minimize2 } from 'lucide-react'
+import { Maximize2, Minimize2, Plus, RotateCcw, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 import {
   DndContext,
   DragEndEvent,
@@ -21,8 +22,11 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { RISQUES_ED840 } from '@/lib/constants/ed840'
-import { ECHELLE_GRAVITE, ECHELLE_PROBABILITE, COEFFICIENTS_PM, getNiveauCriticite } from '@/lib/constants/cotation'
+import { ECHELLE_GRAVITE, ECHELLE_PROBABILITE, COEFFICIENTS_PM } from '@/lib/constants/cotation'
 import { ECHELLE_DUREE_EXPOSITION } from '@/lib/constants/ed840'
+import { QUESTIONS_PRESELECTION } from '@/lib/constants/preselection'
+import { MODULE_PAR_CODE, type ModuleRisque } from '@/lib/constants/modules'
+import type { CodeModule } from '@/types'
 import * as actions from './actions'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -46,6 +50,8 @@ export interface RisqueUI {
   criticite_residuelle: number | null
   mesures_techniques: string | null
   ordre: number
+  module_status: 'non_initie' | 'maitrise' | 'creuser' | null
+  preselection_responses: boolean[] | null
 }
 
 export interface OperationUI {
@@ -61,6 +67,7 @@ type ModaleEtat =
   | { type: 'risque'; id: string }
   | { type: 'operation'; id: string; nom: string; nbRisques: number }
   | null
+type ModalePreselEtat = { risqueId: string; moduleCode: Exclude<CodeModule, 'APR'> } | null
 
 // ─── Constantes colonnes ─────────────────────────────────────────────────────
 
@@ -72,17 +79,14 @@ const COLONNES_TAB = [
 
 // ─── Styles communs ───────────────────────────────────────────────────────────
 
-// Classe de base pour les <th>
-const TH = 'bg-gray-100 border-b-2 border-b-gray-300 border-r border-r-gray-200 px-3 py-3 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em]'
-
-// Classe de base pour les <td> non éditables
-const TD = 'px-3 py-2.5 text-xs border-r border-b border-gray-200 text-gray-900'
+const TH = 'bg-gray-100 border border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
+const TD = 'px-3 py-2.5 text-xs border border-gray-200 text-gray-900'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getGroupBg(op: OperationUI, groupIndex: number): string {
   if (op.est_transversale) return 'bg-amber-50'
-  return groupIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+  return groupIndex % 2 === 0 ? 'bg-white' : 'bg-slate-100'
 }
 
 function getClasseCriticite(score: number): string {
@@ -92,18 +96,96 @@ function getClasseCriticite(score: number): string {
   return 'bg-red-100 text-red-800 border border-red-200'
 }
 
+function getModuleInfo(risque: RisqueUI): ModuleRisque | null {
+  if (risque.type_risque !== 'chronique') return null
+  if (!risque.numero_risque_ed840) return null
+  const risqueED840 = RISQUES_ED840.find(r => r.numero === risque.numero_risque_ed840)
+  if (!risqueED840?.module) return null
+  return MODULE_PAR_CODE[risqueED840.module] ?? null
+}
+
+// ─── useColumnWidths ─────────────────────────────────────────────────────────
+
+const STORAGE_KEY = 'tableau-apr-column-widths-v1'
+
+const DEFAULT_WIDTHS: Record<string, number> = {
+  operation: 140, handle: 32, ref: 72, danger: 180,
+  situation_dangereuse: 200, numero_risque_ed840: 240, type_risque: 88,
+  evenement_dangereux: 175, dommage: 150, siege_lesions: 140,
+  gravite: 52, second: 52, criticite_brute: 84,
+  mesures_techniques: 180, coefficient_pm: 72, criticite_residuelle: 88,
+  actions: 36,
+}
+
+function useColumnWidths() {
+  const [widths, setWidths] = useState<Record<string, number>>(DEFAULT_WIDTHS)
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) setWidths({ ...DEFAULT_WIDTHS, ...JSON.parse(saved) })
+    } catch {}
+  }, [])
+
+  const setWidth = useCallback((id: string, delta: number) => {
+    setWidths(prev => {
+      const next = { ...prev, [id]: Math.max(40, Math.min(600, (prev[id] ?? DEFAULT_WIDTHS[id] ?? 100) + delta)) }
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }, [])
+
+  const resetWidths = useCallback(() => {
+    setWidths(DEFAULT_WIDTHS)
+    try { localStorage.removeItem(STORAGE_KEY) } catch {}
+  }, [])
+
+  return { widths, setWidth, resetWidths }
+}
+
+// ─── ColonneResizer ───────────────────────────────────────────────────────────
+
+function ColonneResizer({ colId, onResize }: { colId: string; onResize: (id: string, delta: number) => void }) {
+  const [dragging, setDragging] = useState(false)
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setDragging(true)
+    const startX = e.clientX
+    let lastX = startX
+
+    const onMouseMove = (ev: MouseEvent) => {
+      const delta = ev.clientX - lastX
+      lastX = ev.clientX
+      onResize(colId, delta)
+    }
+    const onMouseUp = () => {
+      setDragging(false)
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup', onMouseUp)
+    }
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup', onMouseUp)
+  }
+
+  return (
+    <div
+      className={`absolute right-0 top-0 bottom-0 w-1.5 cursor-col-resize z-10 transition-colors ${dragging ? 'bg-blue-400' : 'hover:bg-blue-300'}`}
+      onMouseDown={handleMouseDown}
+    />
+  )
+}
+
 // ─── CelluleTexte ────────────────────────────────────────────────────────────
 
 function CelluleTexte({
   ligneId, colonne, valeur, placeholder = '—',
   isActive, onActivate, onSave, onTab,
-  minWidth = 'min-w-[140px]',
-  maxWidth,
-  tdClassName = '',
+  style, tdClassName = '',
 }: {
   ligneId: string; colonne: string; valeur: string | null; placeholder?: string
   isActive: boolean; onActivate: () => void; onSave: (v: string | null) => Promise<void>
-  onTab?: () => void; minWidth?: string; maxWidth?: string; tdClassName?: string
+  onTab?: () => void; style?: React.CSSProperties; tdClassName?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [draft, setDraft] = useState(valeur ?? '')
@@ -123,11 +205,9 @@ function CelluleTexte({
     }
   }
 
-  const sizeClass = `${minWidth}${maxWidth ? ` ${maxWidth}` : ''}`
-
   if (isActive) {
     return (
-      <td className={`px-2 py-1 ${sizeClass} border-r border-b border-gray-200 bg-white ${tdClassName}`}>
+      <td className={`px-2 py-1 border border-gray-200 bg-white ${tdClassName}`} style={style}>
         <input
           ref={ref}
           value={draft}
@@ -146,7 +226,8 @@ function CelluleTexte({
 
   return (
     <td
-      className={`${TD} cursor-pointer hover:bg-gray-50 ${sizeClass} overflow-hidden ${tdClassName}`}
+      className={`${TD} cursor-pointer hover:bg-gray-50 overflow-hidden ${tdClassName}`}
+      style={style}
       onClick={onActivate}
       title={valeur ?? undefined}
     >
@@ -161,14 +242,13 @@ function CelluleTexte({
 
 function CelluleSelect({
   ligneId, colonne, valeur, options, isActive, onActivate, onSave, onTab,
-  renderLabel, minWidth = 'min-w-[60px]', disabled = false, tdClassName = '',
-  center = false,
+  renderLabel, style, disabled = false, tdClassName = '', center = false,
 }: {
   ligneId: string; colonne: string; valeur: number | string | null
   options: { valeur: number | string; label: string }[]
   isActive: boolean; onActivate: () => void
   onSave: (v: number | string | null) => Promise<void>; onTab?: () => void
-  renderLabel?: (v: number | string | null) => string; minWidth?: string; disabled?: boolean
+  renderLabel?: (v: number | string | null) => string; style?: React.CSSProperties; disabled?: boolean
   tdClassName?: string; center?: boolean
 }) {
   const ref = useRef<HTMLSelectElement>(null)
@@ -187,7 +267,7 @@ function CelluleSelect({
 
   if (isActive && !disabled) {
     return (
-      <td className={`px-1 py-1 ${minWidth} border-r border-b border-gray-200 bg-white ${tdClassName}`}>
+      <td className={`px-1 py-1 border border-gray-200 bg-white ${tdClassName}`} style={style}>
         <select
           ref={ref}
           defaultValue={String(valeur ?? '')}
@@ -210,7 +290,8 @@ function CelluleSelect({
 
   return (
     <td
-      className={`${TD} ${minWidth} ${center ? 'text-center' : ''} ${disabled ? 'opacity-50 cursor-default' : 'cursor-pointer hover:bg-gray-50'} ${tdClassName}`}
+      className={`${TD} ${center ? 'text-center' : ''} ${disabled ? 'opacity-50 cursor-default' : 'cursor-pointer hover:bg-gray-50'} ${tdClassName}`}
+      style={style}
       onClick={disabled ? undefined : onActivate}
     >
       <span className={!valeur && valeur !== 0 ? 'text-gray-400' : ''}>
@@ -224,19 +305,19 @@ function CelluleSelect({
 
 interface ComboboxOption {
   valeur: number
-  label: string  // intitulé seul (sans le numéro)
+  label: string
   badge: 'AIGU' | 'CHRONIQUE' | 'LES_DEUX'
 }
 
 function CelluleCombobox({
   ligneId, colonne, valeur, options, isActive, onActivate, onSave, onTab,
-  minWidth = 'min-w-[240px]', tdClassName = '',
+  style, tdClassName = '',
 }: {
   ligneId: string; colonne: string; valeur: number | null
   options: ComboboxOption[]
   isActive: boolean; onActivate: () => void
   onSave: (v: number | null) => Promise<void>; onTab?: () => void
-  minWidth?: string; tdClassName?: string
+  style?: React.CSSProperties; tdClassName?: string
 }) {
   const cellRef = useRef<HTMLTableCellElement>(null)
   const searchRef = useRef<HTMLInputElement>(null)
@@ -251,11 +332,7 @@ function CelluleCombobox({
   useEffect(() => {
     if (isActive && cellRef.current) {
       const rect = cellRef.current.getBoundingClientRect()
-      setDropPos({
-        top: rect.bottom + 4,
-        left: rect.left,
-        width: Math.max(rect.width, 360),
-      })
+      setDropPos({ top: rect.bottom + 4, left: rect.left, width: Math.max(rect.width, 360) })
       setRecherche('')
       setCursorIdx(0)
       const t = setTimeout(() => searchRef.current?.focus(), 30)
@@ -263,7 +340,6 @@ function CelluleCombobox({
     }
   }, [isActive])
 
-  // Fermer si scroll pendant l'ouverture
   useEffect(() => {
     if (!isActive) return
     const close = () => onTab?.()
@@ -274,12 +350,9 @@ function CelluleCombobox({
   const optionsFiltrees = useMemo(() => {
     if (!recherche) return options
     const q = recherche.toLowerCase()
-    return options.filter(o =>
-      String(o.valeur).includes(q) || o.label.toLowerCase().includes(q)
-    )
+    return options.filter(o => String(o.valeur).includes(q) || o.label.toLowerCase().includes(q))
   }, [options, recherche])
 
-  // Scroll l'item actif dans la liste
   useEffect(() => {
     itemRefs.current[cursorIdx]?.scrollIntoView({ block: 'nearest' })
   }, [cursorIdx])
@@ -290,60 +363,38 @@ function CelluleCombobox({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setCursorIdx(i => Math.min(i + 1, optionsFiltrees.length - 1))
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setCursorIdx(i => Math.max(i - 1, 0))
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      const opt = optionsFiltrees[cursorIdx]
-      if (opt) handleSelect(opt.valeur)
-    } else if (e.key === 'Escape') {
-      e.preventDefault()
-      onTab?.()
-    } else if (e.key === 'Tab') {
-      e.preventDefault()
-      const opt = optionsFiltrees[cursorIdx]
-      if (opt) handleSelect(opt.valeur)
-      else onTab?.()
-    }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setCursorIdx(i => Math.min(i + 1, optionsFiltrees.length - 1)) }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setCursorIdx(i => Math.max(i - 1, 0)) }
+    else if (e.key === 'Enter') { e.preventDefault(); const opt = optionsFiltrees[cursorIdx]; if (opt) handleSelect(opt.valeur) }
+    else if (e.key === 'Escape') { e.preventDefault(); onTab?.() }
+    else if (e.key === 'Tab') { e.preventDefault(); const opt = optionsFiltrees[cursorIdx]; if (opt) handleSelect(opt.valeur); else onTab?.() }
   }
 
   const risqueActif = options.find(o => o.valeur === valeur)
   const displayLabel = risqueActif ? `${valeur}. ${risqueActif.label}` : '—'
 
   const badgeColors: Record<string, string> = {
-    AIGU: 'bg-orange-100 text-orange-700',
-    CHRONIQUE: 'bg-blue-100 text-blue-700',
-    LES_DEUX: 'bg-gray-100 text-gray-600',
+    AIGU: 'bg-orange-100 text-orange-700', CHRONIQUE: 'bg-blue-100 text-blue-700', LES_DEUX: 'bg-gray-100 text-gray-600',
   }
-  const badgeLabels: Record<string, string> = {
-    AIGU: 'A', CHRONIQUE: 'C', LES_DEUX: 'A+C',
-  }
+  const badgeLabels: Record<string, string> = { AIGU: 'A', CHRONIQUE: 'C', LES_DEUX: 'A+C' }
 
   return (
     <td
       ref={cellRef}
-      className={`${minWidth} max-w-[320px] ${TD} cursor-pointer ${isActive ? 'bg-blue-50' : 'hover:bg-gray-50'} overflow-hidden ${tdClassName}`}
+      className={`${TD} cursor-pointer ${isActive ? 'bg-blue-50' : 'hover:bg-gray-50'} overflow-hidden ${tdClassName}`}
+      style={style}
       onClick={!isActive ? onActivate : undefined}
       title={!isActive ? displayLabel : undefined}
     >
-      <span className={`block truncate ${!valeur ? 'text-gray-400 italic' : ''}`}>
-        {displayLabel}
-      </span>
+      <span className={`block truncate ${!valeur ? 'text-gray-400 italic' : ''}`}>{displayLabel}</span>
 
       {isActive && mounted && createPortal(
         <>
-          {/* Backdrop */}
           <div className="fixed inset-0 z-[9998]" onClick={onTab} />
-          {/* Dropdown */}
           <div
             className="fixed z-[9999] bg-white border-2 border-blue-500 rounded-xl shadow-2xl overflow-hidden"
             style={{ top: dropPos.top, left: dropPos.left, width: Math.min(dropPos.width, window.innerWidth - dropPos.left - 16) }}
           >
-            {/* Champ de recherche */}
             <div className="p-2 border-b border-gray-100">
               <div className="flex items-center gap-2 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg">
                 <svg className="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -359,7 +410,6 @@ function CelluleCombobox({
                 />
               </div>
             </div>
-            {/* Liste filtrée */}
             <div className="max-h-64 overflow-y-auto">
               {optionsFiltrees.length === 0 && (
                 <div className="px-3 py-4 text-center text-xs text-gray-400">Aucun résultat</div>
@@ -369,15 +419,11 @@ function CelluleCombobox({
                   key={opt.valeur}
                   ref={el => { itemRefs.current[idx] = el }}
                   onClick={() => handleSelect(opt.valeur)}
-                  className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${
-                    idx === cursorIdx ? 'bg-blue-50' : 'hover:bg-gray-50'
-                  } ${opt.valeur === valeur ? 'font-semibold' : ''}`}
+                  className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 transition-colors ${idx === cursorIdx ? 'bg-blue-50' : 'hover:bg-gray-50'} ${opt.valeur === valeur ? 'font-semibold' : ''}`}
                 >
                   <span className="text-gray-400 font-mono text-[11px] w-5 shrink-0 text-right">{opt.valeur}.</span>
                   <span className="flex-1 text-gray-800 truncate">{opt.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${badgeColors[opt.badge]}`}>
-                    {badgeLabels[opt.badge]}
-                  </span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ${badgeColors[opt.badge]}`}>{badgeLabels[opt.badge]}</span>
                 </button>
               ))}
             </div>
@@ -391,16 +437,16 @@ function CelluleCombobox({
 
 // ─── BadgeCriticite ──────────────────────────────────────────────────────────
 
-function BadgeCriticite({ score }: { score: number | null }) {
+function BadgeCriticite({ score, style, tdClassName = '' }: { score: number | null; style?: React.CSSProperties; tdClassName?: string }) {
   if (!score) {
     return (
-      <td className={`${TD} text-center min-w-[90px]`}>
+      <td className={`${TD} text-center ${tdClassName}`} style={style}>
         <span className="text-gray-300">—</span>
       </td>
     )
   }
   return (
-    <td className={`${TD} text-center min-w-[90px]`}>
+    <td className={`${TD} text-center ${tdClassName}`} style={style}>
       <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-semibold tabular-nums min-w-[32px] ${getClasseCriticite(score)}`}>
         {score}
       </span>
@@ -413,14 +459,18 @@ function BadgeCriticite({ score }: { score: number | null }) {
 function LigneRisque({
   risque, posteId, celluleActive, onActivateCell, onSaveCell,
   onDelete, onMove, autresOperations, groupBg,
-  firstInGroup, operationRowSpan, operationCell, isFirstGroup,
+  firstInGroup, isLastInGroup, operationRowSpan, operationCell, isFirstGroup,
+  widths, onOpenPresel,
 }: {
   risque: RisqueUI; posteId: string; celluleActive: CelluleActive
   onActivateCell: (ligneId: string, colonne: string) => void
   onSaveCell: (ligneId: string, colonne: string, valeur: unknown) => Promise<void>
   onDelete: () => void; onMove: (operationId: string) => Promise<void>
   autresOperations: OperationUI[]; groupBg: string
-  firstInGroup?: boolean; operationRowSpan?: number; operationCell?: React.ReactNode; isFirstGroup?: boolean
+  firstInGroup?: boolean; isLastInGroup?: boolean
+  operationRowSpan?: number; operationCell?: React.ReactNode; isFirstGroup?: boolean
+  widths: Record<string, number>
+  onOpenPresel: (risqueId: string, moduleCode: Exclude<CodeModule, 'APR'>) => void
 }) {
   const [menuOuvert, setMenuOuvert] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -434,22 +484,17 @@ function LigneRisque({
     opacity: isDragging ? 0.4 : 1,
   }
 
-  // Fermer le menu au clic extérieur
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOuvert(false)
-      }
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOuvert(false)
     }
     if (menuOuvert) document.addEventListener('mousedown', handleOutside)
     return () => document.removeEventListener('mousedown', handleOutside)
   }, [menuOuvert])
 
   const isCell = (col: string) => celluleActive?.ligneId === risque.id && celluleActive?.colonne === col
-
   const activate = (col: string) => onActivateCell(risque.id, col)
 
-  // Colonne suivante pour Tab
   const nextCol = (col: string) => {
     const idx = COLONNES_TAB.indexOf(col)
     if (idx === -1 || idx === COLONNES_TAB.length - 1) return
@@ -463,39 +508,39 @@ function LigneRisque({
     }
   }
 
-  // Infos risque ED840 sélectionné
   const risqueED840 = risque.numero_risque_ed840
     ? RISQUES_ED840.find(r => r.numero === risque.numero_risque_ed840) : null
   const typeAuto = risqueED840?.type === 'AIGU' ? 'aigu'
-    : risqueED840?.type === 'CHRONIQUE' ? 'chronique'
-    : null
+    : risqueED840?.type === 'CHRONIQUE' ? 'chronique' : null
 
-  // Classe de fond sticky — doit être solide (pas de transparence) pour que sticky fonctionne
+  // Fond solide pour sticky
   const stickyBg = groupBg === 'bg-amber-50' ? 'bg-amber-50'
-    : groupBg === 'bg-gray-50' ? 'bg-gray-50'
+    : groupBg === 'bg-slate-100' ? 'bg-slate-100'
     : 'bg-white'
 
-  const borderTop = !isFirstGroup && firstInGroup ? 'border-t-2 border-t-gray-400' : ''
+  // Classe séparateur sur dernière ligne de groupe
+  const sepClass = isLastInGroup ? ' border-b-2 border-b-gray-400' : ''
+
+  // Module normé : risque chronique avec module dédié
+  const moduleInfo = getModuleInfo(risque)
 
   return (
-    <tr
-      ref={setNodeRef}
-      style={style}
-      className={`${groupBg} border-0`}
-    >
+    <tr ref={setNodeRef} style={style} className={`${groupBg} border-0`}>
       {/* Cellule opération — rowSpan sur la première ligne uniquement */}
       {firstInGroup && (
         <td
           rowSpan={operationRowSpan}
-          className={`sticky left-0 z-[12] ${stickyBg} border-r-2 border-r-gray-400 border-b border-b-gray-300 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+          className={`sticky left-0 z-[12] ${stickyBg} border-r-2 border-r-gray-400 border border-gray-200 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+          style={{ width: widths.operation }}
         >
           {operationCell}
         </td>
       )}
 
-      {/* Handle drag — sticky col 2 */}
+      {/* Handle drag */}
       <td
-        className={`sticky left-[140px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors ${borderTop}`}
+        className={`border border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors${sepClass}`}
+        style={{ width: widths.handle }}
         {...attributes}
         {...listeners}
       >
@@ -506,19 +551,20 @@ function LigneRisque({
         </svg>
       </td>
 
-      {/* Réf — sticky col 3 */}
-      <td className={`sticky left-[172px] z-[11] ${stickyBg} border-r border-b border-gray-200 w-20 px-3 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap ${borderTop}`}>
+      {/* Réf */}
+      <td className={`border border-gray-200 px-2 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap${sepClass}`} style={{ width: widths.ref }}>
         {risque.identifiant_auto ?? '—'}
       </td>
 
-      {/* Danger — sticky col 4 + ombre de séparation */}
+      {/* — APR zone — */}
+      {/* Danger */}
       <CelluleTexte
         ligneId={risque.id} colonne="danger" valeur={risque.danger} placeholder="Danger…"
         isActive={isCell('danger')} onActivate={() => activate('danger')}
         onSave={v => onSaveCell(risque.id, 'danger', v)}
         onTab={() => nextCol('danger')}
-        minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
-        tdClassName={`sticky left-[252px] z-[11] ${stickyBg} shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)] ${borderTop}`}
+        style={{ width: widths.danger }}
+        tdClassName={`sticky left-0 z-[11] ${stickyBg} shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]${sepClass}`}
       />
 
       {/* Situation dangereuse */}
@@ -526,10 +572,12 @@ function LigneRisque({
         ligneId={risque.id} colonne="situation_dangereuse" valeur={risque.situation_dangereuse} placeholder="Situation…"
         isActive={isCell('situation_dangereuse')} onActivate={() => activate('situation_dangereuse')}
         onSave={v => onSaveCell(risque.id, 'situation_dangereuse', v)}
-        onTab={() => nextCol('situation_dangereuse')} minWidth="min-w-[200px]" maxWidth="max-w-[280px]"
+        onTab={() => nextCol('situation_dangereuse')}
+        style={{ width: widths.situation_dangereuse }}
+        tdClassName={sepClass}
       />
 
-      {/* Risque ED840 — combobox avec recherche */}
+      {/* Risque ED840 */}
       <CelluleCombobox
         ligneId={risque.id} colonne="numero_risque_ed840" valeur={risque.numero_risque_ed840}
         options={RISQUES_ED840.map(r => ({ valeur: r.numero, label: r.intitule, badge: r.type }))}
@@ -543,7 +591,8 @@ function LigneRisque({
           }
         }}
         onTab={() => nextCol('numero_risque_ed840')}
-        minWidth="min-w-[240px]"
+        style={{ width: widths.numero_risque_ed840 }}
+        tdClassName={sepClass}
       />
 
       {/* Type aigu / chronique */}
@@ -554,24 +603,24 @@ function LigneRisque({
         onSave={v => onSaveCell(risque.id, 'type_risque', v)}
         onTab={() => nextCol('type_risque')}
         disabled={typeAuto !== null}
-        minWidth="min-w-[90px]" center
-        renderLabel={v => {
-          if (v === 'aigu') return 'Aigu'
-          if (v === 'chronique') return 'Chronique'
-          return '—'
-        }}
+        style={{ width: widths.type_risque }}
+        center
+        renderLabel={v => v === 'aigu' ? 'Aigu' : v === 'chronique' ? 'Chronique' : '—'}
+        tdClassName={sepClass}
       />
 
-      {/* Événement dangereux — visible si aigu */}
+      {/* Événement dangereux (aigu seulement) */}
       {risque.type_risque === 'aigu' ? (
         <CelluleTexte
           ligneId={risque.id} colonne="evenement_dangereux" valeur={risque.evenement_dangereux} placeholder="Événement…"
           isActive={isCell('evenement_dangereux')} onActivate={() => activate('evenement_dangereux')}
           onSave={v => onSaveCell(risque.id, 'evenement_dangereux', v)}
-          onTab={() => nextCol('evenement_dangereux')} minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
+          onTab={() => nextCol('evenement_dangereux')}
+          style={{ width: widths.evenement_dangereux }}
+          tdClassName={sepClass}
         />
       ) : (
-        <td className={`${TD} min-w-[180px] text-gray-300`}>—</td>
+        <td className={`${TD} text-gray-300${sepClass}`} style={{ width: widths.evenement_dangereux }}>—</td>
       )}
 
       {/* Dommage */}
@@ -579,7 +628,9 @@ function LigneRisque({
         ligneId={risque.id} colonne="dommage" valeur={risque.dommage} placeholder="Dommage…"
         isActive={isCell('dommage')} onActivate={() => activate('dommage')}
         onSave={v => onSaveCell(risque.id, 'dommage', v)}
-        onTab={() => nextCol('dommage')} minWidth="min-w-[150px]" maxWidth="max-w-[220px]"
+        onTab={() => nextCol('dommage')}
+        style={{ width: widths.dommage }}
+        tdClassName={sepClass}
       />
 
       {/* Siège des lésions */}
@@ -587,54 +638,73 @@ function LigneRisque({
         ligneId={risque.id} colonne="siege_lesions" valeur={risque.siege_lesions} placeholder="Siège…"
         isActive={isCell('siege_lesions')} onActivate={() => activate('siege_lesions')}
         onSave={v => onSaveCell(risque.id, 'siege_lesions', v)}
-        onTab={() => nextCol('siege_lesions')} minWidth="min-w-[140px]" maxWidth="max-w-[200px]"
+        onTab={() => nextCol('siege_lesions')}
+        style={{ width: widths.siege_lesions }}
+        tdClassName={sepClass}
       />
 
-      {/* G — Gravité */}
-      <CelluleSelect
-        ligneId={risque.id} colonne="gravite" valeur={risque.gravite}
-        options={ECHELLE_GRAVITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))}
-        isActive={isCell('gravite')} onActivate={() => activate('gravite')}
-        onSave={v => onSaveCell(risque.id, 'gravite', v ? Number(v) : null)}
-        onTab={() => nextCol('gravite')}
-        renderLabel={v => v ? String(v) : '—'}
-        minWidth="min-w-[56px]" center
-      />
+      {/* — Évaluation zone — colSpan=3 si module normé chronique, sinon 3 cellules séparées */}
+      {moduleInfo ? (
+        <td
+          colSpan={3}
+          className={`border border-gray-200 border-l-[3px] border-l-blue-200 px-3 py-2 text-center${sepClass}`}
+          style={{ width: (widths.gravite ?? 52) + (widths.second ?? 52) + (widths.criticite_brute ?? 84) }}
+        >
+          <CelluleModuleNorme
+            risque={risque}
+            moduleInfo={moduleInfo}
+            posteId={posteId}
+            onOpenPresel={onOpenPresel}
+          />
+        </td>
+      ) : (
+        <>
+          {/* G — Gravité */}
+          <CelluleSelect
+            ligneId={risque.id} colonne="gravite" valeur={risque.gravite}
+            options={ECHELLE_GRAVITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))}
+            isActive={isCell('gravite')} onActivate={() => activate('gravite')}
+            onSave={v => onSaveCell(risque.id, 'gravite', v ? Number(v) : null)}
+            onTab={() => nextCol('gravite')}
+            renderLabel={v => v ? String(v) : '—'}
+            style={{ width: widths.gravite }}
+            center
+            tdClassName={`border-l-[3px] border-l-blue-200${sepClass}`}
+          />
 
-      {/* P (aigu) ou DE (chronique) */}
-      <CelluleSelect
-        ligneId={risque.id}
-        colonne={risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition'}
-        valeur={risque.type_risque === 'aigu' ? risque.probabilite : risque.duree_exposition}
-        options={risque.type_risque === 'aigu'
-          ? ECHELLE_PROBABILITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
-          : ECHELLE_DUREE_EXPOSITION.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
-        }
-        isActive={
-          risque.type_risque === 'aigu'
-            ? isCell('probabilite')
-            : isCell('duree_exposition')
-        }
-        onActivate={() => activate(risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition')}
-        onSave={v => onSaveCell(
-          risque.id,
-          risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition',
-          v ? Number(v) : null
-        )}
-        onTab={() => nextCol('second')}
-        renderLabel={v => v ? String(v) : '—'}
-        minWidth="min-w-[56px]" center
-      />
+          {/* P (aigu) ou DE (chronique) */}
+          <CelluleSelect
+            ligneId={risque.id}
+            colonne={risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition'}
+            valeur={risque.type_risque === 'aigu' ? risque.probabilite : risque.duree_exposition}
+            options={risque.type_risque === 'aigu'
+              ? ECHELLE_PROBABILITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
+              : ECHELLE_DUREE_EXPOSITION.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
+            }
+            isActive={risque.type_risque === 'aigu' ? isCell('probabilite') : isCell('duree_exposition')}
+            onActivate={() => activate(risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition')}
+            onSave={v => onSaveCell(risque.id, risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition', v ? Number(v) : null)}
+            onTab={() => nextCol('second')}
+            renderLabel={v => v ? String(v) : '—'}
+            style={{ width: widths.second }}
+            center
+            tdClassName={sepClass}
+          />
 
-      {/* Criticité brute — calculée auto */}
-      <BadgeCriticite score={risque.criticite_brute} />
+          {/* Criticité brute */}
+          <BadgeCriticite score={risque.criticite_brute} style={{ width: widths.criticite_brute }} tdClassName={sepClass} />
+        </>
+      )}
 
+      {/* — Maîtrise zone — */}
       {/* T.H.O./EPI */}
       <CelluleTexte
         ligneId={risque.id} colonne="mesures_techniques" valeur={risque.mesures_techniques} placeholder="Mesures…"
         isActive={isCell('mesures_techniques')} onActivate={() => activate('mesures_techniques')}
         onSave={v => onSaveCell(risque.id, 'mesures_techniques', v)}
-        onTab={() => nextCol('mesures_techniques')} minWidth="min-w-[180px]" maxWidth="max-w-[250px]"
+        onTab={() => nextCol('mesures_techniques')}
+        style={{ width: widths.mesures_techniques }}
+        tdClassName={`border-l-[3px] border-l-green-200${sepClass}`}
       />
 
       {/* PM */}
@@ -645,14 +715,16 @@ function LigneRisque({
         onSave={v => onSaveCell(risque.id, 'coefficient_pm', v !== null ? Number(v) : 1)}
         onTab={() => onActivateCell('', '')}
         renderLabel={v => v !== null ? `×${v}` : '×1'}
-        minWidth="min-w-[72px]" center
+        style={{ width: widths.coefficient_pm }}
+        center
+        tdClassName={sepClass}
       />
 
-      {/* Criticité résiduelle — calculée auto */}
-      <BadgeCriticite score={risque.criticite_residuelle} />
+      {/* Criticité résiduelle */}
+      <BadgeCriticite score={risque.criticite_residuelle} style={{ width: widths.criticite_residuelle }} tdClassName={sepClass} />
 
       {/* Menu ⋮ */}
-      <td className={`${TD} w-10 px-1`}>
+      <td className={`${TD} px-1${sepClass}`} style={{ width: widths.actions }}>
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOuvert(!menuOuvert)}
@@ -667,9 +739,7 @@ function LigneRisque({
             <div className="absolute right-0 top-8 z-20 w-52 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
               {autresOperations.length > 0 && (
                 <div className="border-b border-gray-100">
-                  <p className="px-3 py-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">
-                    Déplacer vers
-                  </p>
+                  <p className="px-3 py-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Déplacer vers</p>
                   {autresOperations.map(op => (
                     <button
                       key={op.id}
@@ -707,12 +777,99 @@ function LigneRisque({
   )
 }
 
+// ─── CelluleModuleNorme ───────────────────────────────────────────────────────
+
+function CelluleModuleNorme({
+  risque, moduleInfo, posteId, onOpenPresel,
+}: {
+  risque: RisqueUI
+  moduleInfo: ModuleRisque
+  posteId: string
+  onOpenPresel: (risqueId: string, moduleCode: Exclude<CodeModule, 'APR'>) => void
+}) {
+  const [resetPending, startReset] = useTransition()
+
+  if (risque.module_status === 'maitrise') {
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded text-[11px] font-semibold">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+          Maîtrisé
+        </span>
+        <button
+          onClick={() => startReset(async () => { await actions.resetPreselectionModule(risque.id, posteId) })}
+          disabled={resetPending}
+          className="text-gray-300 hover:text-gray-500 transition-colors"
+          title="Refaire la présélection"
+        >
+          <RotateCcw className="w-3 h-3" />
+        </button>
+      </div>
+    )
+  }
+
+  if (risque.module_status === 'creuser') {
+    if (moduleInfo.statut === 'actif') {
+      return (
+        <div className="flex items-center justify-center gap-1.5 flex-wrap">
+          <Link
+            href={`/dashboard/postes/${posteId}/operations/${risque.operation_id}/risques/${moduleInfo.code}`}
+            className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-600 text-white rounded text-[11px] font-semibold hover:bg-blue-700 transition-colors"
+          >
+            <ExternalLink className="w-3 h-3" />
+            Ouvrir {moduleInfo.nom}
+          </Link>
+          <button
+            onClick={() => startReset(async () => { await actions.resetPreselectionModule(risque.id, posteId) })}
+            disabled={resetPending}
+            className="text-gray-300 hover:text-gray-500 transition-colors"
+            title="Refaire la présélection"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </button>
+        </div>
+      )
+    }
+    // Coming soon
+    return (
+      <div className="flex items-center justify-center gap-1.5">
+        <span className="inline-flex items-center px-2 py-0.5 bg-gray-100 text-gray-500 border border-gray-200 rounded text-[11px]">
+          À venir — {moduleInfo.nom}
+        </span>
+        <button
+          onClick={() => startReset(async () => { await actions.resetPreselectionModule(risque.id, posteId) })}
+          disabled={resetPending}
+          className="text-gray-300 hover:text-gray-500 transition-colors"
+          title="Refaire"
+        >
+          <RotateCcw className="w-3 h-3" />
+        </button>
+      </div>
+    )
+  }
+
+  // Non initié — bouton lancer
+  return (
+    <button
+      onClick={() => onOpenPresel(risque.id, moduleInfo.code as Exclude<CodeModule, 'APR'>)}
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded text-[11px] font-medium hover:bg-blue-100 transition-colors whitespace-nowrap"
+    >
+      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      </svg>
+      Lancer {moduleInfo.nom}
+    </button>
+  )
+}
+
 // ─── GroupeOperation ──────────────────────────────────────────────────────────
 
 function GroupeOperation({
   operation, posteId, celluleActive, onActivateCell, onSaveCell,
   onAddRisque, onDeleteRisque, onMoveRisque, onRenameOperation, onDeleteOperation,
-  autresOperations, groupIndex,
+  autresOperations, groupIndex, widths, onOpenPresel,
 }: {
   operation: OperationUI; posteId: string; celluleActive: CelluleActive
   onActivateCell: (l: string, c: string) => void
@@ -724,6 +881,8 @@ function GroupeOperation({
   onDeleteOperation: (id: string, nom: string, nb: number) => void
   autresOperations: OperationUI[]
   groupIndex: number
+  widths: Record<string, number>
+  onOpenPresel: (risqueId: string, moduleCode: Exclude<CodeModule, 'APR'>) => void
 }) {
   const [renaming, setRenaming] = useState(false)
   const [nomDraft, setNomDraft] = useState(operation.nom)
@@ -743,62 +902,76 @@ function GroupeOperation({
     setRenaming(false)
   }
 
+  const handleAddInline = async () => {
+    setAjoutEnCours(true)
+    await onAddRisque(operation.id)
+    setAjoutEnCours(false)
+  }
+
   const groupBg = getGroupBg(operation, groupIndex)
   const isFirstGroup = groupIndex === 0
 
-  // Fond solide pour la cellule sticky de l'opération
   const opCellBg = operation.est_transversale ? 'bg-amber-50'
-    : groupBg === 'bg-gray-50' ? 'bg-gray-50'
+    : groupBg === 'bg-slate-100' ? 'bg-slate-100'
     : 'bg-white'
 
-  // Nombre de lignes : risques + 1 ligne pour le bouton "Ajouter"
-  const nbLignes = Math.max(operation.risques.length, 1) + 1
+  const nbLignes = Math.max(operation.risques.length, 1)
+  // +1 pour hauteur minimale confortable
+  const operationRowSpan = Math.max(operation.risques.length, 1)
 
-  // Contenu de la cellule opération (rowSpan)
+  // Contenu de la cellule opération
   const operationCell = (
-    <div className={`flex flex-col h-full px-2 py-2 gap-1.5 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}
-      style={{ minHeight: `${nbLignes * 36}px` }}
+    <div
+      className={`flex flex-col h-full px-2 py-2 gap-1 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}
+      style={{ minHeight: `${nbLignes * 36 + 4}px` }}
     >
-      {/* Icône + Nom */}
-      <div className="flex items-start gap-1.5">
-        {operation.est_transversale ? (
+      {/* Nom + bouton + inline */}
+      <div className="flex items-start gap-1">
+        {operation.est_transversale && (
           <svg className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
           </svg>
-        ) : (
-          <svg className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-          </svg>
         )}
-
-        {renaming ? (
-          <input
-            ref={renameRef}
-            value={nomDraft}
-            onChange={e => setNomDraft(e.target.value)}
-            onBlur={handleRenameCommit}
-            onKeyDown={e => {
-              if (e.key === 'Enter') handleRenameCommit()
-              if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
-            }}
-            className="text-xs font-semibold bg-white text-gray-800 border border-blue-400 rounded px-1.5 py-0.5 focus:outline-none w-full"
-          />
-        ) : (
-          <span className={`text-xs font-semibold leading-tight flex-1 break-words ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
-            {operation.nom}
-          </span>
-        )}
+        <div className="flex-1 min-w-0">
+          {renaming ? (
+            <input
+              ref={renameRef}
+              value={nomDraft}
+              onChange={e => setNomDraft(e.target.value)}
+              onBlur={handleRenameCommit}
+              onKeyDown={e => {
+                if (e.key === 'Enter') handleRenameCommit()
+                if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
+              }}
+              className="text-xs font-semibold bg-white text-gray-800 border border-blue-400 rounded px-1.5 py-0.5 focus:outline-none w-full"
+            />
+          ) : (
+            <span className={`text-xs font-semibold leading-tight break-words ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
+              {operation.nom}
+            </span>
+          )}
+        </div>
+        {/* Bouton + inline */}
+        <button
+          onClick={handleAddInline}
+          disabled={ajoutEnCours}
+          className="shrink-0 w-5 h-5 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-400 hover:text-brand-navy hover:border-brand-navy transition-colors disabled:opacity-50"
+          title="Ajouter un risque"
+        >
+          {ajoutEnCours ? (
+            <svg className="w-3 h-3 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+          ) : (
+            <Plus className="w-3 h-3" />
+          )}
+        </button>
       </div>
 
       {operation.est_transversale && (
-        <span className="text-[10px] text-amber-600/70 italic leading-tight">
-          Transversal
-        </span>
+        <span className="text-[10px] text-amber-600/70 italic leading-tight">Transversal</span>
       )}
-
-      <span className="text-[10px] text-gray-400">
-        {operation.risques.length} risque{operation.risques.length !== 1 ? 's' : ''}
-      </span>
 
       {/* Actions renommer / supprimer — sauf transversale */}
       {!operation.est_transversale && (
@@ -827,26 +1000,27 @@ function GroupeOperation({
   )
 
   return (
-    <SortableContext
-      items={operation.risques.map(r => r.id)}
-      strategy={verticalListSortingStrategy}
-    >
-      {/* Si aucun risque, on rend une ligne vide avec le bouton + */}
+    <SortableContext items={operation.risques.map(r => r.id)} strategy={verticalListSortingStrategy}>
+      {/* Opération vide : 1 ligne placeholder */}
       {operation.risques.length === 0 && (
         <tr className={groupBg}>
-          {/* Cellule opération (rowSpan=2 : ligne vide + ligne bouton) */}
           <td
-            rowSpan={2}
-            className={`sticky left-0 z-[12] ${opCellBg} border-r-2 border-r-gray-400 border-b border-b-gray-300 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+            rowSpan={1}
+            className={`sticky left-0 z-[12] ${opCellBg} border-r-2 border-r-gray-400 border border-gray-200 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top border-b-2 border-b-gray-400 ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+            style={{ width: widths.operation }}
           >
             {operationCell}
           </td>
           <td
-            colSpan={15}
-            className={`px-4 py-3 text-xs text-gray-400 border-b border-gray-200 ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
-          />
+            colSpan={16}
+            className={`px-4 py-3 text-xs text-gray-400 border border-gray-200 border-b-2 border-b-gray-400 italic ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+          >
+            Aucun risque — cliquez <Plus className="inline w-3 h-3 mx-0.5" /> pour ajouter
+          </td>
         </tr>
       )}
+
+      {/* Lignes de risques */}
       {operation.risques.map((risque, idx) => (
         <LigneRisque
           key={risque.id}
@@ -860,38 +1034,14 @@ function GroupeOperation({
           autresOperations={autresOperations}
           groupBg={groupBg}
           firstInGroup={idx === 0}
-          operationRowSpan={operation.risques.length + 1}
+          isLastInGroup={idx === operation.risques.length - 1}
+          operationRowSpan={operationRowSpan}
           operationCell={operationCell}
           isFirstGroup={isFirstGroup}
+          widths={widths}
+          onOpenPresel={onOpenPresel}
         />
       ))}
-
-      {/* Ligne + Ajouter un risque */}
-      <tr className={groupBg}>
-        <td colSpan={15} className="px-4 py-2 border-b border-gray-300">
-          {ajoutEnCours ? (
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <svg className="w-3.5 h-3.5 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-              </svg>
-              Création en cours…
-            </div>
-          ) : (
-            <button
-              onClick={async () => {
-                setAjoutEnCours(true)
-                await onAddRisque(operation.id)
-                setAjoutEnCours(false)
-              }}
-              className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              <span className="w-5 h-5 rounded border border-gray-300 bg-white flex items-center justify-center text-gray-400 text-base leading-none">+</span>
-              Ajouter un risque
-            </button>
-          )}
-        </td>
-      </tr>
     </SortableContext>
   )
 }
@@ -911,16 +1061,10 @@ function ModaleConfirm({
         <h3 className="font-semibold text-gray-900 mb-2">{titre}</h3>
         <p className="text-sm text-gray-600 mb-6">{description}</p>
         <div className="flex items-center justify-end gap-3">
-          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">
-            Annuler
-          </button>
+          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">Annuler</button>
           <button
             onClick={onConfirm}
-            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-colors ${
-              confirmVariant === 'red'
-                ? 'bg-red-600 hover:bg-red-700 text-white'
-                : 'bg-gray-900 hover:bg-gray-800 text-white'
-            }`}
+            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-colors ${confirmVariant === 'red' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gray-900 hover:bg-gray-800 text-white'}`}
           >
             {confirmLabel}
           </button>
@@ -946,17 +1090,11 @@ function ModaleSuppressionOperation({
               Cette opération contient <strong>{nbRisques} risque{nbRisques > 1 ? 's' : ''}</strong>. Que souhaitez-vous faire ?
             </p>
             <div className="space-y-2 mb-4">
-              <button
-                onClick={onDeplacer}
-                className="w-full text-left text-sm bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors"
-              >
+              <button onClick={onDeplacer} className="w-full text-left text-sm bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors">
                 <p className="font-medium text-amber-900">Déplacer vers &quot;Toutes opérations&quot;</p>
                 <p className="text-xs text-amber-700 mt-0.5">Les risques sont conservés et rattachés au poste entier.</p>
               </button>
-              <button
-                onClick={onCascade}
-                className="w-full text-left text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3 hover:border-red-400 transition-colors"
-              >
+              <button onClick={onCascade} className="w-full text-left text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3 hover:border-red-400 transition-colors">
                 <p className="font-medium text-red-700">Supprimer l&apos;opération et ses risques</p>
                 <p className="text-xs text-red-600 mt-0.5">Action irréversible — {nbRisques} risque{nbRisques > 1 ? 's' : ''} supprimé{nbRisques > 1 ? 's' : ''}.</p>
               </button>
@@ -966,23 +1104,93 @@ function ModaleSuppressionOperation({
           <>
             <p className="text-sm text-gray-600 mb-6">Cette opération est vide. Supprimer ?</p>
             <div className="flex items-center justify-end gap-3">
-              <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">
-                Annuler
-              </button>
-              <button
-                onClick={onCascade}
-                className="text-sm font-semibold px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors"
-              >
-                Supprimer
-              </button>
+              <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors px-4 py-2">Annuler</button>
+              <button onClick={onCascade} className="text-sm font-semibold px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors">Supprimer</button>
             </div>
           </>
         )}
         {nbRisques > 0 && (
-          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-            Annuler
-          </button>
+          <button onClick={onCancel} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">Annuler</button>
         )}
+      </div>
+    </div>
+  )
+}
+
+function ModalePreselection({
+  risqueId, posteId, moduleCode, onClose, onSubmit,
+}: {
+  risqueId: string
+  posteId: string
+  moduleCode: Exclude<CodeModule, 'APR'>
+  onClose: () => void
+  onSubmit: (risqueId: string, reponses: boolean[], moduleStatus: 'maitrise' | 'creuser') => void
+}) {
+  const questions = QUESTIONS_PRESELECTION[moduleCode]
+  const module = MODULE_PAR_CODE[moduleCode]
+  const [reponses, setReponses] = useState<(boolean | null)[]>([null, null, null])
+  const [isPending, startTransition] = useTransition()
+
+  const allAnswered = reponses.every(r => r !== null)
+
+  const handleSubmit = () => {
+    if (!allAnswered) return
+    const rep = reponses as boolean[]
+    startTransition(async () => {
+      const result = await actions.enregistrerPreselectionModule(risqueId, posteId, rep)
+      if (result.succes) {
+        onSubmit(risqueId, rep, result.moduleStatus as 'maitrise' | 'creuser')
+        onClose()
+      }
+    })
+  }
+
+  const toggle = (i: number, val: boolean) => {
+    setReponses(prev => { const r = [...prev]; r[i] = val; return r })
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white border border-gray-200 rounded-2xl p-6 max-w-lg w-full shadow-xl">
+        <div className="mb-5">
+          <p className="text-xs font-bold text-brand-bronze uppercase tracking-wider mb-0.5">Présélection</p>
+          <h3 className="font-bold text-gray-900 text-base">{module.nom}</h3>
+          <p className="text-xs text-gray-500 mt-1">3 questions pour déterminer si une évaluation normée est nécessaire. 0 OUI = risque maîtrisé, 1+ OUI = module à compléter.</p>
+        </div>
+
+        <div className="space-y-4 mb-6">
+          {questions.map((q, i) => (
+            <div key={q.id}>
+              <p className="text-sm text-gray-800 mb-2 leading-snug">{i + 1}. {q.texte}</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => toggle(i, true)}
+                  className={`flex-1 text-xs font-semibold py-2 rounded-lg border-2 transition-colors ${reponses[i] === true ? 'bg-red-50 border-red-400 text-red-700' : 'border-gray-200 text-gray-400 hover:border-gray-300'}`}
+                >
+                  Oui
+                </button>
+                <button
+                  onClick={() => toggle(i, false)}
+                  className={`flex-1 text-xs font-semibold py-2 rounded-lg border-2 transition-colors ${reponses[i] === false ? 'bg-green-50 border-green-400 text-green-700' : 'border-gray-200 text-gray-400 hover:border-gray-300'}`}
+                >
+                  Non
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-end gap-3">
+          <button onClick={onClose} className="text-sm text-gray-500 hover:text-gray-800 px-4 py-2">Annuler</button>
+          <button
+            onClick={handleSubmit}
+            disabled={!allAnswered || isPending}
+            className="text-sm font-semibold px-5 py-2 rounded-lg bg-brand-navy text-white disabled:opacity-50 hover:bg-brand-navy/90 transition-colors"
+          >
+            {isPending ? 'Enregistrement…' : 'Valider'}
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -1002,27 +1210,23 @@ export function TableauAPR({
   const [ajoutOpOuvert, setAjoutOpOuvert] = useState(false)
   const [nomNouvelleOp, setNomNouvelleOp] = useState('')
   const [modale, setModale] = useState<ModaleEtat>(null)
+  const [modalePresel, setModalePresel] = useState<ModalePreselEtat>(null)
   const [isPending, startTransition] = useTransition()
   const [activeId, setActiveId] = useState<string | null>(null)
   const [pleinEcran, setPleinEcran] = useState(false)
   const [savedRecently, setSavedRecently] = useState(false)
   const prevPendingRef = useRef(false)
+  const { widths, setWidth, resetWidths } = useColumnWidths()
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
-  )
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
-  // Touche Escape pour quitter le plein écran
   useEffect(() => {
     if (!pleinEcran) return
-    const fn = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setPleinEcran(false)
-    }
+    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') setPleinEcran(false) }
     window.addEventListener('keydown', fn)
     return () => window.removeEventListener('keydown', fn)
   }, [pleinEcran])
 
-  // Indicateur "sauvegardé" — s'affiche 1.5s après la fin d'une transition
   useEffect(() => {
     if (prevPendingRef.current && !isPending) {
       setSavedRecently(true)
@@ -1115,6 +1319,8 @@ export function TableauAPR({
         criticite_residuelle: null,
         mesures_techniques: null,
         ordre: result.evaluation.ordre,
+        module_status: null,
+        preselection_responses: null,
       }
       setOperations(prev => prev.map(op =>
         op.id === operationId ? { ...op, risques: [...op.risques, nouvelleRisque] } : op
@@ -1125,29 +1331,19 @@ export function TableauAPR({
 
   const handleDeleteRisque = async (risqueId: string) => {
     removeRisque(risqueId)
-    startTransition(async () => {
-      await actions.supprimerRisque(risqueId, posteId)
-    })
+    startTransition(async () => { await actions.supprimerRisque(risqueId, posteId) })
     setModale(null)
   }
 
   const handleMoveRisque = async (risqueId: string, nouvelOperationId: string) => {
     const risque = operations.flatMap(op => op.risques).find(r => r.id === risqueId)
     if (!risque) return
-
     setOperations(prev => prev.map(op => {
-      if (op.risques.some(r => r.id === risqueId)) {
-        return { ...op, risques: op.risques.filter(r => r.id !== risqueId) }
-      }
-      if (op.id === nouvelOperationId) {
-        return { ...op, risques: [...op.risques, { ...risque, operation_id: nouvelOperationId }] }
-      }
+      if (op.risques.some(r => r.id === risqueId)) return { ...op, risques: op.risques.filter(r => r.id !== risqueId) }
+      if (op.id === nouvelOperationId) return { ...op, risques: [...op.risques, { ...risque, operation_id: nouvelOperationId }] }
       return op
     }))
-
-    startTransition(async () => {
-      await actions.deplacerRisque(risqueId, nouvelOperationId, posteId)
-    })
+    startTransition(async () => { await actions.deplacerRisque(risqueId, nouvelOperationId, posteId) })
   }
 
   const handleDeleteOperation = async (operationId: string, mode: 'cascade' | 'deplacer') => {
@@ -1164,10 +1360,7 @@ export function TableauAPR({
     } else {
       setOperations(prev => prev.filter(op => op.id !== operationId))
     }
-
-    startTransition(async () => {
-      await actions.supprimerOperationAvecOptions(operationId, posteId, mode)
-    })
+    startTransition(async () => { await actions.supprimerOperationAvecOptions(operationId, posteId, mode) })
     setModale(null)
   }
 
@@ -1175,6 +1368,14 @@ export function TableauAPR({
     setOperations(prev => prev.map(op => op.id === operationId ? { ...op, nom } : op))
     await actions.renommerOperation(operationId, posteId, nom)
   }
+
+  const handlePreselectionSubmit = useCallback((risqueId: string, _reponses: boolean[], moduleStatus: 'maitrise' | 'creuser') => {
+    updateRisque(risqueId, {
+      module_status: moduleStatus,
+      preselection_responses: _reponses,
+      ...(moduleStatus === 'maitrise' ? { criticite_brute: 1, gravite: 1 } : {}),
+    })
+  }, [updateRisque])
 
   // ── DnD ─────────────────────────────────────────────────────────────────────
 
@@ -1193,7 +1394,6 @@ export function TableauAPR({
 
     const activeOp = findOperationByRisqueId(active.id as string)
     const overOp = findOperationByRisqueId(over.id as string)
-
     if (!activeOp) return
 
     if (overOp && activeOp.id === overOp.id) {
@@ -1218,11 +1418,15 @@ export function TableauAPR({
     return a.ordre - b.ordre
   })
 
+  // ── Super-header labels ──────────────────────────────────────────────────────
+
+  const TH_ZONE = 'border border-gray-300 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-center'
+  const TH2 = 'bg-gray-100 border border-gray-300 px-2 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-[0.05em] text-center relative'
+
   // ── Toolbar ─────────────────────────────────────────────────────────────────
 
   const toolbar = (
     <div className="flex items-center justify-between gap-4 px-1">
-      {/* Gauche : Ajouter une opération */}
       <div className="flex items-center gap-2">
         {ajoutOpOuvert ? (
           <>
@@ -1237,37 +1441,22 @@ export function TableauAPR({
               placeholder="Nom de la nouvelle opération…"
               className="text-sm px-3 py-1.5 border border-brand-navy rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-navy/10 bg-brand-off text-brand-navy w-64"
             />
-            <button
-              onClick={handleAddOperation}
-              className="text-sm font-medium bg-brand-navy text-brand-cream px-4 py-1.5 rounded-lg hover:bg-brand-navy/90 transition-colors"
-            >
-              Créer
-            </button>
-            <button
-              onClick={() => { setAjoutOpOuvert(false); setNomNouvelleOp('') }}
-              className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-2"
-            >
-              Annuler
-            </button>
+            <button onClick={handleAddOperation} className="text-sm font-medium bg-brand-navy text-brand-cream px-4 py-1.5 rounded-lg hover:bg-brand-navy/90 transition-colors">Créer</button>
+            <button onClick={() => { setAjoutOpOuvert(false); setNomNouvelleOp('') }} className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-2">Annuler</button>
           </>
         ) : (
-          <button
-            onClick={() => setAjoutOpOuvert(true)}
-            className="flex items-center gap-2 text-sm font-medium bg-brand-navy text-brand-cream px-4 py-2 rounded-lg hover:bg-brand-navy/90 transition-colors"
-          >
+          <button onClick={() => setAjoutOpOuvert(true)} className="flex items-center gap-2 text-sm font-medium bg-brand-navy text-brand-cream px-4 py-2 rounded-lg hover:bg-brand-navy/90 transition-colors">
             <span className="text-lg leading-none">+</span>
             Ajouter une opération
           </button>
         )}
       </div>
 
-      {/* Droite : indicateur de sauvegarde + plein écran */}
       <div className="flex items-center gap-3">
         <div className="h-5 flex items-center">
           {isPending && (
             <span className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              Sauvegarde…
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />Sauvegarde…
             </span>
           )}
           {!isPending && savedRecently && (
@@ -1279,6 +1468,15 @@ export function TableauAPR({
             </span>
           )}
         </div>
+
+        <button
+          onClick={resetWidths}
+          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors px-2 py-1 rounded hover:bg-gray-100"
+          title="Remettre les largeurs par défaut"
+        >
+          <RotateCcw className="w-3 h-3" />
+          <span className="hidden sm:inline">Colonnes</span>
+        </button>
 
         <button
           onClick={() => setPleinEcran(v => !v)}
@@ -1295,40 +1493,86 @@ export function TableauAPR({
   // ── Contenu du tableau ───────────────────────────────────────────────────────
 
   const tableauContent = (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <table className="w-full border-separate border-spacing-0" style={{ minWidth: '1900px' }}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <table style={{ minWidth: '1850px', borderCollapse: 'collapse' }} className="w-full">
 
-        {/* En-tête sticky */}
+        {/* En-tête sticky — 2 lignes */}
         <thead className="sticky top-0 z-20">
+          {/* Ligne 1 : zones super-headers */}
           <tr>
-            {/* Opération — sticky col 1 */}
-            <th className={`${TH} sticky left-0 z-30 w-[140px] min-w-[140px] text-left border-r-2 border-r-gray-400`}>Opération</th>
-            {/* Handle — sticky col 2 */}
-            <th className={`${TH} sticky left-[140px] z-30 w-8`} />
-            {/* Réf — sticky col 3 */}
-            <th className={`${TH} sticky left-[172px] z-30 w-20 text-left`}>Réf.</th>
-            {/* Danger — sticky col 4 + ombre */}
-            <th className={`${TH} sticky left-[252px] z-30 min-w-[180px] text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]`}>
-              Danger
+            {/* Opération — rowSpan=2, sticky */}
+            <th
+              rowSpan={2}
+              className={`${TH} sticky left-0 z-30 text-left border-r-2 border-r-gray-400`}
+              style={{ width: widths.operation, minWidth: widths.operation }}
+            >
+              Opération
+              <ColonneResizer colId="operation" onResize={setWidth} />
             </th>
-            <th className={`${TH} min-w-[200px] text-left`}>Situation dangereuse</th>
-            <th className={`${TH} min-w-[240px] text-left`}>Risque (ED840)</th>
-            <th className={`${TH} min-w-[90px] text-center`}>Type</th>
-            <th className={`${TH} min-w-[180px] text-left`}>Événement dangereux</th>
-            <th className={`${TH} min-w-[150px] text-left`}>Dommage</th>
-            <th className={`${TH} min-w-[140px] text-left`}>Siège lésions</th>
-            <th className={`${TH} w-14 text-center`}>G</th>
-            <th className={`${TH} w-14 text-center`}>P/DE</th>
-            <th className={`${TH} min-w-[90px] text-center`}>C. brute</th>
-            <th className={`${TH} min-w-[180px] text-left`}>T.H.O./EPI</th>
-            <th className={`${TH} w-20 text-center`}>PM</th>
-            <th className={`${TH} min-w-[100px] text-center`}>C. résid.</th>
-            <th className={`${TH} w-10 border-r-0`} />
+            {/* Handle — rowSpan=2 */}
+            <th rowSpan={2} className={`${TH}`} style={{ width: widths.handle, minWidth: widths.handle }} />
+
+            {/* APR zone */}
+            <th colSpan={8} className={`${TH_ZONE} bg-blue-50 text-blue-700 border-b-0`}>
+              APR — Analyse Préliminaire des Risques
+            </th>
+            {/* Évaluation zone */}
+            <th colSpan={3} className={`${TH_ZONE} bg-yellow-50 text-yellow-700 border-l-4 border-l-blue-300 border-b-0`}>
+              Évaluation
+            </th>
+            {/* Maîtrise zone */}
+            <th colSpan={3} className={`${TH_ZONE} bg-green-50 text-green-700 border-l-4 border-l-green-300 border-b-0`}>
+              Plan de Maîtrise
+            </th>
+            {/* Actions — rowSpan=2 */}
+            <th rowSpan={2} className={`${TH} border-r-0`} style={{ width: widths.actions }} />
+          </tr>
+
+          {/* Ligne 2 : colonnes individuelles */}
+          <tr>
+            {/* APR cols */}
+            <th className={TH2} style={{ width: widths.ref }}>Réf.<ColonneResizer colId="ref" onResize={setWidth} /></th>
+            <th className={`${TH2} sticky left-0 z-30 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)] text-left`} style={{ width: widths.danger }}>
+              Danger<ColonneResizer colId="danger" onResize={setWidth} />
+            </th>
+            <th className={`${TH2} text-left`} style={{ width: widths.situation_dangereuse }}>
+              Situation<ColonneResizer colId="situation_dangereuse" onResize={setWidth} />
+            </th>
+            <th className={`${TH2} text-left`} style={{ width: widths.numero_risque_ed840 }}>
+              Risque ED840<ColonneResizer colId="numero_risque_ed840" onResize={setWidth} />
+            </th>
+            <th className={TH2} style={{ width: widths.type_risque }}>
+              Type<ColonneResizer colId="type_risque" onResize={setWidth} />
+            </th>
+            <th className={`${TH2} text-left`} style={{ width: widths.evenement_dangereux }}>
+              Événement<ColonneResizer colId="evenement_dangereux" onResize={setWidth} />
+            </th>
+            <th className={`${TH2} text-left`} style={{ width: widths.dommage }}>
+              Dommage<ColonneResizer colId="dommage" onResize={setWidth} />
+            </th>
+            <th className={`${TH2} text-left`} style={{ width: widths.siege_lesions }}>
+              Siège<ColonneResizer colId="siege_lesions" onResize={setWidth} />
+            </th>
+            {/* Eval cols */}
+            <th className={`${TH2} border-l-4 border-l-blue-200`} style={{ width: widths.gravite }}>
+              G<ColonneResizer colId="gravite" onResize={setWidth} />
+            </th>
+            <th className={TH2} style={{ width: widths.second }}>
+              P/DE<ColonneResizer colId="second" onResize={setWidth} />
+            </th>
+            <th className={TH2} style={{ width: widths.criticite_brute }}>
+              C. brute<ColonneResizer colId="criticite_brute" onResize={setWidth} />
+            </th>
+            {/* Maîtrise cols */}
+            <th className={`${TH2} text-left border-l-4 border-l-green-200`} style={{ width: widths.mesures_techniques }}>
+              T.H.O./EPI<ColonneResizer colId="mesures_techniques" onResize={setWidth} />
+            </th>
+            <th className={TH2} style={{ width: widths.coefficient_pm }}>
+              PM<ColonneResizer colId="coefficient_pm" onResize={setWidth} />
+            </th>
+            <th className={TH2} style={{ width: widths.criticite_residuelle }}>
+              C. résid.<ColonneResizer colId="criticite_residuelle" onResize={setWidth} />
+            </th>
           </tr>
         </thead>
 
@@ -1348,12 +1592,13 @@ export function TableauAPR({
               onDeleteOperation={(id, nom, nb) => setModale({ type: 'operation', id, nom, nbRisques: nb })}
               autresOperations={operations.filter(o => o.id !== op.id)}
               groupIndex={groupIdx}
+              widths={widths}
+              onOpenPresel={(risqueId, moduleCode) => setModalePresel({ risqueId, moduleCode })}
             />
           ))}
         </tbody>
       </table>
 
-      {/* DragOverlay */}
       <DragOverlay>
         {risqueActif ? (
           <div className="bg-white border border-blue-400 rounded-lg px-4 py-2 text-xs text-gray-800 shadow-xl opacity-95 flex items-center gap-3">
@@ -1367,7 +1612,6 @@ export function TableauAPR({
 
   return (
     <>
-      {/* Mode normal */}
       {!pleinEcran && (
         <div className="space-y-3">
           {toolbar}
@@ -1377,7 +1621,6 @@ export function TableauAPR({
         </div>
       )}
 
-      {/* Mode plein écran */}
       {pleinEcran && (
         <div className="fixed inset-0 z-50 bg-white flex flex-col overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 shrink-0">
@@ -1389,7 +1632,7 @@ export function TableauAPR({
         </div>
       )}
 
-      {/* Modales */}
+      {/* Modales suppression */}
       {modale?.type === 'risque' && (
         <ModaleConfirm
           titre="Supprimer ce risque ?"
@@ -1406,6 +1649,17 @@ export function TableauAPR({
           onCascade={() => handleDeleteOperation(modale.id, 'cascade')}
           onDeplacer={() => handleDeleteOperation(modale.id, 'deplacer')}
           onCancel={() => setModale(null)}
+        />
+      )}
+
+      {/* Modale présélection module normé */}
+      {modalePresel && (
+        <ModalePreselection
+          risqueId={modalePresel.risqueId}
+          posteId={posteId}
+          moduleCode={modalePresel.moduleCode}
+          onClose={() => setModalePresel(null)}
+          onSubmit={handlePreselectionSubmit}
         />
       )}
     </>

@@ -16,6 +16,8 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
   const [hovered, setHovered] = useState(false)
   // Détecte si le device supporte le hover (pas tactile)
   const canHover = useRef(false)
+  const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Initialiser depuis localStorage (côté client uniquement)
   useEffect(() => {
@@ -54,12 +56,19 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
     <div className="flex h-screen bg-brand-cream-light overflow-hidden">
       {/* Sidebar desktop — largeur animée */}
       <aside
-        onMouseEnter={() => { if (canHover.current && collapsed) setHovered(true) }}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={() => {
+          if (!canHover.current || !collapsed) return
+          if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null }
+          openTimer.current = setTimeout(() => setHovered(true), 80)
+        }}
+        onMouseLeave={() => {
+          if (openTimer.current) { clearTimeout(openTimer.current); openTimer.current = null }
+          closeTimer.current = setTimeout(() => setHovered(false), 250)
+        }}
         style={{
           width: collapsed ? 64 : 256,
           flexShrink: 0,
-          transition: 'width 250ms ease-in-out',
+          transition: 'width 250ms cubic-bezier(0.32,0.72,0,1)',
           position: 'relative',
           zIndex: isFloating ? 40 : 'auto',
         }}
@@ -73,7 +82,7 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
             top: isFloating ? 0 : undefined,
             left: isFloating ? 0 : undefined,
             height: isFloating ? '100%' : '100%',
-            transition: 'width 200ms ease-in-out',
+            transition: 'width 250ms cubic-bezier(0.32,0.72,0,1)',
             boxShadow: isFloating ? '4px 0 24px rgba(0,0,0,0.18)' : undefined,
           }}
           className="flex overflow-hidden w-full"

@@ -217,6 +217,7 @@ src/app/
 - [x] PHASE_VITRINE_V3_B : Pages contenu (/outil, /reglementation, /a-propos, /faq, /temoignages, /contact)
 - [x] PHASE_VITRINE_V3_C : Pages pricing (/tarifs Pack Industrie/Premium + /comparatif)
 - [x] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)
+- [x] PHASE_UX_TABLEAU_C : Resize colonnes + super-headers zones + modules normés intégrés (présélection) + sidebar delays fluides
 
 ### Phase 4 — Backlog post-lancement
 
