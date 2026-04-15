@@ -81,9 +81,10 @@ export async function toggleRappelsContact(
   actif: boolean
 ): Promise<void> {
   const { supabase } = await getClientAndEntreprise()
-  await supabase
+  const { error } = await supabase
     .from('contacts_entreprise')
     .update({ rappels_actifs: actif })
     .eq('id', contactId)
+  if (error) throw new Error(error.message)
   revalidatePath('/dashboard/parametres/contacts')
 }
