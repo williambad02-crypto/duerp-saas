@@ -129,17 +129,17 @@ export default async function HomePage() {
                 {/* Portrait */}
                 <div className="lg:col-span-2 flex justify-center">
                   <div className="relative">
-                    <div className="w-52 h-52 rounded-3xl overflow-hidden border-2 border-brand-sand shadow-[0_8px_30px_rgba(3,25,72,0.1)]">
+                    <div className="w-72 h-72 md:w-80 md:h-80 rounded-3xl overflow-hidden border-2 border-brand-sand shadow-[0_8px_30px_rgba(3,25,72,0.1)]">
                       <Image
                         src="/marketing/william-portrait-large.jpeg"
                         alt="William Maréchal — fondateur SafeAnalyse."
-                        width={208}
-                        height={208}
+                        width={320}
+                        height={320}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="absolute -bottom-3 -right-3 bg-brand-navy text-brand-cream text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
-                      Fondateur HSE
+                      Diplômé BUT HSE
                     </div>
                   </div>
                 </div>

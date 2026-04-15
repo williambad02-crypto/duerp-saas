@@ -20,7 +20,7 @@ export function MarketingNav() {
   const [menuOuvert, setMenuOuvert] = useState(false)
 
   // Sur les pages à hero sombre (navy deep), logo + liens en blanc avant scroll.
-  const DARK_HERO_PATHS = ['/', '/outil']
+  const DARK_HERO_PATHS = ['/', '/outil', '/tarifs']
   const heroIsDark = DARK_HERO_PATHS.includes(pathname)
   const onDarkHero = heroIsDark && !scrolled
 
