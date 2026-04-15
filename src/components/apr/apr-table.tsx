@@ -1,14 +1,39 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { LigneAPR } from '@/app/dashboard/apr/page'
 import { CodeModule } from '@/types'
 import { MODULES_RISQUES } from '@/lib/constants/modules'
 
+type ColonneAPRId = 'poste' | 'operation' | 'module' | 'brute' | 'mesures' | 'pm' | 'residuelle'
+
+const COLONNES_APR_LABELS: Record<ColonneAPRId, string> = {
+  poste: 'Poste',
+  operation: 'Opération',
+  module: 'Module',
+  brute: 'Criticité brute',
+  mesures: 'Mesures PM',
+  pm: 'Coeff. PM',
+  residuelle: 'Criticité résiduelle',
+}
+
+const COLONNES_APR_DEFAUT: Record<ColonneAPRId, boolean> = {
+  poste: true,
+  operation: true,
+  module: true,
+  brute: true,
+  mesures: false,
+  pm: true,
+  residuelle: true,
+}
+
+const STORAGE_KEY_APR = 'apr-recap-columns'
+
 interface APRTableProps {
   lignes: LigneAPR[]
   postes: { id: string; nom: string }[]
+  readOnly?: boolean
 }
 
 type ColonneSort = 'poste' | 'operation' | 'module' | 'brute' | 'pm' | 'residuelle'
@@ -124,12 +149,38 @@ function SortIcon({ actif, direction }: { actif: boolean; direction: DirectionSo
   )
 }
 
-export function APRTable({ lignes, postes }: APRTableProps) {
+export function APRTable({ lignes, postes, readOnly = false }: APRTableProps) {
   const [filtrePoste, setFiltrePoste] = useState<string>('tous')
   const [filtreModule, setFiltreModule] = useState<string>('tous')
   const [filtreZone, setFiltreZone] = useState<string>('toutes')
   const [sortCol, setSortCol] = useState<ColonneSort>('residuelle')
   const [sortDir, setSortDir] = useState<DirectionSort>('desc')
+  const [showColonnes, setShowColonnes] = useState(false)
+  const [colonnes, setColonnes] = useState<Record<ColonneAPRId, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_APR)
+      return saved ? { ...COLONNES_APR_DEFAUT, ...JSON.parse(saved) } : COLONNES_APR_DEFAUT
+    } catch { return COLONNES_APR_DEFAUT }
+  })
+  const colPopoverRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handle(e: MouseEvent) {
+      if (colPopoverRef.current && !colPopoverRef.current.contains(e.target as Node)) {
+        setShowColonnes(false)
+      }
+    }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [])
+
+  function toggleColonne(key: ColonneAPRId) {
+    setColonnes(prev => {
+      const next = { ...prev, [key]: !prev[key] }
+      try { localStorage.setItem(STORAGE_KEY_APR, JSON.stringify(next)) } catch {}
+      return next
+    })
+  }
 
   function handleSort(col: ColonneSort) {
     if (sortCol === col) {
@@ -275,7 +326,45 @@ export function APRTable({ lignes, postes }: APRTableProps) {
           </button>
         )}
 
-        <span className="ml-auto text-xs text-gray-400">
+        {/* Badge lecture seule */}
+        {readOnly && (
+          <span className="text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-full">
+            Lecture seule
+          </span>
+        )}
+
+        {/* Bouton Colonnes */}
+        <div ref={colPopoverRef} className="relative ml-auto">
+          <button
+            onClick={() => setShowColonnes(s => !s)}
+            className="flex items-center gap-1 text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white text-gray-600 hover:border-gray-300 transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+            Colonnes ▾
+          </button>
+          {showColonnes && (
+            <div className="absolute right-0 top-full mt-1 z-20 w-48 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+              <div className="text-xs font-semibold text-gray-700 mb-2">Afficher / masquer</div>
+              {(Object.keys(COLONNES_APR_LABELS) as ColonneAPRId[]).map(key => (
+                <label key={key} className="flex items-center gap-2 py-1 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={colonnes[key]}
+                    onChange={() => toggleColonne(key)}
+                    className="rounded border-gray-300 text-blue-500"
+                  />
+                  <span className="text-xs text-gray-600 group-hover:text-gray-900">
+                    {COLONNES_APR_LABELS[key]}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <span className="text-xs text-gray-400">
           {lignesFiltrees.length} ligne{lignesFiltrees.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -285,39 +374,46 @@ export function APRTable({ lignes, postes }: APRTableProps) {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              {(
-                [
-                  { col: 'poste' as ColonneSort, label: 'Poste' },
-                  { col: 'operation' as ColonneSort, label: 'Opération' },
-                  { col: 'module' as ColonneSort, label: 'Module' },
-                  { col: 'brute' as ColonneSort, label: 'Criticité brute' },
-                  { col: null, label: 'Mesures PM' },
-                  { col: 'pm' as ColonneSort, label: 'Coeff. PM' },
-                  { col: 'residuelle' as ColonneSort, label: 'Criticité résiduelle' },
-                  { col: null, label: '' },
-                ] as const
-              ).map(({ col, label }, idx) => (
-                <th
-                  key={idx}
-                  className={`px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap ${
-                    col ? 'cursor-pointer hover:bg-gray-100 select-none' : ''
-                  }`}
-                  onClick={col ? () => handleSort(col) : undefined}
-                >
-                  <span className="flex items-center gap-1.5">
-                    {label}
-                    {col && (
-                      <SortIcon actif={sortCol === col} direction={sortDir} />
-                    )}
-                  </span>
+              {colonnes.poste && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('poste')}>
+                  <span className="flex items-center gap-1.5">Poste <SortIcon actif={sortCol === 'poste'} direction={sortDir} /></span>
                 </th>
-              ))}
+              )}
+              {colonnes.operation && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('operation')}>
+                  <span className="flex items-center gap-1.5">Opération <SortIcon actif={sortCol === 'operation'} direction={sortDir} /></span>
+                </th>
+              )}
+              {colonnes.module && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('module')}>
+                  <span className="flex items-center gap-1.5">Module <SortIcon actif={sortCol === 'module'} direction={sortDir} /></span>
+                </th>
+              )}
+              {colonnes.brute && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('brute')}>
+                  <span className="flex items-center gap-1.5">Criticité brute <SortIcon actif={sortCol === 'brute'} direction={sortDir} /></span>
+                </th>
+              )}
+              {colonnes.mesures && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">Mesures PM</th>
+              )}
+              {colonnes.pm && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('pm')}>
+                  <span className="flex items-center gap-1.5">Coeff. PM <SortIcon actif={sortCol === 'pm'} direction={sortDir} /></span>
+                </th>
+              )}
+              {colonnes.residuelle && (
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none" onClick={() => handleSort('residuelle')}>
+                  <span className="flex items-center gap-1.5">Criticité résiduelle <SortIcon actif={sortCol === 'residuelle'} direction={sortDir} /></span>
+                </th>
+              )}
+              {!readOnly && <th className="px-4 py-3"></th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {lignesFiltrees.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-sm text-gray-400">
+                <td colSpan={99} className="px-4 py-8 text-center text-sm text-gray-400">
                   Aucune ligne ne correspond aux filtres sélectionnés.
                 </td>
               </tr>
@@ -337,80 +433,51 @@ export function APRTable({ lignes, postes }: APRTableProps) {
                         : ''
                     }`}
                   >
-                    {/* Poste */}
-                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                      {ligne.posteNom}
-                    </td>
-
-                    {/* Opération */}
-                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
-                      <span className="flex items-center gap-1.5">
-                        {ligne.estTransversale && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
-                        )}
-                        {ligne.operationNom}
-                      </span>
-                    </td>
-
-                    {/* Module */}
-                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
-                      {ligne.nomModule}
-                    </td>
-
-                    {/* Criticité brute */}
-                    <td className="px-4 py-3">
-                      <CriticitePill
-                        score={ligne.criticiteBrute}
-                        module={ligne.codeModule}
-                        moduleIgnore={ligne.moduleIgnore}
-                      />
-                    </td>
-
-                    {/* Mesures PM */}
-                    <td className="px-4 py-3">
-                      {ligne.moduleIgnore ? (
-                        <span className="text-xs text-gray-400">—</span>
-                      ) : (
-                        <MesuresDots
-                          t={ligne.mesuresT}
-                          o={ligne.mesuresO}
-                          h={ligne.mesuresH}
-                          epi={ligne.mesuresEPI}
-                        />
-                      )}
-                    </td>
-
-                    {/* Coeff PM */}
-                    <td className="px-4 py-3 text-gray-700">
-                      {ligne.coefficientPm !== null ? (
-                        <span className="font-medium">
-                          {ligne.coefficientPm === 0
-                            ? '0,0'
-                            : ligne.coefficientPm.toString().replace('.', ',')}
+                    {colonnes.poste && (
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{ligne.posteNom}</td>
+                    )}
+                    {colonnes.operation && (
+                      <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                        <span className="flex items-center gap-1.5">
+                          {ligne.estTransversale && <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />}
+                          {ligne.operationNom}
                         </span>
-                      ) : (
-                        <span className="text-gray-400">—</span>
-                      )}
-                    </td>
-
-                    {/* Criticité résiduelle */}
-                    <td className="px-4 py-3">
-                      <CriticitePill
-                        score={scoreResid}
-                        module={ligne.codeModule}
-                        moduleIgnore={ligne.moduleIgnore}
-                      />
-                    </td>
-
-                    {/* Lien */}
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/dashboard/postes/${ligne.posteId}/operations/${ligne.operationId}/risques/${ligne.codeModule}`}
-                        className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                      >
-                        Voir →
-                      </Link>
-                    </td>
+                      </td>
+                    )}
+                    {colonnes.module && (
+                      <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{ligne.nomModule}</td>
+                    )}
+                    {colonnes.brute && (
+                      <td className="px-4 py-3">
+                        <CriticitePill score={ligne.criticiteBrute} module={ligne.codeModule} moduleIgnore={ligne.moduleIgnore} />
+                      </td>
+                    )}
+                    {colonnes.mesures && (
+                      <td className="px-4 py-3">
+                        {ligne.moduleIgnore ? <span className="text-xs text-gray-400">—</span> : <MesuresDots t={ligne.mesuresT} o={ligne.mesuresO} h={ligne.mesuresH} epi={ligne.mesuresEPI} />}
+                      </td>
+                    )}
+                    {colonnes.pm && (
+                      <td className="px-4 py-3 text-gray-700">
+                        {ligne.coefficientPm !== null ? (
+                          <span className="font-medium">{ligne.coefficientPm === 0 ? '0,0' : ligne.coefficientPm.toString().replace('.', ',')}</span>
+                        ) : (
+                          <span className="text-gray-400">—</span>
+                        )}
+                      </td>
+                    )}
+                    {colonnes.residuelle && (
+                      <td className="px-4 py-3">
+                        <CriticitePill score={scoreResid} module={ligne.codeModule} moduleIgnore={ligne.moduleIgnore} />
+                      </td>
+                    )}
+                    {!readOnly && (
+                      <td className="px-4 py-3">
+                        <Link href={`/dashboard/postes/${ligne.posteId}/operations/${ligne.operationId}/risques/${ligne.codeModule}`} className="text-xs text-blue-600 hover:underline whitespace-nowrap">
+                          Voir →
+                        </Link>
+                      </td>
+                    )}
                   </tr>
                 )
               })
