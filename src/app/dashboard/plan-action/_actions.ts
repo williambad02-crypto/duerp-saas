@@ -55,7 +55,7 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
   // RLS sur evaluations filtre automatiquement par user_id — pas besoin de filtre explicite entreprise_id
   const { supabase } = await getClientAndEntreprise()
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('evaluations')
     .select(`
       id,
@@ -90,6 +90,8 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
     .eq('type_risque', 'aigu')
     .order('criticite_brute', { ascending: false })
 
+  if (error) console.error('[plan-action] Erreur query:', JSON.stringify(error))
+  console.log('[plan-action] Nb évaluations aigues:', data?.length ?? 0)
   if (!data) return []
 
   return data.map((ev: any) => {
