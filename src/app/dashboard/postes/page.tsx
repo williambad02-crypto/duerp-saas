@@ -143,13 +143,13 @@ export default async function PostesPage() {
             </Link>
           ) : (
             <NouveauPosteModal>
-              <button className="group bg-white border-2 border-dashed border-gray-200 rounded-xl p-5 shadow-sm hover:border-brand-navy hover:shadow-md transition-all text-left w-full flex flex-col items-center justify-center gap-3 min-h-[140px]">
-                <div className="w-12 h-12 rounded-xl border-2 border-dashed border-gray-300 group-hover:border-brand-navy flex items-center justify-center transition-colors">
-                  <svg className="w-6 h-6 text-gray-400 group-hover:text-brand-navy transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button className="group bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:border-blue-300 hover:shadow-md transition-all w-full h-full flex flex-col items-center justify-center gap-3 min-h-[100px]">
+                <div className="w-10 h-10 rounded-xl border border-gray-200 group-hover:border-blue-400 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
+                  <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-sm font-medium text-gray-400 group-hover:text-brand-navy transition-colors">
+                <span className="text-sm font-medium text-gray-400 group-hover:text-blue-600 transition-colors">
                   Ajouter un poste
                 </span>
               </button>
