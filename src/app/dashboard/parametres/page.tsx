@@ -132,6 +132,22 @@ export default async function ParametresPage() {
           </div>
         </div>
       )}
+
+      {/* Contacts */}
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">Contacts de l&apos;entreprise</h2>
+            <p className="text-sm text-gray-500 mt-0.5">Responsables d&apos;actions, destinataires des rappels email.</p>
+          </div>
+          <a
+            href="/dashboard/parametres/contacts"
+            className="text-sm font-medium text-brand-navy hover:underline"
+          >
+            Gérer →
+          </a>
+        </div>
+      </div>
     </div>
   )
 }
