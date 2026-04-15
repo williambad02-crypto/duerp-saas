@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none">
+  <rect width="1200" height="800" fill="#031948"/>
+  <!-- Ciel dégradé -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0A2E5C" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#021134" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#B8860B" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#031948" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <!-- Lueur dorée centrale -->
+  <ellipse cx="600" cy="400" rx="400" ry="250" fill="url(#glow)"/>
+  <!-- Silhouette usine agroalimentaire -->
+  <!-- Bâtiment principal -->
+  <rect x="350" y="350" width="500" height="280" fill="#021134" opacity="0.9"/>
+  <!-- Toit bâtiment principal -->
+  <polygon points="350,350 600,260 850,350" fill="#021134" opacity="0.9"/>
+  <!-- Cheminées -->
+  <rect x="420" y="220" width="30" height="140" fill="#021134" opacity="0.95"/>
+  <rect x="500" y="240" width="25" height="120" fill="#021134" opacity="0.95"/>
+  <rect x="760" y="230" width="28" height="130" fill="#021134" opacity="0.95"/>
+  <!-- Fumée légère -->
+  <ellipse cx="435" cy="210" rx="18" ry="30" fill="#0A2E5C" opacity="0.4"/>
+  <ellipse cx="512" cy="228" rx="15" ry="25" fill="#0A2E5C" opacity="0.3"/>
+  <ellipse cx="774" cy="218" rx="16" ry="28" fill="#0A2E5C" opacity="0.35"/>
+  <!-- Bâtiment annexe gauche -->
+  <rect x="200" y="430" width="180" height="200" fill="#021134" opacity="0.85"/>
+  <rect x="200" y="400" width="180" height="35" fill="#021134" opacity="0.9"/>
+  <!-- Bâtiment annexe droit -->
+  <rect x="820" y="410" width="200" height="220" fill="#021134" opacity="0.85"/>
+  <!-- Fenêtres éclairées -->
+  <rect x="380" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.6"/>
+  <rect x="440" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.4"/>
+  <rect x="500" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.7"/>
+  <rect x="560" y="390" width="35" height="25" rx="2" fill="#B8860B" opacity="0.5"/>
+  <rect x="640" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.6"/>
+  <rect x="700" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.4"/>
+  <rect x="760" y="390" width="35" height="25" rx="2" fill="#DAA520" opacity="0.7"/>
+  <!-- Sol -->
+  <rect x="0" y="620" width="1200" height="180" fill="#021134" opacity="0.8"/>
+  <!-- Reflets sol -->
+  <ellipse cx="600" cy="640" rx="350" ry="20" fill="#B8860B" opacity="0.05"/>
+  <!-- Étoiles -->
+  <circle cx="100" cy="80" r="1.5" fill="white" opacity="0.4"/>
+  <circle cx="250" cy="40" r="1" fill="white" opacity="0.5"/>
+  <circle cx="450" cy="60" r="1.5" fill="white" opacity="0.3"/>
+  <circle cx="700" cy="30" r="1" fill="white" opacity="0.6"/>
+  <circle cx="900" cy="70" r="1.5" fill="white" opacity="0.4"/>
+  <circle cx="1100" cy="45" r="1" fill="white" opacity="0.5"/>
+  <circle cx="1050" cy="120" r="1.5" fill="white" opacity="0.3"/>
+  <circle cx="150" cy="160" r="1" fill="white" opacity="0.4"/>
+</svg>

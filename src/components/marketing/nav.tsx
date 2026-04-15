@@ -8,9 +8,9 @@ import { Logo } from '@/components/brand/logo'
 
 const navItems = [
   { label: "L'outil", href: '/outil' },
+  { label: 'Tarifs', href: '/tarifs' },
   { label: 'Réglementation', href: '/reglementation' },
   { label: 'Qui je suis', href: '/a-propos' },
-  { label: 'Tarifs', href: '/tarifs' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -20,7 +20,7 @@ export function MarketingNav() {
   const [menuOuvert, setMenuOuvert] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -38,23 +38,26 @@ export function MarketingNav() {
     <>
       <header
         className={cn(
-          'sticky top-0 z-50 transition-all duration-300',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           scrolled
-            ? 'bg-brand-cream/95 backdrop-blur-md border-b border-brand-sand shadow-[0_1px_8px_rgba(3,25,72,0.06)]'
-            : 'bg-brand-cream border-b border-transparent'
+            ? 'bg-brand-cream/90 backdrop-blur-md border-b border-brand-sand shadow-[0_1px_8px_rgba(3,25,72,0.07)] h-16'
+            : 'bg-transparent border-b border-transparent h-20'
         )}
       >
-        <div className={cn(
-          'max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300',
-          scrolled ? 'h-14' : 'h-20'
-        )}>
+        <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">
+
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
-            <Logo variant="full" theme="default" height={28} />
+            <Logo
+              variant="full"
+              theme="default"
+              height={scrolled ? 26 : 30}
+              className="transition-all duration-300"
+            />
           </Link>
 
           {/* Navigation desktop */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {navItems.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -62,15 +65,15 @@ export function MarketingNav() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'relative px-3 py-1.5 text-sm font-medium transition-colors rounded-md',
+                    'relative px-3.5 py-2 text-sm font-medium transition-colors rounded-md',
                     isActive
-                      ? 'text-brand-navy'
-                      : 'text-brand-bronze hover:text-brand-navy'
+                      ? 'text-brand-navy font-semibold'
+                      : 'text-brand-ink-soft hover:text-brand-navy'
                   )}
                 >
                   {item.label}
                   {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-brand-gold-light rounded-full" />
+                    <span className="absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-brand-accent rounded-full" />
                   )}
                 </Link>
               )
@@ -78,25 +81,25 @@ export function MarketingNav() {
           </nav>
 
           {/* Actions desktop */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-3">
             <Link
               href="/auth/login"
-              className="text-sm font-medium text-brand-navy border border-brand-navy/30 hover:border-brand-navy hover:bg-brand-navy/5 px-4 py-2 rounded-lg transition-colors"
+              className="text-sm font-medium text-brand-bronze hover:text-brand-navy transition-colors"
             >
               Se connecter
             </Link>
             <Link
-              href="/auth/signup"
-              className="text-sm font-semibold bg-brand-gold text-brand-off hover:bg-brand-gold-light px-4 py-2 rounded-lg transition-colors"
+              href="/contact"
+              className="text-sm font-semibold bg-brand-gold text-brand-off hover:bg-brand-gold-light px-4 py-2 rounded-lg transition-all hover:shadow-[0_2px_8px_rgba(184,134,11,0.3)]"
             >
-              Essai gratuit
+              Demander un échange
             </Link>
           </div>
 
           {/* Hamburger mobile */}
           <button
             onClick={() => setMenuOuvert(!menuOuvert)}
-            className="md:hidden flex flex-col items-center justify-center w-10 h-10 gap-1.5 rounded-lg hover:bg-brand-sand/50 transition-colors"
+            className="lg:hidden flex flex-col items-center justify-center w-10 h-10 gap-1.5 rounded-lg hover:bg-brand-sand/40 transition-colors"
             aria-label={menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={menuOuvert}
           >
@@ -109,7 +112,7 @@ export function MarketingNav() {
             <span
               className={cn(
                 'block w-5 h-0.5 bg-brand-navy rounded-full transition-all duration-300',
-                menuOuvert && 'opacity-0'
+                menuOuvert && 'opacity-0 scale-x-0'
               )}
             />
             <span
@@ -122,16 +125,16 @@ export function MarketingNav() {
         </div>
       </header>
 
-      {/* Menu mobile — plein écran */}
+      {/* Menu mobile — slide depuis la droite */}
       <div
         className={cn(
-          'fixed inset-0 z-40 md:hidden transition-all duration-300',
+          'fixed inset-0 z-40 lg:hidden transition-all duration-300',
           menuOuvert ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         )}
       >
-        {/* Overlay */}
+        {/* Overlay sombre */}
         <div
-          className="absolute inset-0 bg-brand-navy/60 backdrop-blur-sm"
+          className="absolute inset-0 bg-brand-navy/50 backdrop-blur-sm"
           onClick={() => setMenuOuvert(false)}
         />
 
@@ -143,11 +146,12 @@ export function MarketingNav() {
           )}
         >
           {/* En-tête du panel */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-brand-sand">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-brand-sand">
             <Logo variant="full" theme="default" height={24} />
             <button
               onClick={() => setMenuOuvert(false)}
-              className="w-8 h-8 flex items-center justify-center text-brand-bronze hover:text-brand-navy rounded-lg hover:bg-brand-sand/50 transition-colors"
+              className="w-8 h-8 flex items-center justify-center text-brand-bronze hover:text-brand-navy rounded-lg hover:bg-brand-sand/40 transition-colors"
+              aria-label="Fermer le menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -164,10 +168,10 @@ export function MarketingNav() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'flex items-center px-4 py-3 rounded-xl text-base font-medium transition-colors',
+                    'flex items-center px-4 py-3.5 rounded-xl text-base font-medium transition-colors',
                     isActive
-                      ? 'bg-brand-gold-pale text-brand-navy border-l-2 border-brand-gold-light'
-                      : 'text-brand-bronze hover:bg-brand-sand/40 hover:text-brand-navy'
+                      ? 'bg-brand-gold-pale text-brand-navy border-l-2 border-brand-accent'
+                      : 'text-brand-ink-soft hover:bg-brand-sand/40 hover:text-brand-navy'
                   )}
                 >
                   {item.label}
@@ -176,19 +180,19 @@ export function MarketingNav() {
             })}
           </nav>
 
-          {/* Actions */}
+          {/* Actions bas de panel */}
           <div className="px-4 py-6 border-t border-brand-sand space-y-3">
             <Link
               href="/auth/login"
-              className="block text-center text-sm font-medium text-brand-navy border border-brand-navy px-4 py-2.5 rounded-lg hover:bg-brand-navy/5 transition-colors"
+              className="block text-center text-sm font-medium text-brand-navy border border-brand-navy/30 px-4 py-2.5 rounded-lg hover:bg-brand-navy/5 transition-colors"
             >
               Se connecter
             </Link>
             <Link
-              href="/auth/signup"
+              href="/contact"
               className="block text-center text-sm font-semibold bg-brand-gold text-brand-off hover:bg-brand-gold-light px-4 py-2.5 rounded-lg transition-colors"
             >
-              Commencer l&apos;essai gratuit →
+              Demander un échange →
             </Link>
           </div>
         </div>

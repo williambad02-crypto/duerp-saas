@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#FAF6ED"/>
+  <!-- Interface outil SafeAnalyse -->
+  <rect x="60" y="70" width="280" height="260" rx="12" fill="white" stroke="#E5DDC9" stroke-width="1.5"/>
+  <!-- Header app -->
+  <rect x="60" y="70" width="280" height="44" rx="12" fill="#031948"/>
+  <rect x="60" y="96" width="280" height="18" fill="#031948"/>
+  <!-- Logo dans header -->
+  <circle cx="86" cy="92" r="9" fill="#B8860B"/>
+  <text x="86" y="96" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="white">S</text>
+  <text x="130" y="97" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="white">SafeAnalyse.</text>
+  <!-- Sidebar petite -->
+  <rect x="60" y="114" width="60" height="216" fill="#F9FAFB" rx="0"/>
+  <rect x="60" y="114" width="60" height="216" fill="#021134" opacity="0.97"/>
+  <!-- Icônes sidebar -->
+  <rect x="74" y="128" width="32" height="6" rx="3" fill="#0A2E5C"/>
+  <rect x="74" y="140" width="32" height="6" rx="3" fill="#0A2E5C"/>
+  <rect x="74" y="152" width="32" height="6" rx="3" fill="#DAA520" opacity="0.8"/>
+  <rect x="74" y="164" width="32" height="6" rx="3" fill="#0A2E5C"/>
+  <!-- Contenu principal -->
+  <!-- Tableau APR simplifié -->
+  <text x="135" y="132" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#031948">Tableau d&apos;évaluation des risques</text>
+  <!-- Header tableau -->
+  <rect x="120" y="140" width="205" height="18" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="130" y="152" font-family="Inter, sans-serif" font-size="7" fill="#374151">Risque</text>
+  <text x="200" y="152" font-family="Inter, sans-serif" font-size="7" fill="#374151">G</text>
+  <text x="220" y="152" font-family="Inter, sans-serif" font-size="7" fill="#374151">P</text>
+  <text x="240" y="152" font-family="Inter, sans-serif" font-size="7" fill="#374151">Score</text>
+  <text x="275" y="152" font-family="Inter, sans-serif" font-size="7" fill="#374151">Niveau</text>
+  <!-- Lignes tableau -->
+  <rect x="120" y="158" width="205" height="16" fill="white" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="130" y="169" font-family="Inter, sans-serif" font-size="7" fill="#374151">Bruit</text>
+  <text x="200" y="169" font-family="Inter, sans-serif" font-size="7" fill="#374151">3</text>
+  <text x="220" y="169" font-family="Inter, sans-serif" font-size="7" fill="#374151">3</text>
+  <text x="240" y="169" font-family="Inter, sans-serif" font-size="7" fill="#374151">9</text>
+  <rect x="268" y="161" width="42" height="10" rx="5" fill="#FEF3C7"/>
+  <text x="289" y="169" text-anchor="middle" font-family="Inter, sans-serif" font-size="6" font-weight="600" fill="#92400E">Modéré</text>
+
+  <rect x="120" y="174" width="205" height="16" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="130" y="185" font-family="Inter, sans-serif" font-size="7" fill="#374151">Chute de hauteur</text>
+  <text x="200" y="185" font-family="Inter, sans-serif" font-size="7" fill="#374151">4</text>
+  <text x="220" y="185" font-family="Inter, sans-serif" font-size="7" fill="#374151">2</text>
+  <text x="240" y="185" font-family="Inter, sans-serif" font-size="7" fill="#374151">8</text>
+  <rect x="268" y="177" width="42" height="10" rx="5" fill="#FFEDD5"/>
+  <text x="289" y="185" text-anchor="middle" font-family="Inter, sans-serif" font-size="6" font-weight="600" fill="#9A3412">Élevé</text>
+
+  <rect x="120" y="190" width="205" height="16" fill="white" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="130" y="201" font-family="Inter, sans-serif" font-size="7" fill="#374151">TMS membres sup.</text>
+  <text x="200" y="201" font-family="Inter, sans-serif" font-size="7" fill="#374151">2</text>
+  <text x="220" y="201" font-family="Inter, sans-serif" font-size="7" fill="#374151">3</text>
+  <text x="240" y="201" font-family="Inter, sans-serif" font-size="7" fill="#374151">6</text>
+  <rect x="268" y="193" width="42" height="10" rx="5" fill="#FEF3C7"/>
+  <text x="289" y="201" text-anchor="middle" font-family="Inter, sans-serif" font-size="6" font-weight="600" fill="#92400E">Modéré</text>
+
+  <!-- Bouton export PDF -->
+  <rect x="240" y="296" width="95" height="22" rx="6" fill="#B8860B"/>
+  <text x="287" y="311" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" font-weight="700" fill="white">Générer DUERP</text>
+  <!-- Badge conforme -->
+  <rect x="120" y="298" width="90" height="18" rx="9" fill="#D1FAE5"/>
+  <text x="165" y="310" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#065F46">✓ Conforme INRS</text>
+</svg>

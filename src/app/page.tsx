@@ -1,18 +1,26 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { cn } from '@/lib/utils'
 import { CookieBanner } from '@/components/landing/cookie-banner'
 import { MarketingNav } from '@/components/marketing/nav'
 import { MarketingFooter } from '@/components/marketing/footer'
+import { AnimateOnScroll } from '@/components/marketing/animate-on-scroll'
+import { HeroSection, StorySection } from '@/components/marketing/hero-scroll'
+import { Factory, HardHat, Utensils, CheckCircle2, ArrowRight, Shield, BookOpen, MapPin, FileCheck } from 'lucide-react'
 
 export const metadata = {
-  title: "SafeAnalyse. — Votre DUERP en ligne, simple et conforme",
-  description: "L'outil qui guide les PME dans leur évaluation des risques professionnels. Créez votre DUERP en ligne, exportez-le en PDF conforme à la loi du 2 août 2021.",
+  title: 'SafeAnalyse. — Votre DUERP fait sérieusement.',
+  description:
+    "L'outil DUERP guidé pour les PME industrielles. Conçu par un professionnel HSE, conforme Code du travail, accompagnement local Morbihan disponible.",
 }
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (user) redirect('/dashboard')
 
   return (
@@ -21,186 +29,330 @@ export default async function HomePage() {
 
       <main className="flex-1 flex flex-col">
 
-        {/* ── Hero ───────────────────────────────────────────────────── */}
-        <section className="bg-brand-cream py-20 sm:py-32">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="animate-hero-badge inline-flex items-center gap-2 bg-brand-gold-pale border border-brand-sand rounded-full px-4 py-1.5 text-sm text-brand-bronze mb-8 font-medium">
-              <span className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
-              Accès gratuit — 14 jours d&apos;essai complet, sans carte bancaire
-            </div>
-            <h1 className="animate-hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-brand-navy mb-6">
-              Votre Document Unique<br />
-              <span className="text-brand-bronze font-bold">en ligne, simple et conforme</span>
-            </h1>
-            <p className="animate-hero-sub text-lg sm:text-xl text-brand-bronze max-w-2xl mx-auto mb-10 leading-relaxed">
-              L&apos;outil qui guide les PME et TPE françaises dans leur évaluation des risques professionnels.
-              Conforme au Code du travail, exportable en PDF officiel.
-            </p>
-            <div className="animate-hero-cta flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/auth/signup"
-                className="bg-brand-gold text-brand-off hover:bg-brand-gold-light font-semibold px-8 py-3 rounded-lg text-base transition-colors w-full sm:w-auto text-center"
-              >
-                Créer mon DUERP gratuitement →
-              </Link>
-              <Link
-                href="/auth/login"
-                className="text-brand-navy border border-brand-navy hover:bg-brand-navy/5 font-medium px-8 py-3 rounded-lg text-base transition-colors w-full sm:w-auto text-center"
-              >
-                J&apos;ai déjà un compte
-              </Link>
-            </div>
-            <p className="mt-6 text-sm text-brand-bronze/70">
-              Aucune installation — 100 % en ligne — données hébergées en Europe
-            </p>
-          </div>
-        </section>
+        {/* ── 1. Hero plein écran ──────────────────────────────────────── */}
+        <HeroSection />
 
-        {/* ── Comment ça marche ───────────────────────────────────────── */}
-        <section className="py-20 bg-brand-cream-light">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl font-bold text-brand-navy">Comment ça marche ?</h2>
-              <p className="mt-3 text-brand-bronze max-w-xl mx-auto">
-                Du zéro au DUERP finalisé en quelques heures, sans formation HSE requise.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {([
-                { num: "1", titre: "Créez votre entreprise", desc: "Renseignez les informations de votre entreprise : nom, effectif, secteur d'activité, adresse.", icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" },
-                { num: "2", titre: "Déclarez vos postes", desc: "Listez les postes de travail de votre entreprise et décomposez-les en opérations concrètes.", icon: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" },
-                { num: "3", titre: "Évaluez chaque risque", desc: "Notre wizard vous guide module par module (bruit, TMS, RPS…) avec des grilles de cotation normées.", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-                { num: "4", titre: "Générez votre DUERP", desc: "Exportez le Document Unique en PDF horodaté, prêt à présenter à l'inspection du travail.", icon: "M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" },
-              ] as const).map((step, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-start bg-brand-off border border-brand-sand rounded-xl p-6 shadow-[0_1px_3px_rgba(3,25,72,0.05)]"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-brand-gold-pale text-brand-gold flex items-center justify-center mb-4">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={step.icon} />
-                    </svg>
-                  </div>
-                  <div className="text-xs font-bold text-brand-gold mb-1">ÉTAPE {step.num}</div>
-                  <h3 className="font-semibold text-brand-navy mb-2">{step.titre}</h3>
-                  <p className="text-sm text-brand-bronze leading-relaxed">{step.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ── 2. Sticky scroll storytelling ───────────────────────────── */}
+        <StorySection />
 
-        {/* ── Arguments ───────────────────────────────────────────────── */}
-        <section className="py-20 bg-brand-cream">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl font-bold text-brand-navy">Pourquoi choisir cet outil ?</h2>
-              <p className="mt-3 text-brand-bronze max-w-xl mx-auto">
-                Conçu pour les dirigeants de PME qui veulent être conformes sans passer par un cabinet HSE.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* ── 3. Pour qui ─────────────────────────────────────────────── */}
+        <section className="py-24 bg-brand-cream-light">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimateOnScroll animation="fade-up">
+              <div className="text-center mb-14">
+                <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">
+                  Secteurs d&apos;activité
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3 mb-4">
+                  Pour qui est SafeAnalyse. ?
+                </h2>
+                <p className="text-brand-ink-soft max-w-xl mx-auto text-lg">
+                  Conçu pour les PME qui travaillent dans des environnements à risques réels — pas pour les bureaux.
+                </p>
+              </div>
+            </AnimateOnScroll>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {[
-                { titre: "Conforme au Code du travail", desc: "Méthode fondée sur l'article L4121-1 du Code du travail et la loi du 2 août 2021. Versioning des documents avec conservation 40 ans." },
-                { titre: "Guidé pas à pas", desc: "Pas besoin d'être expert HSE. Chaque module vous explique ce que vous devez évaluer et comment, avec des grilles normées (INRS, ANSES)." },
-                { titre: "Adapté aux PME et TPE", desc: "Interface simple, accessible sur tablette, pensée pour les dirigeants de terrain. Pas de jargon inutile, que de l'efficacité." },
-                { titre: "Export PDF professionnel", desc: "Générez en un clic un PDF structuré avec couverture, tableau APR, plan de maîtrise et programme annuel de prévention." },
-              ].map((arg, i) => (
-                <div
-                  key={i}
-                  className="bg-brand-off border border-brand-sand rounded-2xl p-6 shadow-[0_1px_3px_rgba(3,25,72,0.05)] hover:shadow-[0_4px_12px_rgba(3,25,72,0.08)] transition-shadow"
-                >
-                  <div className="w-2 h-2 rounded-full bg-brand-gold mb-4" />
-                  <h3 className="font-semibold text-brand-navy mb-2 text-lg">{arg.titre}</h3>
-                  <p className="text-sm text-brand-bronze leading-relaxed">{arg.desc}</p>
-                </div>
+                {
+                  icon: Factory,
+                  titre: 'Agroalimentaire',
+                  description:
+                    'Ateliers de production, chambres froides, découpe, conditionnement. Bruit, TMS, risques biologiques et chimiques.',
+                  delay: 0 as const,
+                },
+                {
+                  icon: HardHat,
+                  titre: 'BTP & Industrie',
+                  description:
+                    'Chantiers, ateliers de maintenance, manutention. Chutes, vibrations, risques électriques et mécaniques.',
+                  delay: 100 as const,
+                },
+                {
+                  icon: Utensils,
+                  titre: 'Restauration & Services',
+                  description:
+                    'Cuisine professionnelle, hôtellerie, transport. Brûlures, efforts physiques, stress thermique et RPS.',
+                  delay: 200 as const,
+                },
+              ].map((secteur) => (
+                <AnimateOnScroll key={secteur.titre} animation="fade-up" delay={secteur.delay}>
+                  <div className="bg-brand-off border border-brand-sand rounded-2xl p-8 shadow-[0_1px_3px_rgba(3,25,72,0.05)] hover:shadow-[0_4px_16px_rgba(3,25,72,0.09)] transition-shadow group">
+                    <div className="w-12 h-12 rounded-xl bg-brand-gold-pale flex items-center justify-center mb-5 group-hover:bg-brand-gold-pale/80 transition-colors">
+                      <secteur.icon className="w-6 h-6 text-brand-gold" />
+                    </div>
+                    <h3 className="text-xl font-bold text-brand-navy mb-3">{secteur.titre}</h3>
+                    <p className="text-brand-ink-soft leading-relaxed">{secteur.description}</p>
+                  </div>
+                </AnimateOnScroll>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Pricing ─────────────────────────────────────────────────── */}
-        <section className="py-20 bg-brand-cream-light">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold text-brand-navy mb-4">Tarifs simples, sans surprise</h2>
-            <p className="text-brand-bronze mb-12 max-w-xl mx-auto">
-              Un seul plan tout inclus. Vous payez quand vous êtes prêt.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-              {/* Mensuel */}
-              <div className="rounded-2xl border border-brand-sand bg-brand-off p-8 shadow-[0_1px_3px_rgba(3,25,72,0.05)] flex flex-col">
-                <div className="text-sm font-medium text-brand-bronze mb-2">Mensuel</div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-extrabold text-brand-navy">39€</span>
-                  <span className="text-brand-bronze text-sm">/mois</span>
-                </div>
-                <p className="text-xs text-brand-sand-dark mb-6">Sans engagement</p>
-                <ul className="text-sm text-brand-bronze space-y-2 mb-8 text-left flex-1">
-                  {["Postes et opérations illimités", "Tous les modules de risques", "Export PDF DUERP", "Versioning 40 ans", "Support par email"].map((f) => (
-                    <li key={f} className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-criticite-vert shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/auth/signup"
-                  className="border border-brand-navy text-brand-navy hover:bg-brand-navy/5 font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors text-center"
-                >
-                  Commencer l&apos;essai gratuit
-                </Link>
+        {/* ── 4. Comment ça marche ────────────────────────────────────── */}
+        <section className="py-24 bg-brand-cream">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimateOnScroll animation="fade-up">
+              <div className="text-center mb-16">
+                <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">
+                  Démarche
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-brand-navy mt-3 mb-4">
+                  Du zéro au DUERP en quelques heures
+                </h2>
+                <p className="text-brand-ink-soft max-w-xl mx-auto text-lg">
+                  Sans formation HSE requise. Guidé pas à pas, méthodes INRS intégrées.
+                </p>
               </div>
+            </AnimateOnScroll>
 
-              {/* Annuel */}
-              <div className="rounded-2xl border-2 border-brand-navy bg-brand-navy p-8 shadow-md flex flex-col relative">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-off text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-                  1 MOIS OFFERT
-                </div>
-                <div className="text-sm font-medium text-brand-cream mb-2">Annuel</div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-extrabold text-white">390€</span>
-                  <span className="text-brand-cream/70 text-sm">/an</span>
-                </div>
-                <p className="text-xs text-brand-cream/60 mb-6">Soit 32,50€/mois — économisez 78€</p>
-                <ul className="text-sm text-brand-cream space-y-2 mb-8 text-left flex-1">
-                  {["Tout le plan mensuel inclus", "Facture annuelle unique", "Accès prioritaire aux nouveautés"].map((f) => (
-                    <li key={f} className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-brand-gold-light shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  num: '1',
+                  titre: 'Déclarez votre entreprise',
+                  desc: 'Nom, effectif, secteur d\'activité. 2 minutes pour démarrer.',
+                  delay: 0 as const,
+                },
+                {
+                  num: '2',
+                  titre: 'Listez vos postes de travail',
+                  desc: 'Décomposez chaque poste en opérations concrètes — ex : "conduite de chariot", "découpe", "nettoyage".',
+                  delay: 100 as const,
+                },
+                {
+                  num: '3',
+                  titre: 'Évaluez chaque risque',
+                  desc: 'Le wizard vous guide module par module (bruit, TMS, chutes…) avec les grilles de cotation INRS.',
+                  delay: 200 as const,
+                },
+                {
+                  num: '4',
+                  titre: 'Générez votre DUERP PDF',
+                  desc: 'Document horodaté, structuré, prêt à présenter à l\'inspection du travail. Conservé 40 ans automatiquement.',
+                  delay: 300 as const,
+                },
+              ].map((etape) => (
+                <AnimateOnScroll key={etape.num} animation="fade-up" delay={etape.delay}>
+                  <div className="relative flex flex-col bg-brand-off border border-brand-sand rounded-2xl p-6 shadow-[0_1px_3px_rgba(3,25,72,0.05)]">
+                    <div className="text-4xl font-extrabold text-brand-gold-pale mb-3 leading-none">
+                      {etape.num}
+                    </div>
+                    <h3 className="font-bold text-brand-navy text-lg mb-2">{etape.titre}</h3>
+                    <p className="text-sm text-brand-ink-soft leading-relaxed">{etape.desc}</p>
+                  </div>
+                </AnimateOnScroll>
+              ))}
+            </div>
+
+            <AnimateOnScroll animation="fade-up" delay={400}>
+              <div className="mt-10 text-center">
                 <Link
-                  href="/auth/signup"
-                  className="bg-brand-gold hover:bg-brand-gold-light text-brand-off font-semibold py-2.5 px-4 rounded-lg text-sm transition-colors text-center"
+                  href="/outil"
+                  className="inline-flex items-center gap-2 text-brand-navy font-semibold hover:text-brand-accent transition-colors"
                 >
-                  Commencer l&apos;essai gratuit
+                  Voir comment fonctionne l&apos;outil
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
-            </div>
-            <p className="mt-8 text-sm text-brand-bronze/70">
-              14 jours d&apos;essai gratuit complet — aucune carte bancaire requise
-            </p>
+            </AnimateOnScroll>
           </div>
         </section>
 
-        {/* ── CTA final ───────────────────────────────────────────────── */}
-        <section className="py-20 bg-brand-navy text-center">
+        {/* ── 5. Pourquoi pas un autre outil ? (teaser comparatif) ─────── */}
+        <section className="py-24 bg-brand-navy">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimateOnScroll animation="fade-up">
+              <div className="text-center mb-14">
+                <span className="text-brand-gold-light text-xs font-bold uppercase tracking-widest">
+                  Comparatif
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-brand-cream mt-3 mb-4">
+                  Pourquoi pas un autre outil ?
+                </h2>
+                <p className="text-brand-cream/60 max-w-xl mx-auto">
+                  Il existe d&apos;autres solutions. Voici pourquoi les PME industrielles nous choisissent.
+                </p>
+              </div>
+            </AnimateOnScroll>
+
+            {/* Mini-comparatif */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                {
+                  label: 'SafeAnalyse.',
+                  desc: 'Créé par un pro HSE de terrain',
+                  points: ['Méthodes INRS intégrées', 'Guidé pas à pas', 'Accompagnement local possible', 'Conforme Code du travail'],
+                  highlight: true,
+                  delay: 0 as const,
+                },
+                {
+                  label: 'Cabinet HSE',
+                  desc: 'Expertise maximale, prix élevé',
+                  points: ['Expert dédié', '1 500 €+ / audit', 'À renouveler chaque année', 'Pas d\'outil en mains'],
+                  highlight: false,
+                  delay: 100 as const,
+                },
+                {
+                  label: 'Outils gratuits',
+                  desc: 'INRS, Seirich, tableurs…',
+                  points: ['Gratuit', 'Très complexe', 'Pas de guidance', 'Risque d\'erreurs'],
+                  highlight: false,
+                  delay: 200 as const,
+                },
+              ].map((col) => (
+                <AnimateOnScroll key={col.label} animation="fade-up" delay={col.delay}>
+                  <div className={cn(
+                    'rounded-2xl p-6',
+                    col.highlight
+                      ? 'bg-brand-navy-light border-2 border-brand-gold/50 shadow-[0_0_30px_rgba(184,134,11,0.15)]'
+                      : 'bg-brand-navy-deep/60 border border-white/10'
+                  )}>
+                    <div className={cn(
+                      'text-sm font-bold uppercase tracking-wider mb-1',
+                      col.highlight ? 'text-brand-gold-light' : 'text-brand-cream/50'
+                    )}>
+                      {col.label}
+                    </div>
+                    <p className={cn(
+                      'text-xs mb-5',
+                      col.highlight ? 'text-brand-cream/70' : 'text-brand-cream/40'
+                    )}>
+                      {col.desc}
+                    </p>
+                    <ul className="space-y-2.5">
+                      {col.points.map((point) => (
+                        <li key={point} className="flex items-start gap-2">
+                          <CheckCircle2 className={cn(
+                            'w-4 h-4 mt-0.5 shrink-0',
+                            col.highlight ? 'text-brand-success' : 'text-brand-cream/25'
+                          )} />
+                          <span className={cn(
+                            'text-sm leading-snug',
+                            col.highlight ? 'text-brand-cream' : 'text-brand-cream/45'
+                          )}>
+                            {point}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </AnimateOnScroll>
+              ))}
+            </div>
+
+            <AnimateOnScroll animation="fade-up" delay={300}>
+              <div className="mt-10 text-center">
+                <Link
+                  href="/comparatif"
+                  className="inline-flex items-center gap-2 text-brand-gold-light font-semibold hover:text-brand-gold transition-colors"
+                >
+                  Voir le comparatif détaillé
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </AnimateOnScroll>
+          </div>
+        </section>
+
+        {/* ── 6. Pourquoi William ─────────────────────────────────────── */}
+        <section className="py-24 bg-brand-cream-light">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimateOnScroll animation="fade-up">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-center">
+
+                {/* Portrait */}
+                <div className="lg:col-span-2 flex justify-center">
+                  <div className="relative">
+                    <div className="w-52 h-52 rounded-3xl overflow-hidden border-2 border-brand-sand shadow-[0_8px_30px_rgba(3,25,72,0.1)]">
+                      <Image
+                        src="/marketing/william-portrait.svg"
+                        alt="William Maréchal — fondateur SafeAnalyse."
+                        width={208}
+                        height={208}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Badge fondateur */}
+                    <div className="absolute -bottom-3 -right-3 bg-brand-navy text-brand-cream text-xs font-semibold px-3 py-1.5 rounded-full shadow-md">
+                      Fondateur HSE
+                    </div>
+                  </div>
+                </div>
+
+                {/* Texte */}
+                <div className="lg:col-span-3">
+                  <span className="text-brand-accent text-xs font-bold uppercase tracking-widest">
+                    Un outil fait par un pro
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-brand-navy mt-3 mb-4">
+                    Pas un éditeur de logiciels.
+                    <br />Un professionnel HSE en exercice.
+                  </h2>
+                  <p className="text-brand-ink-soft leading-relaxed mb-5">
+                    Je m&apos;appelle William Maréchal. Je suis alternant HSE en PME agroalimentaire depuis 2 ans,
+                    et pompier volontaire en Morbihan. J&apos;ai créé SafeAnalyse. parce que les outils existants
+                    ne correspondaient pas à la réalité du terrain : trop complexes, trop chers, ou trop génériques.
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    {[
+                      { icon: Shield, text: 'BUT HSE — sept. 2026' },
+                      { icon: MapPin, text: 'Morbihan & Bretagne sud' },
+                      { icon: Factory, text: '2 ans en PME agro (MGD Nature)' },
+                      { icon: FileCheck, text: 'Méthodes INRS ED 840, ISO 9612' },
+                    ].map((item) => (
+                      <div key={item.text} className="flex items-center gap-2 text-sm text-brand-ink-soft">
+                        <item.icon className="w-4 h-4 text-brand-gold shrink-0" />
+                        {item.text}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link
+                    href="/a-propos"
+                    className="inline-flex items-center gap-2 text-brand-navy font-semibold hover:text-brand-accent transition-colors"
+                  >
+                    Découvrir mon parcours
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </AnimateOnScroll>
+          </div>
+        </section>
+
+        {/* ── 7. CTA final ─────────────────────────────────────────────── */}
+        <section className="py-24 bg-brand-navy-deep text-center">
           <div className="max-w-2xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl font-bold text-brand-cream mb-4">Prêt à réaliser votre DUERP ?</h2>
-            <p className="text-brand-cream/70 mb-8">
-              Rejoignez les PME qui ont simplifié leur conformité HSE. Démarrez gratuitement, sans engagement.
-            </p>
-            <Link
-              href="/auth/signup"
-              className="inline-block bg-brand-gold hover:bg-brand-gold-light text-brand-off font-semibold px-10 py-3 rounded-lg text-base transition-colors"
-            >
-              Créer mon DUERP gratuitement →
-            </Link>
+            <AnimateOnScroll animation="fade-up">
+              <BookOpen className="w-10 h-10 text-brand-gold mx-auto mb-6 opacity-80" />
+              <h2 className="text-3xl sm:text-4xl font-bold text-brand-cream mb-5 leading-tight">
+                Discutons de votre DUERP.
+              </h2>
+              <p className="text-brand-cream/60 mb-10 text-lg leading-relaxed">
+                Un échange de 20 minutes pour comprendre votre situation et vous dire
+                si SafeAnalyse. est la bonne solution pour vous. Sans engagement.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 bg-brand-gold-light text-brand-navy-deep hover:bg-brand-gold font-semibold px-8 py-3.5 rounded-xl text-base transition-all hover:shadow-[0_4px_20px_rgba(184,134,11,0.4)] hover:scale-[1.02]"
+                >
+                  Demander un échange
+                </Link>
+                <Link
+                  href="/tarifs"
+                  className="inline-flex items-center justify-center gap-2 border border-brand-cream/30 text-brand-cream hover:bg-brand-cream/10 font-medium px-8 py-3.5 rounded-xl text-base transition-all"
+                >
+                  Voir les tarifs
+                </Link>
+              </div>
+              <p className="mt-6 text-sm text-brand-cream/35">
+                14 jours d&apos;essai gratuit · Sans carte bancaire · Résiliable à tout moment
+              </p>
+            </AnimateOnScroll>
           </div>
         </section>
 

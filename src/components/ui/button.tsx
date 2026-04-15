@@ -18,6 +18,15 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        // ── Variantes SafeAnalyse. brand ──
+        "brand-cta":
+          "bg-brand-gold-light text-brand-navy-deep hover:bg-brand-gold font-semibold shadow-[0_1px_4px_rgba(184,134,11,0.2)] hover:shadow-[0_2px_10px_rgba(184,134,11,0.35)] hover:scale-[1.02] transition-all",
+        "brand-primary":
+          "bg-brand-navy text-brand-cream hover:bg-brand-navy-light",
+        "brand-secondary":
+          "border border-brand-navy text-brand-navy bg-transparent hover:bg-brand-navy/5",
+        "brand-secondary-light":
+          "border border-brand-cream/70 text-brand-cream bg-transparent hover:bg-brand-cream/10",
       },
       size: {
         default:

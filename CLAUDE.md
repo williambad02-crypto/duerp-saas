@@ -213,7 +213,7 @@ src/app/
 
 ### Phase 3 — Vitrine V3 + repositionnement Stratégie C — en cours
 
-- [ ] PHASE_VITRINE_V3_A : Fondations (palette enrichie, nav hover, hero Apple-style)
+- [x] PHASE_VITRINE_V3_A : Fondations (palette enrichie, nav hover, hero Apple-style)
 - [ ] PHASE_VITRINE_V3_B : Pages contenu (/outil, /reglementation, /a-propos, /faq, /temoignages, /contact)
 - [ ] PHASE_VITRINE_V3_C : Pages pricing (/tarifs Pack Industrie/Premium + /comparatif)
 - [ ] Bascule pricing Stripe vers nouvelle grille (99€ / 149€)

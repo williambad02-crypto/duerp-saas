@@ -25,6 +25,18 @@
   --color-brand-sand: #E5DDC9;
   --color-brand-sand-dark: #C9BFA5;
 
+  /* ── Nouvelles couleurs V3 ── */
+  --color-brand-navy-deep: #021134;
+  --color-brand-accent: #0EA5E9;
+  --color-brand-accent-dark: #0369A1;
+  --color-brand-success: #10B981;
+  --color-brand-success-soft: #D1FAE5;
+  --color-brand-warning: #F59E0B;
+  --color-brand-danger: #EF4444;
+  --color-brand-ink: #0F172A;
+  --color-brand-ink-soft: #334155;
+  --color-brand-ink-mute: #64748B;
+
   /* ── Criticité (fonctionnel) ── */
   --color-criticite-vert: #16A34A;
   --color-criticite-jaune: #CA8A04;

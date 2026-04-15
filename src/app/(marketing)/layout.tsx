@@ -4,11 +4,12 @@ import { MarketingFooter } from '@/components/marketing/footer'
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <MarketingNav />
-      <main className="flex-1">{children}</main>
+      {/* pt-20 compense le nav fixed qui sort du flux */}
+      <main className="flex-1 pt-20">{children}</main>
       <MarketingFooter />
       <CookieBanner />
-    </>
+    </div>
   )
 }
