@@ -63,9 +63,9 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
       criticite_brute,
       type_risque,
       mesures_existantes,
-      operations!inner (
+      operations (
         nom,
-        postes!inner (
+        postes (
           nom
         )
       ),
