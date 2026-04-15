@@ -84,10 +84,7 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
         coefficient_pm_cible,
         criticite_cible,
         commentaire,
-        date_realisation,
-        contacts_entreprise:contact_id (
-          id, prenom, nom, email, role, rappels_actifs
-        )
+        date_realisation
       )
     `)
     .eq('type_risque', 'aigu')
@@ -123,7 +120,7 @@ export async function getEvaluationsAiguesAvecActions(): Promise<EvaluationAvecA
             date_realisation: action.date_realisation,
           }
         : null,
-      contact: action?.contacts_entreprise ?? null,
+      contact: null, // résolu côté client depuis la prop contacts
     }
   })
 }
