@@ -84,15 +84,13 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
   return (
     <div className="flex flex-col h-full w-full bg-brand-navy overflow-hidden">
       {/* Logo */}
-      <div className="flex items-center justify-between px-4 py-5 border-b border-brand-navy-light" style={{ minHeight: 72 }}>
+      <div className="flex items-center justify-between px-4 py-5 border-b border-brand-navy-light relative" style={{ minHeight: 72 }}>
         <div
           style={{
             opacity: collapsed ? 0 : 1,
-            maxWidth: collapsed ? 0 : 200,
+            transition: 'opacity 150ms ease',
             overflow: 'hidden',
-            transition: collapsed
-              ? 'opacity 80ms ease, max-width 220ms cubic-bezier(0.4,0,0.2,1)'
-              : 'opacity 150ms ease 80ms, max-width 220ms cubic-bezier(0.4,0,0.2,1)',
+            whiteSpace: 'nowrap',
           }}
         >
           <Logo variant="full" theme="white" height={28} />
@@ -100,11 +98,11 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
         <div
           style={{
             opacity: collapsed ? 1 : 0,
-            maxWidth: collapsed ? 40 : 0,
-            overflow: 'hidden',
-            transition: collapsed
-              ? 'opacity 150ms ease 80ms, max-width 220ms cubic-bezier(0.4,0,0.2,1)'
-              : 'opacity 80ms ease, max-width 220ms cubic-bezier(0.4,0,0.2,1)',
+            transition: 'opacity 150ms ease',
+            position: 'absolute',
+            left: 14,
+            top: '50%',
+            transform: 'translateY(-50%)',
           }}
         >
           <div className="w-8 h-8 rounded-lg bg-brand-gold-light flex items-center justify-center">
@@ -123,25 +121,6 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
           </button>
         )}
       </div>
-
-      {/* Nom entreprise */}
-      {nomEntreprise && (
-        <div
-          className="border-b border-brand-navy-light overflow-hidden"
-          style={{
-            maxHeight: collapsed ? 0 : 60,
-            opacity: collapsed ? 0 : 1,
-            transition: collapsed
-              ? 'max-height 220ms cubic-bezier(0.4,0,0.2,1), opacity 80ms ease'
-              : 'max-height 220ms cubic-bezier(0.4,0,0.2,1), opacity 150ms ease 80ms',
-          }}
-        >
-          <div className="px-6 py-3">
-            <p className="text-xs text-brand-cream/40 uppercase tracking-wide font-medium">Entreprise</p>
-            <p className="text-sm font-medium text-brand-cream truncate mt-0.5">{nomEntreprise}</p>
-          </div>
-        </div>
-      )}
 
       {/* Navigation */}
       <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
@@ -168,17 +147,12 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
                 <span className={isActive ? 'text-brand-gold-light' : 'text-brand-off/50'}>
                   {item.icon}
                 </span>
-                {/* Label avec transition opacity/max-width */}
                 <span
                   style={{
                     opacity: collapsed ? 0 : 1,
-                    maxWidth: collapsed ? 0 : 180,
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    transition: collapsed
-                      ? 'opacity 80ms ease, max-width 220ms cubic-bezier(0.4,0,0.2,1)'
-                      : 'opacity 150ms ease 80ms, max-width 220ms cubic-bezier(0.4,0,0.2,1)',
+                    transition: 'opacity 150ms ease',
                   }}
+                  className="whitespace-nowrap overflow-hidden"
                 >
                   {item.label}
                 </span>
@@ -203,7 +177,7 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
       <div
         className="px-4 py-4 border-t border-brand-navy-light space-y-2 overflow-hidden"
         style={{
-          maxHeight: collapsed ? 48 : 120,
+          maxHeight: collapsed ? 48 : 140,
           transition: 'max-height 220ms cubic-bezier(0.4,0,0.2,1)',
         }}
       >
@@ -212,6 +186,11 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
             statut={abonnement.statut}
             joursRestantsTrial={abonnement.joursRestantsTrial}
           />
+        )}
+        {nomEntreprise && !collapsed && (
+          <p className="text-xs text-brand-cream/70 truncate" title={nomEntreprise}>
+            {nomEntreprise}
+          </p>
         )}
         <p
           style={{

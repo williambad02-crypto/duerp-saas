@@ -66,7 +66,7 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
           closeTimer.current = setTimeout(() => setHovered(false), 250)
         }}
         style={{
-          width: collapsed ? 64 : 256,
+          width: (collapsed && !hovered) ? 64 : 256,
           flexShrink: 0,
           transition: 'width 220ms cubic-bezier(0.4,0,0.2,1)',
           position: 'relative',
