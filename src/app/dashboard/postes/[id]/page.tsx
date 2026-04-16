@@ -1,9 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { TableauAPR, OperationUI, RisqueUI } from './_components/tableau-apr'
-import { EditerPosteModal } from '@/components/postes/editer-poste-modal'
-import { SupprimerPosteButton } from '@/components/postes/supprimer-poste-button'
-import Link from 'next/link'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -100,38 +97,15 @@ export default async function PosteDetailPage({ params }: Props) {
   })
 
   return (
-    <div className="h-full flex flex-col gap-3">
-
-      {/* Barre fine : fil d'Ariane + titre poste + actions */}
-      <div className="flex items-center justify-between gap-4 flex-wrap shrink-0">
-        <div className="min-w-0 flex items-center gap-3 flex-wrap">
-          <nav className="flex items-center gap-2 text-xs text-brand-bronze/70">
-            <Link href="/dashboard/postes" className="hover:text-brand-navy transition-colors">
-              Postes de travail
-            </Link>
-            <span>/</span>
-          </nav>
-          <h1 className="text-xl font-bold text-brand-navy leading-tight truncate">{poste.nom}</h1>
-          {poste.description && (
-            <span className="text-xs text-brand-bronze/80 truncate hidden md:inline">
-              — {poste.description}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <EditerPosteModal poste={{ id: poste.id, nom: poste.nom, description: poste.description ?? '' }} />
-          <SupprimerPosteButton posteId={poste.id} nomPoste={poste.nom} />
-        </div>
-      </div>
-
-      {/* Tableau APR — pleine largeur, fond blanc tableur, prend toute la hauteur dispo */}
+    <div className="h-full flex flex-col">
       <div className="-mx-4 lg:-mx-6 flex-1 min-h-0">
         <TableauAPR
           operationsInitiales={operationsUI}
           posteId={poste.id}
+          nomPoste={poste.nom}
+          descriptionPoste={poste.description ?? null}
         />
       </div>
-
     </div>
   )
 }

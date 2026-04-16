@@ -2,8 +2,10 @@
 
 import { useState, useCallback, useRef, useTransition, useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import { Maximize2, Minimize2, Plus, RotateCcw, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Maximize2, Minimize2, Plus, RotateCcw, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { EditerPosteModal } from '@/components/postes/editer-poste-modal'
+import { SupprimerPosteButton } from '@/components/postes/supprimer-poste-button'
 import {
   DndContext,
   DragEndEvent,
@@ -1216,20 +1218,97 @@ function ModalePreselection({
 
 // ─── TableauAPR (orchestrateur) ───────────────────────────────────────────────
 
+// ─── MenuPoste (dropdown ⋮ dans la toolbar) ──────────────────────────────────
+
+function MenuPoste({ posteId, nomPoste, descriptionPoste }: {
+  posteId: string
+  nomPoste: string
+  descriptionPoste: string | null
+}) {
+  const [ouvert, setOuvert] = useState(false)
+  const [editer, setEditer] = useState(false)
+  const [supprimer, setSupprimer] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setOuvert(false)
+    }
+    if (ouvert) document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
+  }, [ouvert])
+
+  return (
+    <>
+      <div className="relative" ref={menuRef}>
+        <button
+          onClick={() => setOuvert(v => !v)}
+          className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-brand-navy hover:bg-gray-100 rounded-lg transition-colors"
+          title="Actions du poste"
+          aria-label="Actions du poste"
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+          </svg>
+        </button>
+        {ouvert && (
+          <div className="absolute left-0 top-full mt-1 w-52 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50">
+            <button
+              onClick={() => { setEditer(true); setOuvert(false) }}
+              className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Renommer le poste
+            </button>
+            <button
+              onClick={() => { setSupprimer(true); setOuvert(false) }}
+              className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
+            >
+              Supprimer le poste
+            </button>
+            <Link
+              href="/dashboard/postes"
+              className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
+            >
+              Retour aux postes
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <EditerPosteModal
+        poste={{ id: posteId, nom: nomPoste, description: descriptionPoste ?? '' }}
+        open={editer}
+        onOpenChange={setEditer}
+        hideTrigger
+      />
+      <SupprimerPosteButton
+        posteId={posteId}
+        nomPoste={nomPoste}
+        open={supprimer}
+        onOpenChange={setSupprimer}
+        hideTrigger
+      />
+    </>
+  )
+}
+
 export function TableauAPR({
   operationsInitiales,
   posteId,
+  nomPoste,
+  descriptionPoste,
 }: {
   operationsInitiales: OperationUI[]
   posteId: string
+  nomPoste: string
+  descriptionPoste: string | null
 }) {
   const [operations, setOperations] = useState<OperationUI[]>(operationsInitiales)
   const [celluleActive, setCelluleActive] = useState<CelluleActive>(null)
-  const [ajoutOpOuvert, setAjoutOpOuvert] = useState(false)
-  const [nomNouvelleOp, setNomNouvelleOp] = useState('')
   const [modale, setModale] = useState<ModaleEtat>(null)
   const [modalePresel, setModalePresel] = useState<ModalePreselEtat>(null)
   const [isPending, startTransition] = useTransition()
+  const [ajoutOpEnCours, startAjoutOp] = useTransition()
   const [activeId, setActiveId] = useState<string | null>(null)
   const [pleinEcran, setPleinEcran] = useState(false)
   const [savedRecently, setSavedRecently] = useState(false)
@@ -1304,15 +1383,13 @@ export function TableauAPR({
     })
   }, [operations, posteId, updateRisque])
 
-  const handleAddOperation = async () => {
-    const nom = nomNouvelleOp.trim()
-    if (!nom) return
-    const result = await actions.creerOperationInline(posteId, nom)
-    if (result.succes && result.operation) {
-      setOperations(prev => [...prev, { ...result.operation!, risques: [] }])
-      setNomNouvelleOp('')
-      setAjoutOpOuvert(false)
-    }
+  const handleAddOperation = () => {
+    startAjoutOp(async () => {
+      const result = await actions.creerOperationInline(posteId, 'Nouvelle opération')
+      if (result.succes && result.operation) {
+        setOperations(prev => [...prev, { ...result.operation!, risques: [] }])
+      }
+    })
   }
 
   const handleAddRisque = async (operationId: string) => {
@@ -1444,34 +1521,33 @@ export function TableauAPR({
   // ── Toolbar ─────────────────────────────────────────────────────────────────
 
   const toolbar = (
-    <div className="flex items-center justify-between gap-4 px-1">
-      <div className="flex items-center gap-2">
-        {ajoutOpOuvert ? (
-          <>
-            <input
-              autoFocus
-              value={nomNouvelleOp}
-              onChange={e => setNomNouvelleOp(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleAddOperation()
-                if (e.key === 'Escape') { setAjoutOpOuvert(false); setNomNouvelleOp('') }
-              }}
-              placeholder="Nom de la nouvelle opération…"
-              className="text-sm px-3 py-1.5 border border-brand-navy rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-navy/10 bg-brand-off text-brand-navy w-64"
-            />
-            <button onClick={handleAddOperation} className="text-sm font-medium bg-brand-navy text-brand-cream px-4 py-1.5 rounded-lg hover:bg-brand-navy/90 transition-colors">Créer</button>
-            <button onClick={() => { setAjoutOpOuvert(false); setNomNouvelleOp('') }} className="text-sm text-brand-bronze hover:text-brand-navy transition-colors px-2">Annuler</button>
-          </>
-        ) : (
-          <button onClick={() => setAjoutOpOuvert(true)} className="flex items-center gap-2 text-sm font-medium bg-brand-navy text-brand-cream px-4 py-2 rounded-lg hover:bg-brand-navy/90 transition-colors">
-            <span className="text-lg leading-none">+</span>
-            Ajouter une opération
-          </button>
-        )}
+    <div className="flex items-center gap-3 h-12 px-4 lg:px-6">
+
+      {/* Gauche : retour + nom poste + menu */}
+      <div className="flex items-center gap-2 shrink-0 min-w-0">
+        <Link
+          href="/dashboard/postes"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-brand-navy hover:bg-gray-100 rounded-lg transition-colors shrink-0"
+          title="Retour aux postes"
+          aria-label="Retour aux postes"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </Link>
+        <h1
+          className="text-sm font-semibold text-brand-navy truncate max-w-[300px]"
+          title={descriptionPoste ?? nomPoste}
+        >
+          {nomPoste}
+        </h1>
+        <MenuPoste posteId={posteId} nomPoste={nomPoste} descriptionPoste={descriptionPoste} />
       </div>
 
-      <div className="flex items-center gap-3">
-        <div className="h-5 flex items-center">
+      {/* Centre : placeholder (compteur criticités ajouté en Task 6) */}
+      <div className="flex-1" />
+
+      {/* Droite : indicateur sauvegarde + icônes actions */}
+      <div className="flex items-center gap-1 shrink-0">
+        <div className="h-5 flex items-center mr-1">
           {isPending && (
             <span className="flex items-center gap-1.5 text-xs text-gray-500">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />Sauvegarde…
@@ -1489,18 +1565,18 @@ export function TableauAPR({
 
         <button
           onClick={resetWidths}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors px-2 py-1 rounded hover:bg-gray-100"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-brand-navy hover:bg-gray-100 rounded-lg transition-colors"
           title="Remettre les largeurs par défaut"
+          aria-label="Remettre les largeurs par défaut"
         >
-          <RotateCcw className="w-3 h-3" />
-          <span className="hidden sm:inline">Colonnes</span>
+          <RotateCcw className="w-4 h-4" />
         </button>
 
         <button
           onClick={() => setPleinEcran(v => !v)}
-          className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
-          aria-label={pleinEcran ? 'Quitter le plein écran' : 'Plein écran'}
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-brand-navy hover:bg-gray-100 rounded-lg transition-colors"
           title={pleinEcran ? 'Quitter le plein écran (Échap)' : 'Plein écran'}
+          aria-label={pleinEcran ? 'Quitter le plein écran' : 'Plein écran'}
         >
           {pleinEcran ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
         </button>
@@ -1612,6 +1688,20 @@ export function TableauAPR({
               onOpenPresel={(risqueId, moduleCode) => setModalePresel({ risqueId, moduleCode })}
             />
           ))}
+
+          {/* Ligne d'ajout opération (pattern Notion/Linear) */}
+          <tr>
+            <td colSpan={17} className="border-b border-gray-200 p-0">
+              <button
+                onClick={handleAddOperation}
+                disabled={ajoutOpEnCours}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm text-gray-500 hover:text-brand-navy hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                <Plus className="w-4 h-4" />
+                {ajoutOpEnCours ? 'Ajout…' : 'Ajouter une opération'}
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -1630,7 +1720,7 @@ export function TableauAPR({
     <>
       {!pleinEcran && (
         <div className="h-full bg-white border-t border-b border-gray-200 flex flex-col">
-          <div className="shrink-0 px-4 lg:px-6 py-2 border-b border-gray-200 bg-gray-50">
+          <div className="shrink-0 border-b border-gray-200 bg-gray-50">
             {toolbar}
           </div>
           <div className="flex-1 min-h-0 overflow-auto">
@@ -1641,7 +1731,7 @@ export function TableauAPR({
 
       {pleinEcran && (
         <div className="fixed inset-0 z-50 bg-white flex flex-col overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 shrink-0">
+          <div className="bg-gray-50 border-b border-gray-200 shrink-0">
             {toolbar}
           </div>
           <div className="flex-1 overflow-x-auto overflow-y-auto">
