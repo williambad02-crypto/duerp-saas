@@ -80,7 +80,7 @@ const COLONNES_TAB = [
 // ─── Styles communs ───────────────────────────────────────────────────────────
 
 const TH = 'bg-gray-100 border-r border-b border-t border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
-const TD = 'border-r border-b border-gray-200 px-2 py-1 text-xs text-gray-800'
+const TD = 'border-r border-b border-gray-200 px-3 py-2 text-xs text-gray-800'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -112,8 +112,8 @@ const DEFAULT_WIDTHS: Record<string, number> = {
   operation: 140, handle: 32, ref: 72, danger: 180,
   situation_dangereuse: 200, numero_risque_ed840: 240, type_risque: 88,
   evenement_dangereux: 175, dommage: 150, siege_lesions: 140,
-  gravite: 84, second: 104, criticite_brute: 84,
-  mesures_techniques: 180, coefficient_pm: 72, criticite_residuelle: 88,
+  gravite: 120, second: 130, criticite_brute: 100,
+  mesures_techniques: 280, coefficient_pm: 110, criticite_residuelle: 110,
   actions: 36,
 }
 
@@ -207,7 +207,7 @@ function CelluleTexte({
 
   if (isActive) {
     return (
-      <td className={`px-2 py-1 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
+      <td className={`px-3 py-2 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
         <input
           ref={ref}
           value={draft}
@@ -267,7 +267,7 @@ function CelluleSelect({
 
   if (isActive && !disabled) {
     return (
-      <td className={`px-1 py-1 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
+      <td className={`px-2 py-2 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
         <select
           ref={ref}
           defaultValue={String(valeur ?? '')}
