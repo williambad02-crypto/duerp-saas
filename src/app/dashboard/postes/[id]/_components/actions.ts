@@ -67,6 +67,237 @@ export async function renommerOperation(operationId: string, posteId: string, no
   return { succes: true }
 }
 
+export async function dupliquerOperation(operationId: string, posteId: string) {
+  const { supabase } = await getClient()
+
+  // 1. Charger l'opération source
+  const { data: opSource, error: errOp } = await supabase
+    .from('operations')
+    .select('id, poste_id, nom, description, est_transversale, ordre')
+    .eq('id', operationId)
+    .single()
+
+  if (errOp || !opSource) return { erreur: "Opération introuvable." }
+
+  // 2. Refuser si transversale
+  if (opSource.est_transversale) {
+    return { erreur: "Impossible de dupliquer l'opération transversale." }
+  }
+
+  // 3. Charger les évaluations APR source + leurs plans de maîtrise
+  const { data: evaluationsSource, error: errEval } = await supabase
+    .from('evaluations')
+    .select(`
+      id,
+      numero_risque_ed840,
+      type_risque,
+      statut,
+      danger,
+      situation_dangereuse,
+      evenement_dangereux,
+      dommage,
+      siege_lesions,
+      gravite,
+      probabilite,
+      duree_exposition,
+      criticite_brute,
+      ordre,
+      module_status,
+      preselection_responses,
+      module_completed_at,
+      plans_maitrise (
+        coefficient_pm,
+        criticite_residuelle,
+        mesures_techniques,
+        mesures_humaines,
+        mesures_organisationnelles,
+        mesures_epi
+      )
+    `)
+    .eq('operation_id', operationId)
+    .eq('code_module', 'APR')
+
+  if (errEval) return { erreur: "Erreur lors du chargement des risques sources." }
+
+  // 4. Calculer le nouvel ordre et décaler les opérations suivantes
+  const nouvelOrdre = opSource.ordre + 1
+
+  const { data: opsSuivantes, error: errOps } = await supabase
+    .from('operations')
+    .select('id, ordre')
+    .eq('poste_id', posteId)
+    .gte('ordre', nouvelOrdre)
+    .order('ordre', { ascending: false })
+
+  if (errOps) return { erreur: "Erreur lors de la préparation de l'ordre." }
+
+  // Décalage en descendant pour éviter toute collision intermédiaire
+  for (const op of opsSuivantes ?? []) {
+    const { error } = await supabase
+      .from('operations')
+      .update({ ordre: op.ordre + 1 })
+      .eq('id', op.id)
+    if (error) return { erreur: "Erreur lors du décalage des opérations." }
+  }
+
+  // 5. Insérer la nouvelle opération (clone)
+  const { data: opClone, error: errInsert } = await supabase
+    .from('operations')
+    .insert({
+      poste_id: posteId,
+      nom: `${opSource.nom} (copie)`,
+      description: opSource.description,
+      est_transversale: false,
+      ordre: nouvelOrdre,
+    })
+    .select('id, nom, est_transversale, ordre')
+    .single()
+
+  if (errInsert || !opClone) {
+    return { erreur: "Erreur lors de la création de l'opération dupliquée." }
+  }
+
+  // 6. Pour chaque évaluation source → cloner + cloner son plan de maîtrise
+  // On génère un nouvel identifiant_auto basé sur le nouvel ordre du poste
+  // (le champ est auto-géré par l'application, pas par un trigger DB)
+  type PlanMaitriseSource = {
+    coefficient_pm: number
+    criticite_residuelle: number | null
+    mesures_techniques: string | null
+    mesures_humaines: string | null
+    mesures_organisationnelles: string | null
+    mesures_epi: string | null
+  }
+
+  // Récupérer l'ordre du poste pour régénérer l'identifiant_auto
+  const { data: posteData } = await supabase
+    .from('postes')
+    .select('ordre')
+    .eq('id', posteId)
+    .single()
+  const ordrePoste = (posteData?.ordre ?? 0) + 1
+
+  const risquesClones: Array<{
+    id: string
+    operation_id: string
+    identifiant_auto: string | null
+    numero_risque_ed840: number | null
+    type_risque: string
+    danger: string | null
+    situation_dangereuse: string | null
+    evenement_dangereux: string | null
+    dommage: string | null
+    siege_lesions: string | null
+    gravite: number | null
+    probabilite: number | null
+    duree_exposition: number | null
+    criticite_brute: number | null
+    coefficient_pm: number
+    criticite_residuelle: number | null
+    mesures_techniques: string | null
+    ordre: number
+    module_status: string | null
+    preselection_responses: boolean[] | null
+  }> = []
+
+  let sequence = 1
+  for (const evalSrc of evaluationsSource ?? []) {
+    // Identifiant unique basé sur le timestamp pour éviter les collisions
+    const identifiant = `UT${String(ordrePoste).padStart(2, '0')}-R${String(Date.now() % 10000 + sequence).padStart(3, '0')}`
+    sequence++
+
+    const { data: evalClone, error: errEvalInsert } = await supabase
+      .from('evaluations')
+      .insert({
+        operation_id: opClone.id,
+        code_module: 'APR',
+        numero_risque_ed840: evalSrc.numero_risque_ed840,
+        type_risque: evalSrc.type_risque,
+        statut: evalSrc.statut ?? 'brouillon',
+        identifiant_auto: identifiant,
+        danger: evalSrc.danger,
+        situation_dangereuse: evalSrc.situation_dangereuse,
+        evenement_dangereux: evalSrc.evenement_dangereux,
+        dommage: evalSrc.dommage,
+        siege_lesions: evalSrc.siege_lesions,
+        gravite: evalSrc.gravite,
+        probabilite: evalSrc.probabilite,
+        duree_exposition: evalSrc.duree_exposition,
+        criticite_brute: evalSrc.criticite_brute,
+        ordre: evalSrc.ordre,
+        module_status: evalSrc.module_status,
+        preselection_responses: evalSrc.preselection_responses,
+        module_completed_at: evalSrc.module_completed_at,
+      })
+      .select('id, identifiant_auto, numero_risque_ed840, type_risque, danger, situation_dangereuse, evenement_dangereux, dommage, siege_lesions, gravite, probabilite, duree_exposition, criticite_brute, ordre, module_status, preselection_responses')
+      .single()
+
+    if (errEvalInsert || !evalClone) {
+      // Best-effort : on continue, mais on ne bloque pas la création du clone
+      continue
+    }
+
+    // Cloner le plan de maîtrise (ou créer un PM vide par défaut)
+    const pmRaw = evalSrc.plans_maitrise as unknown
+    const pmSource: PlanMaitriseSource | null = Array.isArray(pmRaw)
+      ? (pmRaw[0] as PlanMaitriseSource | undefined) ?? null
+      : (pmRaw as PlanMaitriseSource | null)
+
+    let coefficientPm: number = 1.0
+    let criticiteResiduelle: number | null = null
+    let mesuresTechniques: string | null = null
+
+    if (pmSource) {
+      coefficientPm = pmSource.coefficient_pm
+      criticiteResiduelle = pmSource.criticite_residuelle
+      mesuresTechniques = pmSource.mesures_techniques
+
+      await supabase.from('plans_maitrise').insert({
+        evaluation_id: evalClone.id,
+        coefficient_pm: pmSource.coefficient_pm,
+        criticite_residuelle: pmSource.criticite_residuelle,
+        mesures_techniques: pmSource.mesures_techniques,
+        mesures_humaines: pmSource.mesures_humaines,
+        mesures_organisationnelles: pmSource.mesures_organisationnelles,
+        mesures_epi: pmSource.mesures_epi,
+      })
+    } else {
+      // Fallback : plan vide (aligné avec le comportement de creerRisqueVide)
+      await supabase.from('plans_maitrise').insert({
+        evaluation_id: evalClone.id,
+        coefficient_pm: 1.0,
+        criticite_residuelle: null,
+      })
+    }
+
+    risquesClones.push({
+      id: evalClone.id as string,
+      operation_id: opClone.id as string,
+      identifiant_auto: (evalClone.identifiant_auto as string | null) ?? null,
+      numero_risque_ed840: evalClone.numero_risque_ed840 as number | null,
+      type_risque: evalClone.type_risque as string,
+      danger: evalClone.danger as string | null,
+      situation_dangereuse: evalClone.situation_dangereuse as string | null,
+      evenement_dangereux: evalClone.evenement_dangereux as string | null,
+      dommage: evalClone.dommage as string | null,
+      siege_lesions: evalClone.siege_lesions as string | null,
+      gravite: evalClone.gravite as number | null,
+      probabilite: evalClone.probabilite as number | null,
+      duree_exposition: evalClone.duree_exposition as number | null,
+      criticite_brute: evalClone.criticite_brute as number | null,
+      coefficient_pm: coefficientPm,
+      criticite_residuelle: criticiteResiduelle,
+      mesures_techniques: mesuresTechniques,
+      ordre: (evalClone.ordre as number | null) ?? 0,
+      module_status: evalClone.module_status as string | null,
+      preselection_responses: (evalClone.preselection_responses as boolean[] | null) ?? null,
+    })
+  }
+
+  revalidatePath(`/dashboard/postes/${posteId}`)
+  return { succes: true, operation: opClone, risques: risquesClones }
+}
+
 export async function supprimerOperationAvecOptions(
   operationId: string,
   posteId: string,

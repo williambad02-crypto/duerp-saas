@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useTransition, useEffect, useMemo } from
 import { createPortal } from 'react-dom'
 import { ArrowLeft, Maximize2, Minimize2, Plus, RotateCcw, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { EditerPosteModal } from '@/components/postes/editer-poste-modal'
 import { SupprimerPosteButton } from '@/components/postes/supprimer-poste-button'
 import {
@@ -954,6 +955,7 @@ function CelluleModuleNorme({
 function GroupeOperation({
   operation, posteId, celluleActive, onActivateCell, onSaveCell,
   onAddRisque, onDeleteRisque, onMoveRisque, onRenameOperation, onDeleteOperation,
+  onDuplicateOperation,
   autresOperations, groupIndex, widths, onOpenPresel,
 }: {
   operation: OperationUI; posteId: string; celluleActive: CelluleActive
@@ -964,6 +966,7 @@ function GroupeOperation({
   onMoveRisque: (risqueId: string, opId: string) => Promise<void>
   onRenameOperation: (id: string, nom: string) => Promise<void>
   onDeleteOperation: (id: string, nom: string, nb: number) => void
+  onDuplicateOperation: (id: string) => void
   autresOperations: OperationUI[]
   groupIndex: number
   widths: Record<string, number>
@@ -972,6 +975,7 @@ function GroupeOperation({
   const [renaming, setRenaming] = useState(false)
   const [nomDraft, setNomDraft] = useState(operation.nom)
   const [ajoutEnCours, setAjoutEnCours] = useState(false)
+  const [duplicationEnCours, setDuplicationEnCours] = useState(false)
   const renameRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -1046,7 +1050,7 @@ function GroupeOperation({
         </button>
       </div>
 
-      {/* Bas : actions renommer / supprimer alignées à droite (sauf Toutes opérations) */}
+      {/* Bas : actions renommer / dupliquer / supprimer alignées à droite (sauf Toutes opérations) */}
       {!operation.est_transversale && (
         <div className="flex items-center justify-end gap-0.5 mt-auto pt-2">
           <button
@@ -1057,6 +1061,29 @@ function GroupeOperation({
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
+          </button>
+          <button
+            onClick={() => {
+              if (duplicationEnCours) return
+              setDuplicationEnCours(true)
+              onDuplicateOperation(operation.id)
+              // Le parent gère l'async ; on reset rapidement pour éviter le blocage visuel
+              setTimeout(() => setDuplicationEnCours(false), 600)
+            }}
+            disabled={duplicationEnCours}
+            className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded hover:bg-gray-200 disabled:opacity-50"
+            title="Dupliquer l'opération"
+          >
+            {duplicationEnCours ? (
+              <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+            )}
           </button>
           <button
             onClick={() => onDeleteOperation(operation.id, operation.nom, operation.risques.length)}
@@ -1397,6 +1424,7 @@ export function TableauAPR({
   nomPoste: string
   descriptionPoste: string | null
 }) {
+  const router = useRouter()
   const [operations, setOperations] = useState<OperationUI[]>(operationsInitiales)
   const [celluleActive, setCelluleActive] = useState<CelluleActive>(null)
   const [modale, setModale] = useState<ModaleEtat>(null)
@@ -1565,6 +1593,59 @@ export function TableauAPR({
   const handleRenameOperation = async (operationId: string, nom: string) => {
     setOperations(prev => prev.map(op => op.id === operationId ? { ...op, nom } : op))
     await actions.renommerOperation(operationId, posteId, nom)
+  }
+
+  const handleDuplicateOperation = (operationId: string) => {
+    startTransition(async () => {
+      const result = await actions.dupliquerOperation(operationId, posteId)
+      if (result.succes && result.operation) {
+        // Construit l'opération clonée (avec ses risques) et l'insère juste après l'original
+        setOperations(prev => {
+          const nextOps = [...prev]
+          const sourceIdx = nextOps.findIndex(op => op.id === operationId)
+          const risquesUI: RisqueUI[] = (result.risques ?? []).map(r => ({
+            id: r.id,
+            operation_id: r.operation_id,
+            identifiant_auto: r.identifiant_auto,
+            numero_risque_ed840: r.numero_risque_ed840,
+            type_risque: (r.type_risque === 'chronique' ? 'chronique' : 'aigu') as 'aigu' | 'chronique',
+            danger: r.danger,
+            situation_dangereuse: r.situation_dangereuse,
+            evenement_dangereux: r.evenement_dangereux,
+            dommage: r.dommage,
+            siege_lesions: r.siege_lesions,
+            gravite: r.gravite,
+            probabilite: r.probabilite,
+            duree_exposition: r.duree_exposition,
+            criticite_brute: r.criticite_brute,
+            coefficient_pm: r.coefficient_pm ?? 1.0,
+            criticite_residuelle: r.criticite_residuelle,
+            mesures_techniques: r.mesures_techniques,
+            ordre: r.ordre ?? 0,
+            module_status: (r.module_status as RisqueUI['module_status']) ?? null,
+            preselection_responses: r.preselection_responses,
+          }))
+          const cloneEntry: OperationUI = {
+            id: result.operation!.id,
+            nom: result.operation!.nom,
+            est_transversale: result.operation!.est_transversale,
+            ordre: result.operation!.ordre,
+            risques: risquesUI,
+          }
+          if (sourceIdx === -1) {
+            nextOps.push(cloneEntry)
+          } else {
+            nextOps.splice(sourceIdx + 1, 0, cloneEntry)
+          }
+          return nextOps
+        })
+        // Revalidation server-side déjà déclenchée par la server action
+        router.refresh()
+      } else {
+        console.error('Erreur duplication opération', result)
+        alert("Impossible de dupliquer l'opération. Réessaie ou recharge la page.")
+      }
+    })
   }
 
   const handlePreselectionSubmit = useCallback((risqueId: string, _reponses: boolean[], moduleStatus: 'maitrise' | 'creuser') => {
@@ -1832,6 +1913,7 @@ export function TableauAPR({
               onMoveRisque={handleMoveRisque}
               onRenameOperation={handleRenameOperation}
               onDeleteOperation={(id, nom, nb) => setModale({ type: 'operation', id, nom, nbRisques: nb })}
+              onDuplicateOperation={handleDuplicateOperation}
               autresOperations={operations.filter(o => o.id !== op.id)}
               groupIndex={groupIdx}
               widths={widths}
