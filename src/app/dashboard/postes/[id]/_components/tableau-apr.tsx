@@ -79,7 +79,7 @@ const COLONNES_TAB = [
 
 // ─── Styles communs ───────────────────────────────────────────────────────────
 
-const TH = 'bg-gray-100 border-r border-b border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
+const TH = 'bg-gray-100 border-r border-b border-t border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
 const TD = 'border-r border-b border-gray-200 px-2 py-1 text-xs text-gray-800'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
