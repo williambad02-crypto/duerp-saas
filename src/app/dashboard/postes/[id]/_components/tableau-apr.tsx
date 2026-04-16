@@ -1265,12 +1265,6 @@ function MenuPoste({ posteId, nomPoste, descriptionPoste }: {
             >
               Supprimer le poste
             </button>
-            <Link
-              href="/dashboard/postes"
-              className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
-            >
-              Retour aux postes
-            </Link>
           </div>
         )}
       </div>
@@ -1385,9 +1379,17 @@ export function TableauAPR({
 
   const handleAddOperation = () => {
     startAjoutOp(async () => {
-      const result = await actions.creerOperationInline(posteId, 'Nouvelle opération')
+      // Numéroter pour éviter les doublons silencieux "Nouvelle opération" × N
+      const existants = operations.filter(op => op.nom.startsWith('Nouvelle opération'))
+      const nomNouvelle = existants.length === 0
+        ? 'Nouvelle opération'
+        : `Nouvelle opération ${existants.length + 1}`
+      const result = await actions.creerOperationInline(posteId, nomNouvelle)
       if (result.succes && result.operation) {
         setOperations(prev => [...prev, { ...result.operation!, risques: [] }])
+      } else {
+        console.error('Erreur création opération', result)
+        alert("Impossible de créer l'opération. Vérifie ta connexion et réessaie.")
       }
     })
   }
@@ -1691,11 +1693,11 @@ export function TableauAPR({
 
           {/* Ligne d'ajout opération (pattern Notion/Linear) */}
           <tr>
-            <td colSpan={17} className="border-b border-gray-200 p-0">
+            <td colSpan={17} className="border-b border-gray-200 p-0 bg-gray-50">
               <button
                 onClick={handleAddOperation}
                 disabled={ajoutOpEnCours}
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm text-gray-500 hover:text-brand-navy hover:bg-gray-50 transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm text-gray-500 hover:text-brand-navy hover:bg-gray-100 transition-colors disabled:opacity-50"
               >
                 <Plus className="w-4 h-4" />
                 {ajoutOpEnCours ? 'Ajout…' : 'Ajouter une opération'}

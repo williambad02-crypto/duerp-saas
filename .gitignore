@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Documentation métier — sources lourdes
 DUERP/00_SOURCES/
+
+# Superpowers brainstorming cache (HTML générés par le skill)
+.superpowers/
