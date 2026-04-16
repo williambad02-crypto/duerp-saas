@@ -29,6 +29,9 @@ export function DashboardShell({ children, nomEntreprise, abonnement }: Dashboar
   }, [])
 
   const toggleSidebar = useCallback(() => {
+    // Clear pending hover timers pour éviter un re-open immédiat après toggle
+    if (openTimer.current) { clearTimeout(openTimer.current); openTimer.current = null }
+    if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null }
     setCollapsed(prev => {
       const next = !prev
       try { localStorage.setItem('sidebar-collapsed', String(next)) } catch {}

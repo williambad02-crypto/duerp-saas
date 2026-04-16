@@ -88,7 +88,8 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
         <div
           style={{
             opacity: collapsed ? 0 : 1,
-            transition: 'opacity 150ms ease',
+            maxWidth: collapsed ? 0 : 200,
+            transition: 'opacity 150ms ease, max-width 220ms cubic-bezier(0.4,0,0.2,1)',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
           }}
@@ -160,6 +161,7 @@ export function Sidebar({ nomEntreprise, onClose, abonnement, collapsed = false 
 
               {/* Tooltip — visible uniquement en mode collapsed */}
               <span
+                aria-hidden="true"
                 className="absolute left-full ml-3 top-1/2 -translate-y-1/2 bg-brand-navy-light text-brand-cream text-xs px-2.5 py-1 rounded-lg whitespace-nowrap pointer-events-none z-[60] shadow-lg border border-white/10"
                 style={{
                   opacity: collapsed ? undefined : 0,
