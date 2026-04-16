@@ -79,7 +79,7 @@ const COLONNES_TAB = [
 
 // ─── Styles communs ───────────────────────────────────────────────────────────
 
-const TH = 'bg-gray-100 border border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
+const TH = 'bg-gray-100 border border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
 const TD = 'px-3 py-2.5 text-xs border border-gray-200 text-gray-900'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ const DEFAULT_WIDTHS: Record<string, number> = {
   operation: 140, handle: 32, ref: 72, danger: 180,
   situation_dangereuse: 200, numero_risque_ed840: 240, type_risque: 88,
   evenement_dangereux: 175, dommage: 150, siege_lesions: 140,
-  gravite: 52, second: 52, criticite_brute: 84,
+  gravite: 84, second: 104, criticite_brute: 84,
   mesures_techniques: 180, coefficient_pm: 72, criticite_residuelle: 88,
   actions: 36,
 }
@@ -564,7 +564,7 @@ function LigneRisque({
         onSave={v => onSaveCell(risque.id, 'danger', v)}
         onTab={() => nextCol('danger')}
         style={{ width: widths.danger }}
-        tdClassName={`sticky left-0 z-[11] ${stickyBg} shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]${sepClass}`}
+        tdClassName={sepClass}
       />
 
       {/* Situation dangereuse */}
@@ -915,27 +915,19 @@ function GroupeOperation({
   const groupBg = getGroupBg(operation, groupIndex)
   const isFirstGroup = groupIndex === 0
 
-  const opCellBg = operation.est_transversale ? 'bg-amber-50'
-    : groupBg === 'bg-slate-100' ? 'bg-slate-100'
-    : 'bg-white'
+  const opCellBg = groupBg === 'bg-slate-100' ? 'bg-slate-100' : 'bg-white'
 
   const nbLignes = Math.max(operation.risques.length, 1)
-  // +1 pour hauteur minimale confortable
   const operationRowSpan = Math.max(operation.risques.length, 1)
 
-  // Contenu de la cellule opération
+  // Contenu de la cellule opération — layout uniforme pour transversale et normale
   const operationCell = (
     <div
-      className={`flex flex-col h-full px-2 py-2 gap-1 ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}
+      className="flex flex-col h-full px-2.5 py-2 text-gray-800"
       style={{ minHeight: `${nbLignes * 36 + 4}px` }}
     >
-      {/* Nom + bouton + inline */}
-      <div className="flex items-start gap-1">
-        {operation.est_transversale && (
-          <svg className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clipRule="evenodd" />
-          </svg>
-        )}
+      {/* Haut : nom centré + bouton + */}
+      <div className="flex items-start gap-1.5">
         <div className="flex-1 min-w-0">
           {renaming ? (
             <input
@@ -947,10 +939,10 @@ function GroupeOperation({
                 if (e.key === 'Enter') handleRenameCommit()
                 if (e.key === 'Escape') { setNomDraft(operation.nom); setRenaming(false) }
               }}
-              className="text-xs font-semibold bg-white text-gray-800 border border-blue-400 rounded px-1.5 py-0.5 focus:outline-none w-full"
+              className="text-[13px] font-semibold bg-white text-gray-800 border border-blue-400 rounded px-1.5 py-0.5 focus:outline-none w-full"
             />
           ) : (
-            <span className={`text-xs font-semibold leading-tight break-words ${operation.est_transversale ? 'text-amber-800' : 'text-gray-800'}`}>
+            <span className="text-[13px] font-semibold leading-snug break-words text-gray-900">
               {operation.nom}
             </span>
           )}
@@ -959,7 +951,7 @@ function GroupeOperation({
         <button
           onClick={handleAddInline}
           disabled={ajoutEnCours}
-          className="shrink-0 w-5 h-5 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-400 hover:text-brand-navy hover:border-brand-navy transition-colors disabled:opacity-50"
+          className="shrink-0 w-5 h-5 flex items-center justify-center rounded border border-gray-300 bg-white text-gray-500 hover:text-brand-navy hover:border-brand-navy transition-colors disabled:opacity-50"
           title="Ajouter un risque"
         >
           {ajoutEnCours ? (
@@ -973,19 +965,15 @@ function GroupeOperation({
         </button>
       </div>
 
-      {operation.est_transversale && (
-        <span className="text-[10px] text-amber-600/70 italic leading-tight">Transversal</span>
-      )}
-
-      {/* Actions renommer / supprimer — sauf transversale */}
+      {/* Bas : actions renommer / supprimer alignées à droite (sauf Toutes opérations) */}
       {!operation.est_transversale && (
-        <div className="flex items-center gap-0.5 mt-auto">
+        <div className="flex items-center justify-end gap-0.5 mt-auto pt-2">
           <button
             onClick={() => setRenaming(true)}
             className="text-gray-400 hover:text-gray-700 transition-colors p-1 rounded hover:bg-gray-200"
             title="Renommer"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
           </button>
@@ -994,7 +982,7 @@ function GroupeOperation({
             className="text-red-400/60 hover:text-red-500 transition-colors p-1 rounded hover:bg-red-50"
             title="Supprimer"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </button>
@@ -1424,8 +1412,9 @@ export function TableauAPR({
 
   // ── Super-header labels ──────────────────────────────────────────────────────
 
-  const TH_ZONE = 'border border-gray-300 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-center'
-  const TH2 = 'bg-gray-100 border border-gray-300 px-2 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-[0.05em] text-center relative'
+  // shadow inset = bordures auto-peintes à l'intérieur de la cellule ; robustes en sticky
+  const TH_ZONE = 'border border-gray-300 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-center shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
+  const TH2 = 'bg-gray-50 border border-gray-300 px-2 py-2 text-[12px] font-semibold text-gray-700 tracking-normal text-center relative shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
 
   // ── Toolbar ─────────────────────────────────────────────────────────────────
 
@@ -1504,28 +1493,24 @@ export function TableauAPR({
         <thead className="sticky top-0 z-20">
           {/* Ligne 1 : zones super-headers */}
           <tr>
-            {/* Opération — rowSpan=2, sticky */}
-            <th
-              rowSpan={2}
-              className={`${TH} sticky left-0 z-30 text-left border-r-2 border-r-gray-400`}
-              style={{ width: widths.operation, minWidth: widths.operation }}
-            >
-              Opération
-              <ColonneResizer colId="operation" onResize={setWidth} />
-            </th>
-            {/* Handle — rowSpan=2 */}
-            <th rowSpan={2} className={`${TH}`} style={{ width: widths.handle, minWidth: widths.handle }} />
-
-            {/* APR zone */}
-            <th colSpan={8} className={`${TH_ZONE} bg-blue-50 text-blue-700 border-b-0`}>
+            {/* APR zone — couvre Opération + handle + 8 cols APR */}
+            <th colSpan={10} className={`${TH_ZONE} bg-blue-50 text-blue-700 border-b-0`}>
               APR — Analyse Préliminaire des Risques
             </th>
-            {/* Évaluation zone */}
-            <th colSpan={3} className={`${TH_ZONE} bg-yellow-50 text-yellow-700 border-l-4 border-l-blue-300 border-b-0`}>
+            {/* Évaluation zone — bordure gauche bleue via shadow inset (reste collée au thead) */}
+            <th
+              colSpan={3}
+              className={`${TH_ZONE} bg-yellow-50 text-yellow-700 border-b-0`}
+              style={{ boxShadow: 'inset 4px 0 0 0 #93c5fd, inset -1px 0 0 0 #d1d5db' }}
+            >
               Évaluation
             </th>
             {/* Maîtrise zone */}
-            <th colSpan={3} className={`${TH_ZONE} bg-green-50 text-green-700 border-l-4 border-l-green-300 border-b-0`}>
+            <th
+              colSpan={3}
+              className={`${TH_ZONE} bg-green-50 text-green-700 border-b-0`}
+              style={{ boxShadow: 'inset 4px 0 0 0 #86efac, inset -1px 0 0 0 #d1d5db' }}
+            >
               Plan de Maîtrise
             </th>
             {/* Actions — rowSpan=2 */}
@@ -1534,42 +1519,68 @@ export function TableauAPR({
 
           {/* Ligne 2 : colonnes individuelles */}
           <tr>
+            {/* Opération (sticky left) — bordure droite épaisse via shadow inset */}
+            <th
+              className={`${TH2} sticky left-0 z-30`}
+              style={{
+                width: widths.operation,
+                minWidth: widths.operation,
+                boxShadow: 'inset 0 -1px 0 0 #d1d5db, inset -2px 0 0 0 #9ca3af',
+              }}
+            >
+              Opération
+              <ColonneResizer colId="operation" onResize={setWidth} />
+            </th>
+            {/* Handle */}
+            <th className={TH2} style={{ width: widths.handle, minWidth: widths.handle }} />
             {/* APR cols */}
             <th className={TH2} style={{ width: widths.ref }}>Réf.<ColonneResizer colId="ref" onResize={setWidth} /></th>
-            <th className={`${TH2} sticky left-0 z-30 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)] text-left`} style={{ width: widths.danger }}>
+            <th className={TH2} style={{ width: widths.danger }}>
               Danger<ColonneResizer colId="danger" onResize={setWidth} />
             </th>
-            <th className={`${TH2} text-left`} style={{ width: widths.situation_dangereuse }}>
+            <th className={TH2} style={{ width: widths.situation_dangereuse }}>
               Situation<ColonneResizer colId="situation_dangereuse" onResize={setWidth} />
             </th>
-            <th className={`${TH2} text-left`} style={{ width: widths.numero_risque_ed840 }}>
+            <th className={TH2} style={{ width: widths.numero_risque_ed840 }}>
               Risque ED840<ColonneResizer colId="numero_risque_ed840" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.type_risque }}>
               Type<ColonneResizer colId="type_risque" onResize={setWidth} />
             </th>
-            <th className={`${TH2} text-left`} style={{ width: widths.evenement_dangereux }}>
+            <th className={TH2} style={{ width: widths.evenement_dangereux }}>
               Événement<ColonneResizer colId="evenement_dangereux" onResize={setWidth} />
             </th>
-            <th className={`${TH2} text-left`} style={{ width: widths.dommage }}>
+            <th className={TH2} style={{ width: widths.dommage }}>
               Dommage<ColonneResizer colId="dommage" onResize={setWidth} />
             </th>
-            <th className={`${TH2} text-left`} style={{ width: widths.siege_lesions }}>
+            <th className={TH2} style={{ width: widths.siege_lesions }}>
               Siège<ColonneResizer colId="siege_lesions" onResize={setWidth} />
             </th>
-            {/* Eval cols */}
-            <th className={`${TH2} border-l-4 border-l-blue-200`} style={{ width: widths.gravite }}>
-              G<ColonneResizer colId="gravite" onResize={setWidth} />
+            {/* Eval cols — bordure gauche bleue via shadow inset */}
+            <th
+              className={TH2}
+              style={{
+                width: widths.gravite,
+                boxShadow: 'inset 4px 0 0 0 #bfdbfe, inset 0 -1px 0 0 #d1d5db, inset -1px 0 0 0 #d1d5db',
+              }}
+            >
+              Gravité<ColonneResizer colId="gravite" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.second }}>
-              P/DE<ColonneResizer colId="second" onResize={setWidth} />
+              Probabilité<ColonneResizer colId="second" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.criticite_brute }}>
               C. brute<ColonneResizer colId="criticite_brute" onResize={setWidth} />
             </th>
-            {/* Maîtrise cols */}
-            <th className={`${TH2} text-left border-l-4 border-l-green-200`} style={{ width: widths.mesures_techniques }}>
-              T.H.O./EPI<ColonneResizer colId="mesures_techniques" onResize={setWidth} />
+            {/* Maîtrise cols — bordure gauche verte via shadow inset */}
+            <th
+              className={TH2}
+              style={{
+                width: widths.mesures_techniques,
+                boxShadow: 'inset 4px 0 0 0 #bbf7d0, inset 0 -1px 0 0 #d1d5db, inset -1px 0 0 0 #d1d5db',
+              }}
+            >
+              Moyens de maîtrise<ColonneResizer colId="mesures_techniques" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.coefficient_pm }}>
               PM<ColonneResizer colId="coefficient_pm" onResize={setWidth} />
@@ -1617,9 +1628,11 @@ export function TableauAPR({
   return (
     <>
       {!pleinEcran && (
-        <div className="space-y-3">
-          {toolbar}
-          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+        <div className="h-full bg-white border-t border-b border-gray-200 flex flex-col">
+          <div className="shrink-0 px-4 lg:px-6 py-2 border-b border-gray-200 bg-gray-50">
+            {toolbar}
+          </div>
+          <div className="flex-1 min-h-0 overflow-auto">
             {tableauContent}
           </div>
         </div>

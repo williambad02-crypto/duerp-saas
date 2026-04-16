@@ -100,56 +100,36 @@ export default async function PosteDetailPage({ params }: Props) {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="h-full flex flex-col gap-3">
 
-      {/* Fil d'Ariane */}
-      <nav className="flex items-center gap-2 text-sm text-brand-bronze/70">
-        <Link href="/dashboard/postes" className="hover:text-brand-navy transition-colors">
-          Postes de travail
-        </Link>
-        <span>/</span>
-        <span className="text-brand-navy font-medium">{poste.nom}</span>
-      </nav>
-
-      {/* En-tête du poste */}
-      <div className="bg-brand-off border border-brand-sand rounded-xl p-5 shadow-[0_1px_3px_rgba(3,25,72,0.05)]">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-2xl font-bold text-brand-navy leading-tight">{poste.nom}</h1>
-            {poste.description && (
-              <p className="mt-1 text-sm text-brand-bronze">{poste.description}</p>
-            )}
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <EditerPosteModal poste={{ id: poste.id, nom: poste.nom, description: poste.description ?? '' }} />
-            <SupprimerPosteButton posteId={poste.id} nomPoste={poste.nom} />
-          </div>
+      {/* Barre fine : fil d'Ariane + titre poste + actions */}
+      <div className="flex items-center justify-between gap-4 flex-wrap shrink-0">
+        <div className="min-w-0 flex items-center gap-3 flex-wrap">
+          <nav className="flex items-center gap-2 text-xs text-brand-bronze/70">
+            <Link href="/dashboard/postes" className="hover:text-brand-navy transition-colors">
+              Postes de travail
+            </Link>
+            <span>/</span>
+          </nav>
+          <h1 className="text-xl font-bold text-brand-navy leading-tight truncate">{poste.nom}</h1>
+          {poste.description && (
+            <span className="text-xs text-brand-bronze/80 truncate hidden md:inline">
+              — {poste.description}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <EditerPosteModal poste={{ id: poste.id, nom: poste.nom, description: poste.description ?? '' }} />
+          <SupprimerPosteButton posteId={poste.id} nomPoste={poste.nom} />
         </div>
       </div>
 
-      {/* Tableau APR inline */}
-      <TableauAPR
-        operationsInitiales={operationsUI}
-        posteId={poste.id}
-      />
-
-      {/* Lien modules normés */}
-      <div className="bg-brand-off border border-brand-sand rounded-xl p-4">
-        <p className="text-xs font-semibold text-brand-navy mb-2">Évaluations normées disponibles</p>
-        <div className="flex flex-wrap gap-2">
-          {operationsUI.map(op => (
-            <Link
-              key={op.id}
-              href={`/dashboard/postes/${poste.id}/operations/${op.id}/risques/M01_BRUIT`}
-              className="text-xs px-3 py-1 bg-brand-gold-pale text-brand-bronze border border-brand-sand hover:border-brand-navy hover:text-brand-navy rounded-full transition-colors"
-            >
-              Bruit — {op.nom}
-            </Link>
-          ))}
-          <span className="text-xs px-3 py-1 bg-brand-cream text-brand-bronze/50 border border-brand-sand/50 rounded-full cursor-not-allowed">
-            TMS · Vibrations · RPS (bientôt)
-          </span>
-        </div>
+      {/* Tableau APR — pleine largeur, fond blanc tableur, prend toute la hauteur dispo */}
+      <div className="-mx-4 lg:-mx-6 flex-1 min-h-0">
+        <TableauAPR
+          operationsInitiales={operationsUI}
+          posteId={poste.id}
+        />
       </div>
 
     </div>
