@@ -127,20 +127,6 @@ export const TEMPLATES_METIER: TemplateMetier[] = [
         mesures_techniques_modele:
           'Hygiène stricte, gants, vestiaires séparés',
       },
-      {
-        // ED840 #5 — Postures contraignantes (charge physique)
-        numero_risque_ed840: 5,
-        type_risque: 'chronique',
-        danger: 'Posture debout prolongée',
-        situation_dangereuse: '8 h debout sur ligne de production',
-        evenement_dangereux: 'Fatigue, TMS membre inférieur',
-        dommage: 'Insuffisance veineuse, TMS',
-        gravite: 2,
-        probabilite: null,
-        duree_exposition: 4,
-        mesures_techniques_modele:
-          'Tapis anti-fatigue, rotation, sièges debout',
-      },
     ],
   },
 
@@ -192,20 +178,6 @@ export const TEMPLATES_METIER: TemplateMetier[] = [
         duree_exposition: null,
         mesures_techniques_modele:
           'Marchepieds propres, formation "3 points de contact"',
-      },
-      {
-        // ED840 #5 — Posture assise prolongée (charge physique)
-        numero_risque_ed840: 5,
-        type_risque: 'chronique',
-        danger: 'Posture assise prolongée',
-        situation_dangereuse: '> 6 h / jour au volant',
-        evenement_dangereux: 'TMS dos, jambes',
-        dommage: 'Lombalgie chronique',
-        gravite: 3,
-        probabilite: null,
-        duree_exposition: 4,
-        mesures_techniques_modele:
-          'Siège ergonomique, pauses marche',
       },
       {
         // ED840 #17 — Risques psychosociaux (RPS)
