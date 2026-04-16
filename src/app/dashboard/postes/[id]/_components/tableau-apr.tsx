@@ -79,8 +79,8 @@ const COLONNES_TAB = [
 
 // ─── Styles communs ───────────────────────────────────────────────────────────
 
-const TH = 'bg-gray-100 border border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
-const TD = 'px-3 py-2.5 text-xs border border-gray-200 text-gray-900'
+const TH = 'bg-gray-100 border-r border-b border-gray-300 px-3 py-2.5 text-[11px] font-semibold text-gray-600 uppercase tracking-[0.05em] relative'
+const TD = 'border-r border-b border-gray-200 px-2 py-1 text-xs text-gray-800'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -207,7 +207,7 @@ function CelluleTexte({
 
   if (isActive) {
     return (
-      <td className={`px-2 py-1 border border-gray-200 bg-white ${tdClassName}`} style={style}>
+      <td className={`px-2 py-1 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
         <input
           ref={ref}
           value={draft}
@@ -267,7 +267,7 @@ function CelluleSelect({
 
   if (isActive && !disabled) {
     return (
-      <td className={`px-1 py-1 border border-gray-200 bg-white ${tdClassName}`} style={style}>
+      <td className={`px-1 py-1 border-r border-b border-gray-200 bg-white ${tdClassName}`} style={style}>
         <select
           ref={ref}
           defaultValue={String(valeur ?? '')}
@@ -530,7 +530,7 @@ function LigneRisque({
       {firstInGroup && (
         <td
           rowSpan={operationRowSpan}
-          className={`sticky left-0 z-[12] ${stickyBg} border-r-2 border-r-gray-400 border border-gray-200 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+          className={`sticky left-0 z-[12] ${stickyBg} border-l border-l-gray-300 border-r-2 border-r-gray-400 border-b border-b-gray-200 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
           style={{ width: widths.operation }}
         >
           {operationCell}
@@ -539,7 +539,7 @@ function LigneRisque({
 
       {/* Handle drag */}
       <td
-        className={`border border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors${sepClass}`}
+        className={`border-r border-b border-gray-200 w-8 px-1.5 py-2 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 transition-colors${sepClass}`}
         style={{ width: widths.handle }}
         {...attributes}
         {...listeners}
@@ -552,7 +552,7 @@ function LigneRisque({
       </td>
 
       {/* Réf */}
-      <td className={`border border-gray-200 px-2 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap${sepClass}`} style={{ width: widths.ref }}>
+      <td className={`border-r border-b border-gray-200 px-2 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap${sepClass}`} style={{ width: widths.ref }}>
         {risque.identifiant_auto ?? '—'}
       </td>
 
@@ -647,7 +647,7 @@ function LigneRisque({
       {moduleInfo ? (
         <td
           colSpan={3}
-          className={`border border-gray-200 border-l-[3px] border-l-blue-200 px-3 py-2 text-center${sepClass}`}
+          className={`border-r border-b border-gray-200 border-l-[3px] border-l-blue-200 px-3 py-2 text-center${sepClass}`}
           style={{ width: (widths.gravite ?? 52) + (widths.second ?? 52) + (widths.criticite_brute ?? 84) }}
         >
           <CelluleModuleNorme
@@ -998,14 +998,14 @@ function GroupeOperation({
         <tr className={groupBg}>
           <td
             rowSpan={1}
-            className={`sticky left-0 z-[12] ${opCellBg} border-r-2 border-r-gray-400 border border-gray-200 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top border-b-2 border-b-gray-400 ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+            className={`sticky left-0 z-[12] ${opCellBg} border-l border-l-gray-300 border-r-2 border-r-gray-400 border-b-2 border-b-gray-400 w-[140px] min-w-[140px] max-w-[140px] p-0 align-top ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
             style={{ width: widths.operation }}
           >
             {operationCell}
           </td>
           <td
             colSpan={16}
-            className={`px-4 py-3 text-xs text-gray-400 border border-gray-200 border-b-2 border-b-gray-400 italic ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
+            className={`px-4 py-3 text-xs text-gray-400 border-r border-gray-200 border-b-2 border-b-gray-400 italic ${!isFirstGroup ? 'border-t-2 border-t-gray-400' : ''}`}
           >
             Aucun risque — cliquez <Plus className="inline w-3 h-3 mx-0.5" /> pour ajouter
           </td>
@@ -1412,9 +1412,8 @@ export function TableauAPR({
 
   // ── Super-header labels ──────────────────────────────────────────────────────
 
-  // shadow inset = bordures auto-peintes à l'intérieur de la cellule ; robustes en sticky
-  const TH_ZONE = 'border border-gray-300 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-center shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
-  const TH2 = 'bg-gray-50 border border-gray-300 px-2 py-2 text-[12px] font-semibold text-gray-700 tracking-normal text-center relative shadow-[inset_0_-1px_0_0_#d1d5db,inset_-1px_0_0_0_#d1d5db]'
+  const TH_ZONE = 'border-r border-b border-t border-gray-300 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-center'
+  const TH2 = 'bg-gray-50 border-r border-b border-gray-300 px-2 py-2 text-[12px] font-semibold text-gray-700 tracking-normal text-center relative'
 
   // ── Toolbar ─────────────────────────────────────────────────────────────────
 
@@ -1487,7 +1486,7 @@ export function TableauAPR({
 
   const tableauContent = (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <table style={{ minWidth: '1850px', borderCollapse: 'collapse' }} className="w-full">
+      <table style={{ minWidth: '1850px', borderCollapse: 'separate', borderSpacing: 0 }} className="w-full">
 
         {/* En-tête sticky — 2 lignes */}
         <thead className="sticky top-0 z-20">
@@ -1497,20 +1496,12 @@ export function TableauAPR({
             <th colSpan={10} className={`${TH_ZONE} bg-blue-50 text-blue-700 border-b-0`}>
               APR — Analyse Préliminaire des Risques
             </th>
-            {/* Évaluation zone — bordure gauche bleue via shadow inset (reste collée au thead) */}
-            <th
-              colSpan={3}
-              className={`${TH_ZONE} bg-yellow-50 text-yellow-700 border-b-0`}
-              style={{ boxShadow: 'inset 4px 0 0 0 #93c5fd, inset -1px 0 0 0 #d1d5db' }}
-            >
+            {/* Évaluation zone — bordure gauche bleue */}
+            <th colSpan={3} className={`${TH_ZONE} bg-yellow-50 text-yellow-700 border-l-4 border-l-blue-300 border-b-0`}>
               Évaluation
             </th>
             {/* Maîtrise zone */}
-            <th
-              colSpan={3}
-              className={`${TH_ZONE} bg-green-50 text-green-700 border-b-0`}
-              style={{ boxShadow: 'inset 4px 0 0 0 #86efac, inset -1px 0 0 0 #d1d5db' }}
-            >
+            <th colSpan={3} className={`${TH_ZONE} bg-green-50 text-green-700 border-l-4 border-l-green-300 border-b-0`}>
               Plan de Maîtrise
             </th>
             {/* Actions — rowSpan=2 */}
@@ -1519,14 +1510,10 @@ export function TableauAPR({
 
           {/* Ligne 2 : colonnes individuelles */}
           <tr>
-            {/* Opération (sticky left) — bordure droite épaisse via shadow inset */}
+            {/* Opération (sticky left) — bordures en classes pour border-collapse: separate */}
             <th
-              className={`${TH2} sticky left-0 z-30`}
-              style={{
-                width: widths.operation,
-                minWidth: widths.operation,
-                boxShadow: 'inset 0 -1px 0 0 #d1d5db, inset -2px 0 0 0 #9ca3af',
-              }}
+              className={`${TH2} sticky left-0 z-30 border-l border-l-gray-300 border-r-2 border-r-gray-400`}
+              style={{ width: widths.operation, minWidth: widths.operation }}
             >
               Opération
               <ColonneResizer colId="operation" onResize={setWidth} />
@@ -1556,14 +1543,8 @@ export function TableauAPR({
             <th className={TH2} style={{ width: widths.siege_lesions }}>
               Siège<ColonneResizer colId="siege_lesions" onResize={setWidth} />
             </th>
-            {/* Eval cols — bordure gauche bleue via shadow inset */}
-            <th
-              className={TH2}
-              style={{
-                width: widths.gravite,
-                boxShadow: 'inset 4px 0 0 0 #bfdbfe, inset 0 -1px 0 0 #d1d5db, inset -1px 0 0 0 #d1d5db',
-              }}
-            >
+            {/* Eval cols — bordure gauche bleue */}
+            <th className={`${TH2} border-l-4 border-l-blue-200`} style={{ width: widths.gravite }}>
               Gravité<ColonneResizer colId="gravite" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.second }}>
@@ -1572,14 +1553,8 @@ export function TableauAPR({
             <th className={TH2} style={{ width: widths.criticite_brute }}>
               C. brute<ColonneResizer colId="criticite_brute" onResize={setWidth} />
             </th>
-            {/* Maîtrise cols — bordure gauche verte via shadow inset */}
-            <th
-              className={TH2}
-              style={{
-                width: widths.mesures_techniques,
-                boxShadow: 'inset 4px 0 0 0 #bbf7d0, inset 0 -1px 0 0 #d1d5db, inset -1px 0 0 0 #d1d5db',
-              }}
-            >
+            {/* Maîtrise cols — bordure gauche verte */}
+            <th className={`${TH2} border-l-4 border-l-green-200`} style={{ width: widths.mesures_techniques }}>
               Moyens de maîtrise<ColonneResizer colId="mesures_techniques" onResize={setWidth} />
             </th>
             <th className={TH2} style={{ width: widths.coefficient_pm }}>
