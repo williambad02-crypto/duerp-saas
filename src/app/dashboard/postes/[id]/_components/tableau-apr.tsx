@@ -24,8 +24,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { RISQUES_ED840 } from '@/lib/constants/ed840'
-import { ECHELLE_GRAVITE, ECHELLE_PROBABILITE, COEFFICIENTS_PM } from '@/lib/constants/cotation'
-import { ECHELLE_DUREE_EXPOSITION } from '@/lib/constants/ed840'
+import { COEFFICIENTS_PM } from '@/lib/constants/cotation'
 import { QUESTIONS_PRESELECTION } from '@/lib/constants/preselection'
 import { MODULE_PAR_CODE, type ModuleRisque } from '@/lib/constants/modules'
 import type { CodeModule } from '@/types'
@@ -314,6 +313,66 @@ function CelluleSelect({
       <span className={!valeur && valeur !== 0 ? 'text-gray-400' : ''}>
         {label}
       </span>
+    </td>
+  )
+}
+
+// ─── CelluleNoteBoutons (saisie rapide G / P / DE par boutons 1-N colorés) ───
+
+function CelluleNoteBoutons({
+  ligneId: _ligneId, colonne: _colonne, valeur, isActive: _isActive, onActivate, onSave, onTab,
+  style, tdClassName = '', disabled = false, max = 5,
+}: {
+  ligneId: string; colonne: string; valeur: number | null
+  isActive: boolean; onActivate: () => void
+  onSave: (v: number | null) => Promise<void>
+  onTab?: () => void
+  style?: React.CSSProperties
+  tdClassName?: string
+  disabled?: boolean
+  max?: number
+}) {
+  // Palette par zone de criticité potentielle : 1-2 vert, 3 jaune, 4 orange, 5 rouge
+  const zones: { n: number; bg: string; bgActive: string }[] = [
+    { n: 1, bg: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100', bgActive: 'bg-green-500 text-white border-green-600' },
+    { n: 2, bg: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100', bgActive: 'bg-green-500 text-white border-green-600' },
+    { n: 3, bg: 'bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-100', bgActive: 'bg-yellow-500 text-white border-yellow-600' },
+    { n: 4, bg: 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100', bgActive: 'bg-orange-500 text-white border-orange-600' },
+    { n: 5, bg: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100', bgActive: 'bg-red-500 text-white border-red-600' },
+  ].slice(0, max)
+
+  const handleClick = async (n: number) => {
+    await onSave(n)
+    onTab?.()
+  }
+
+  return (
+    <td
+      className={`border-r border-b border-gray-200 px-1 py-1 ${disabled ? 'opacity-50' : ''} ${tdClassName}`}
+      style={style}
+      onClick={!disabled ? onActivate : undefined}
+    >
+      <div className="flex items-center justify-center gap-0.5">
+        {zones.map(z => {
+          const selected = valeur === z.n
+          return (
+            <button
+              key={z.n}
+              type="button"
+              disabled={disabled}
+              onClick={e => { e.stopPropagation(); handleClick(z.n) }}
+              className={`w-6 h-6 flex items-center justify-center rounded text-[11px] font-semibold border transition-colors disabled:opacity-50 ${
+                selected ? z.bgActive : z.bg
+              }`}
+              title={`Note ${z.n}`}
+              aria-label={`Note ${z.n}`}
+              aria-pressed={selected}
+            >
+              {z.n}
+            </button>
+          )
+        })}
+      </div>
     </td>
   )
 }
@@ -688,36 +747,29 @@ function LigneRisque({
         </td>
       ) : (
         <>
-          {/* G — Gravité */}
-          <CelluleSelect
+          {/* G — Gravité : 5 boutons 1-5 colorés */}
+          <CelluleNoteBoutons
             ligneId={risque.id} colonne="gravite" valeur={risque.gravite}
-            options={ECHELLE_GRAVITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))}
             isActive={isCell('gravite')} onActivate={() => activate('gravite')}
-            onSave={v => onSaveCell(risque.id, 'gravite', v ? Number(v) : null)}
+            onSave={v => onSaveCell(risque.id, 'gravite', v)}
             onTab={() => nextCol('gravite')}
-            renderLabel={v => v ? String(v) : '—'}
             style={{ width: widths.gravite }}
-            center
             tdClassName={`border-l-[3px] border-l-blue-200${sepClass}`}
+            max={5}
           />
 
-          {/* P (aigu) ou DE (chronique) */}
-          <CelluleSelect
+          {/* P (aigu) ou DE (chronique) : 4 boutons 1-4 colorés */}
+          <CelluleNoteBoutons
             ligneId={risque.id}
             colonne={risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition'}
             valeur={risque.type_risque === 'aigu' ? risque.probabilite : risque.duree_exposition}
-            options={risque.type_risque === 'aigu'
-              ? ECHELLE_PROBABILITE.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
-              : ECHELLE_DUREE_EXPOSITION.map(e => ({ valeur: e.valeur, label: `${e.valeur} — ${e.label}` }))
-            }
             isActive={risque.type_risque === 'aigu' ? isCell('probabilite') : isCell('duree_exposition')}
             onActivate={() => activate(risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition')}
-            onSave={v => onSaveCell(risque.id, risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition', v ? Number(v) : null)}
+            onSave={v => onSaveCell(risque.id, risque.type_risque === 'aigu' ? 'probabilite' : 'duree_exposition', v)}
             onTab={() => nextCol('second')}
-            renderLabel={v => v ? String(v) : '—'}
             style={{ width: widths.second }}
-            center
             tdClassName={sepClass}
+            max={4}
           />
 
           {/* Criticité brute */}
