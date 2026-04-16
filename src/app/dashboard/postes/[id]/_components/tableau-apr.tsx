@@ -70,6 +70,7 @@ type ModaleEtat =
   | { type: 'operation'; id: string; nom: string; nbRisques: number }
   | null
 type ModalePreselEtat = { risqueId: string; moduleCode: Exclude<CodeModule, 'APR'> } | null
+type CriticiteZone = 'rouge' | 'orange' | 'jaune' | 'vert' | 'incomplet'
 
 // ─── Constantes colonnes ─────────────────────────────────────────────────────
 
@@ -1220,6 +1221,53 @@ function ModalePreselection({
 
 // ─── MenuPoste (dropdown ⋮ dans la toolbar) ──────────────────────────────────
 
+function CompteurCriticites({
+  total, compteurs, filtre, onFiltre,
+}: {
+  total: number
+  compteurs: Record<CriticiteZone, number>
+  filtre: CriticiteZone | null
+  onFiltre: (zone: CriticiteZone | null) => void
+}) {
+  const zones: { key: CriticiteZone; label: string; dot: string }[] = [
+    { key: 'rouge',     label: 'Rouge',     dot: 'bg-red-500' },
+    { key: 'orange',    label: 'Orange',    dot: 'bg-orange-500' },
+    { key: 'jaune',     label: 'Jaune',     dot: 'bg-yellow-400' },
+    { key: 'vert',      label: 'Vert',      dot: 'bg-green-500' },
+    { key: 'incomplet', label: 'Incomplets', dot: 'bg-gray-300' },
+  ]
+  return (
+    <div className="flex items-center gap-1.5 text-xs">
+      <button
+        onClick={() => onFiltre(null)}
+        className={`px-2.5 py-1 rounded-md transition-colors ${
+          filtre === null
+            ? 'bg-brand-navy text-white font-semibold'
+            : 'text-gray-600 hover:bg-gray-100'
+        }`}
+        title="Afficher tous les risques"
+      >
+        {total} risques
+      </button>
+      {zones.map(z => (
+        <button
+          key={z.key}
+          onClick={() => onFiltre(filtre === z.key ? null : z.key)}
+          className={`flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors ${
+            filtre === z.key
+              ? 'bg-gray-900 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+          }`}
+          title={z.label}
+        >
+          <span className={`w-2 h-2 rounded-full ${z.dot}`} />
+          <span className="font-medium">{compteurs[z.key]}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
 function MenuPoste({ posteId, nomPoste, descriptionPoste }: {
   posteId: string
   nomPoste: string
@@ -1301,6 +1349,7 @@ export function TableauAPR({
   const [celluleActive, setCelluleActive] = useState<CelluleActive>(null)
   const [modale, setModale] = useState<ModaleEtat>(null)
   const [modalePresel, setModalePresel] = useState<ModalePreselEtat>(null)
+  const [filtreCriticite, setFiltreCriticite] = useState<CriticiteZone | null>(null)
   const [isPending, startTransition] = useTransition()
   const [ajoutOpEnCours, startAjoutOp] = useTransition()
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -1515,6 +1564,46 @@ export function TableauAPR({
     return a.ordre - b.ordre
   })
 
+  // ── Compteurs criticités + filtre ───────────────────────────────────────────
+
+  const compteurs = useMemo(() => {
+    const c: Record<CriticiteZone, number> = {
+      rouge: 0, orange: 0, jaune: 0, vert: 0, incomplet: 0,
+    }
+    operations.forEach(op => op.risques.forEach(r => {
+      if (champsManquants(r).length > 0) { c.incomplet += 1; return }
+      const cr = r.criticite_residuelle ?? 0
+      if (cr >= 15) c.rouge += 1
+      else if (cr >= 10) c.orange += 1
+      else if (cr >= 5) c.jaune += 1
+      else c.vert += 1
+    }))
+    return c
+  }, [operations])
+
+  const totalRisques = useMemo(
+    () => operations.reduce((n, op) => n + op.risques.length, 0),
+    [operations]
+  )
+
+  const operationsAffichees = useMemo(() => {
+    if (!filtreCriticite) return operationsTri
+    return operationsTri.map(op => ({
+      ...op,
+      risques: op.risques.filter(r => {
+        const incomplet = champsManquants(r).length > 0
+        if (filtreCriticite === 'incomplet') return incomplet
+        if (incomplet) return false
+        const cr = r.criticite_residuelle ?? 0
+        if (filtreCriticite === 'rouge') return cr >= 15
+        if (filtreCriticite === 'orange') return cr >= 10 && cr < 15
+        if (filtreCriticite === 'jaune') return cr >= 5 && cr < 10
+        if (filtreCriticite === 'vert') return cr < 5
+        return true
+      }),
+    }))
+  }, [operationsTri, filtreCriticite])
+
   // ── Super-header labels ──────────────────────────────────────────────────────
 
   const TH_ZONE = 'border-r border-b border-t border-gray-300 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-center'
@@ -1544,8 +1633,15 @@ export function TableauAPR({
         <MenuPoste posteId={posteId} nomPoste={nomPoste} descriptionPoste={descriptionPoste} />
       </div>
 
-      {/* Centre : placeholder (compteur criticités ajouté en Task 6) */}
-      <div className="flex-1" />
+      {/* Centre : compteur criticités cliquable (filtre toggle) */}
+      <div className="flex-1 flex justify-center min-w-0">
+        <CompteurCriticites
+          total={totalRisques}
+          compteurs={compteurs}
+          filtre={filtreCriticite}
+          onFiltre={setFiltreCriticite}
+        />
+      </div>
 
       {/* Droite : indicateur sauvegarde + icônes actions */}
       <div className="flex items-center gap-1 shrink-0">
@@ -1671,7 +1767,7 @@ export function TableauAPR({
         </thead>
 
         <tbody>
-          {operationsTri.map((op, groupIdx) => (
+          {operationsAffichees.map((op, groupIdx) => (
             <GroupeOperation
               key={op.id}
               operation={op}
