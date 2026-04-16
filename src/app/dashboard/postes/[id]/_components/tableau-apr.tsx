@@ -104,6 +104,20 @@ function getModuleInfo(risque: RisqueUI): ModuleRisque | null {
   return MODULE_PAR_CODE[risqueED840.module] ?? null
 }
 
+function champsManquants(risque: RisqueUI): string[] {
+  const manquants: string[] = []
+  if (!risque.danger?.trim()) manquants.push('Danger')
+  if (risque.numero_risque_ed840 === null) manquants.push('Risque ED840')
+  if (risque.gravite === null) manquants.push('Gravité')
+  if (risque.type_risque === 'aigu' && risque.probabilite === null) manquants.push('Probabilité')
+  if (risque.type_risque === 'chronique' && risque.duree_exposition === null) manquants.push("Durée d'exposition")
+  if (risque.coefficient_pm === null || risque.coefficient_pm === undefined) manquants.push('Coefficient PM')
+  if ((risque.criticite_residuelle ?? 0) > 4 && !risque.mesures_techniques?.trim()) {
+    manquants.push('Moyens de maîtrise')
+  }
+  return manquants
+}
+
 // ─── useColumnWidths ─────────────────────────────────────────────────────────
 
 const STORAGE_KEY = 'tableau-apr-column-widths-v1'
@@ -553,7 +567,19 @@ function LigneRisque({
 
       {/* Réf */}
       <td className={`border-r border-b border-gray-200 px-2 py-2.5 text-[11px] text-gray-400 font-mono whitespace-nowrap${sepClass}`} style={{ width: widths.ref }}>
-        {risque.identifiant_auto ?? '—'}
+        <div className="flex items-center gap-1.5">
+          {(() => {
+            const manquants = champsManquants(risque)
+            return manquants.length > 0 ? (
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"
+                title={`Champs manquants : ${manquants.join(', ')}`}
+                aria-label={`Incomplet : ${manquants.join(', ')}`}
+              />
+            ) : null
+          })()}
+          <span>{risque.identifiant_auto ?? '—'}</span>
+        </div>
       </td>
 
       {/* — APR zone — */}
