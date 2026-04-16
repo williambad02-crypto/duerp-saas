@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { posteSchema } from '@/lib/validations/poste'
 import { operationSchema } from '@/lib/validations/operation'
+import { TEMPLATE_METIER_PAR_CODE } from '@/lib/constants/templates-metier'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -60,14 +61,85 @@ export async function creerPoste(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from('postes').insert({
-    entreprise_id: entrepriseId,
-    nom: validation.data.nom,
-    description: validation.data.description || null,
-    ordre: (postes?.length ?? 0),
-  })
+  const { data: nouveauPoste, error } = await supabase
+    .from('postes')
+    .insert({
+      entreprise_id: entrepriseId,
+      nom: validation.data.nom,
+      description: validation.data.description || null,
+      ordre: (postes?.length ?? 0),
+    })
+    .select('id')
+    .single()
 
-  if (error) return { erreur: 'Erreur lors de la création du poste.' }
+  if (error || !nouveauPoste) return { erreur: 'Erreur lors de la création du poste.' }
+
+  // ── Template métier : pré-remplissage de l'opération transversale ────────
+  // Le trigger DB ensure_toutes_operations() crée l'opération "Toutes opérations"
+  // automatiquement après l'insert dans postes. On récupère cette opération
+  // puis on insère les risques du template choisi (si fourni).
+  const templateCodeRaw = formData.get('templateCode')
+  const templateCode = typeof templateCodeRaw === 'string' && templateCodeRaw.length > 0
+    ? templateCodeRaw
+    : null
+
+  if (templateCode) {
+    const template = TEMPLATE_METIER_PAR_CODE[templateCode]
+    if (template) {
+      const { data: opTransverse } = await supabase
+        .from('operations')
+        .select('id')
+        .eq('poste_id', nouveauPoste.id)
+        .eq('est_transversale', true)
+        .single()
+
+      if (opTransverse) {
+        // Sécurité : si des évaluations existent déjà (cas théorique improbable),
+        // on ne crée pas de doublons.
+        const { data: evalsExistantes } = await supabase
+          .from('evaluations')
+          .select('id')
+          .eq('operation_id', opTransverse.id)
+          .limit(1)
+
+        if (!evalsExistantes || evalsExistantes.length === 0) {
+          for (let i = 0; i < template.risques.length; i++) {
+            const r = template.risques[i]
+            const { data: newEval } = await supabase
+              .from('evaluations')
+              .insert({
+                operation_id: opTransverse.id,
+                code_module: 'APR',
+                numero_risque_ed840: r.numero_risque_ed840,
+                type_risque: r.type_risque,
+                danger: r.danger,
+                situation_dangereuse: r.situation_dangereuse,
+                evenement_dangereux: r.evenement_dangereux,
+                dommage: r.dommage,
+                gravite: r.gravite,
+                probabilite: r.probabilite,
+                duree_exposition: r.duree_exposition,
+                ordre: i,
+              })
+              .select('id')
+              .single()
+
+            if (newEval && r.mesures_techniques_modele) {
+              // coefficient_pm = 1.0 par défaut : les mesures types sont
+              // proposées mais pas encore évaluées en efficacité par l'utilisateur.
+              // La criticité résiduelle reste égale à la criticité brute tant
+              // que l'utilisateur n'a pas renseigné le coefficient réel.
+              await supabase.from('plans_maitrise').insert({
+                evaluation_id: newEval.id,
+                coefficient_pm: 1.0,
+                mesures_techniques: r.mesures_techniques_modele,
+              })
+            }
+          }
+        }
+      }
+    }
+  }
 
   revalidatePath('/dashboard/postes')
   return { succes: true }
